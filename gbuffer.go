@@ -24,18 +24,6 @@ type AggregateFB struct {
 	program                              gl2.Program
 	DiffUni, NormalUni, PosUni, DepthUni gl2.UniformLocation
 	Out                                  gl2.Texture2D
-
-	// cook torrance
-	CookRoughnessValue, CookF0, CookK gl2.UniformLocation
-
-	// shadow
-	ShadowMapUni, ShadowMatUni gl2.UniformLocation
-
-	// View uniforms
-	CamPosUni gl2.UniformLocation
-
-	// lights
-	NumPointLightUni, PointLightPosUni, PointLightColUni gl2.UniformLocation
 }
 
 // LightAccumulator takes all the lights and accumulates their effect in a gbuffer
@@ -91,7 +79,6 @@ void main() {
 ` + "\x00"
 
 		_gbufferAggregateFragmentShader = `#version 330
-#define MAX_POINT_LIGHT 8
 #define MIN_LUX 0.3
 
 // GBuffer textures
@@ -100,83 +87,26 @@ uniform sampler2D normaltex;
 uniform sampler2D postex;
 uniform sampler2D depthtex;
 
-// cook
-uniform float roughnessValue;
-uniform float F0;
-uniform float k;
-
-// Lights
-uniform int NUM_POINT_LIGHT;
-uniform vec3 point_light_pos[MAX_POINT_LIGHT];
-uniform vec3 point_light_color[MAX_POINT_LIGHT];
-
-// Shadows
-uniform sampler2DShadow shadowmap;
-uniform mat4 shadowmat;
-
-// View
-uniform vec3 cam_pos;
-
 in vec2 uv;
 
 layout (location=0) out vec4 outColor;
 
-void cook() {
-	vec3 normal = normalize(texture(normaltex, uv).xyz);
-	vec3 world_position = texture(postex, uv).xyz;
-
-	vec4 shadowcoord = shadowmat*vec4(world_position, 1);
-	shadowcoord.z+=0.005;
-	float shadow = texture(shadowmap, shadowcoord.xyz,0);
-
-	////// cook torrance
-
-	// material values
-	vec3 lightColor = vec3(0.9,0.1,0.1);
-
-	vec3 world_pos = texture(postex, uv).xyz;
-	vec3 lightDir = point_light_pos[0]-world_pos;
-
-	float NdL = max(dot(normal, lightDir), 0);
-
-	float lux = shadow;
-	if(shadow > 0){
-		float specular = 0.0;
-		if(NdL > 0.0){
-			vec3 eyeDir = normalize(cam_pos-world_pos);
-
-			vec3 halfVec = normalize(lightDir+eyeDir);
-			float NdH = max(0,dot(normal,halfVec));
-			float NdV = max(0,dot(normal, eyeDir));
-			float VdH = max(0,dot(eyeDir, halfVec));
-			float mSqu = roughnessValue*roughnessValue;
-
-			float NH2 = 2.0*NdH;
-			float geoAtt = min(1.0,min((NH2*NdV)/VdH,(NH2*NdL)/VdH));
-			float roughness = (1.0 / ( 4.0 * mSqu * pow(NdH, 4.0)))*exp((NdH * NdH - 1.0) / (mSqu * NdH * NdH));
-			float fresnel = pow(1.0 - VdH, 5.0)*(1.0 - F0)+F0;
-			specular = (fresnel*geoAtt*roughness)/(NdV*NdL*3.14);
-		}
-		lux=NdL * (k + specular * (1.0 - k));
-	}
+float Lux() {
+	float lux = texture(albedoTex, uv).a;
 	if(lux < MIN_LUX){
-		lux=MIN_LUX;
+		return MIN_LUX;
 	}
-	outColor = texture(albedoTex, uv)*lux;
+	return lux;
 }
 
 void colMulLux(){
 	vec4 t = texture(albedoTex, uv);
-	outColor = vec4(t.rgb*t.a, 1);
+	outColor = vec4(t.rgb*Lux(), 1);
 }
 
-void colOnly(){
-	outColor = texture(albedoTex, uv);
-}
-
-void luxOnly(){
-	float r = texture(albedoTex, uv).a;
-	outColor = vec4(r,r,r,1);
+void luxOnly() {
+	float l = Lux();
+	outColor = vec4(l, l, l, 1);
 }
 
 void main(){
@@ -298,20 +228,6 @@ void main(){
 
 	aggfb.framebuffer.DrawBuffers(gl2.COLOR_ATTACHMENT0)
 	aggfb.framebuffer.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, aggfb.Out, 0)
-
-	// test data for cook torrance shader
-	aggfb.CookRoughnessValue = aprog.GetUniformLocation("roughnessValue")
-	aggfb.CookF0 = aprog.GetUniformLocation("F0")
-	aggfb.CookK = aprog.GetUniformLocation("k")
-
-	aggfb.ShadowMapUni = aprog.GetUniformLocation("shadowmap")
-	aggfb.ShadowMatUni = aprog.GetUniformLocation("shadowmat")
-
-	aggfb.CamPosUni = aprog.GetUniformLocation("cam_pos")
-
-	aggfb.NumPointLightUni = aprog.GetUniformLocation("NUM_POINT_LIGHT")
-	aggfb.PointLightPosUni = aprog.GetUniformLocation("point_light_pos")
-	aggfb.PointLightColUni = aprog.GetUniformLocation("point_light_color")
 
 	gbuffer.AggregateFramebuffer = aggfb
 
@@ -537,14 +453,10 @@ func (gb *GBuffer) RenderLight(cam *Camera, light *PointLight, shadowmat glm.Mat
 }
 
 // Aggregate performs the lighting calculation per pixel. This is essentially a special post process pass.
-func (gb *GBuffer) Aggregate(cam *Camera, plights []*PointLight, shadowmat glm.Mat4, tex gl2.Texture2D, roughness, F0, Kd float32) {
+func (gb *GBuffer) Aggregate() {
 	gb.AggregateFramebuffer.framebuffer.Bind(gl2.FRAMEBUFFER)
 
 	gb.AggregateFramebuffer.program.Use()
-
-	gb.AggregateFramebuffer.CookRoughnessValue.Uniform1f(roughness)
-	gb.AggregateFramebuffer.CookF0.Uniform1f(F0)
-	gb.AggregateFramebuffer.CookK.Uniform1f(Kd)
 
 	gl.ActiveTexture(gl2.TEXTURE0)
 	gb.AlbedoTex.Bind()
@@ -561,33 +473,6 @@ func (gb *GBuffer) Aggregate(cam *Camera, plights []*PointLight, shadowmat glm.M
 	gl.ActiveTexture(gl2.TEXTURE3)
 	gb.DepthTex.Bind()
 	gb.AggregateFramebuffer.DepthUni.Uniform1i(3)
-
-	// point lights
-	gb.AggregateFramebuffer.NumPointLightUni.Uniform1i(int32(len(plights)))
-	plightpos := make([]float32, len(plights)*3)
-	plightcol := make([]float32, len(plights)*3)
-	for i, light := range plights {
-		plightpos[i] = light.X
-		plightpos[i+1] = light.Y
-		plightpos[i+2] = light.Z
-
-		plightcol[i] = light.R
-		plightcol[i] = light.G
-		plightcol[i] = light.B
-	}
-	if len(plights) != 0 {
-		gb.AggregateFramebuffer.PointLightPosUni.Uniform3fv(int32(len(plights)), &plightpos[0])
-		gb.AggregateFramebuffer.PointLightColUni.Uniform3fv(int32(len(plights)), &plightcol[0])
-	}
-	gb.AggregateFramebuffer.CamPosUni.Uniform3fv(1, &cam.Pos[0])
-
-	//=====shadow=====//
-	gl.ActiveTexture(gl2.TEXTURE4)
-	tex.Bind()
-	gb.AggregateFramebuffer.ShadowMapUni.Uniform1i(4)
-
-	gb.AggregateFramebuffer.ShadowMatUni.UniformMatrix4fv(1, false, &shadowmat[0])
-	//================//
 
 	Fstri()
 
