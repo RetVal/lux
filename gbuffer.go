@@ -6,34 +6,51 @@ import (
 	gl2 "github.com/luxengine/gl"
 )
 
-//GBuffer is lux implementation of a geometry buffer for defered rendering
+// GBuffer is lux implementation of a geometry buffer for defered rendering
 type GBuffer struct {
-	framebuffer                                  gl2.Framebuffer
-	program                                      gl2.Program
-	PUni, VUni, MUni, NUni, MVPUni, DiffuseUni   gl2.UniformLocation
-	DiffuseTex, NormalTex, PositionTex, DepthTex gl2.Texture2D
-	AggregateFramebuffer                         AggregateFB
-	vp, view                                     glm.Mat4
-	width, height                                int32
-	//shadow
-	ShadowMapUni, ShadowMatUni gl2.UniformLocation
-	//lights
-	NumPointLightUni, PointLightPosUni, PointLightColUni gl2.UniformLocation
-	//View uniforms
-	CamPosUni gl2.UniformLocation
-	//cook torrance
-	CookRoughnessValue, CookF0, CookK gl2.UniformLocation
+	framebuffer                                 gl2.Framebuffer
+	program                                     gl2.Program
+	PUni, VUni, MUni, NUni, MVPUni, DiffuseUni  gl2.UniformLocation
+	AlbedoTex, NormalTex, PositionTex, DepthTex gl2.Texture2D
+	AggregateFramebuffer                        AggregateFB
+	LightAcc                                    LightAccumulator
+	vp, view                                    glm.Mat4
+	width, height                               int32
 }
 
-//AggregateFB is the FBO used to aggregate all the textures that the geometry shader built.
+// AggregateFB is the FBO used to aggregate all the textures that the geometry shader built.
 type AggregateFB struct {
 	framebuffer                          gl2.Framebuffer
 	program                              gl2.Program
 	DiffUni, NormalUni, PosUni, DepthUni gl2.UniformLocation
 	Out                                  gl2.Texture2D
+
+	// cook torrance
+	CookRoughnessValue, CookF0, CookK gl2.UniformLocation
+
+	// shadow
+	ShadowMapUni, ShadowMatUni gl2.UniformLocation
+
+	// View uniforms
+	CamPosUni gl2.UniformLocation
+
+	// lights
+	NumPointLightUni, PointLightPosUni, PointLightColUni gl2.UniformLocation
 }
 
-//NewGBuffer will create a new geometry buffer and allocate all the resources required
+// LightAccumulator takes all the lights and accumulates their effect in a gbuffer
+type LightAccumulator struct {
+	framebuffer                            gl2.Framebuffer
+	program                                gl2.Program
+	AlbedoUni, NormalUni, PosUni, DepthUni gl2.UniformLocation
+	Out                                    gl2.Texture2D
+	CookRoughnessValue, CookF0, CookK      gl2.UniformLocation
+	PointLightPosUni                       gl2.UniformLocation
+	CamPosUni                              gl2.UniformLocation
+	ShadowMapUni, ShadowMatUni             gl2.UniformLocation
+}
+
+// NewGBuffer will create a new geometry buffer and allocate all the resources required
 func NewGBuffer(width, height int32) (gbuffer GBuffer, err error) {
 	const (
 		_gbufferVertexShaderSource = `#version 330
@@ -63,49 +80,48 @@ uniform mat4 N;
 in vec2 fragTexCoord;
 in vec3 normal;
 in vec3 world_pos;
-layout (location=0) out vec3 outColor;
+layout (location=0) out vec4 outAlbedo;
 layout (location=1) out vec3 outNormal;
 layout (location=2) out vec3 outPosition;
 void main() {
-	outColor = texture(diffuse, fragTexCoord).rgb;
+	outAlbedo = vec4(texture(diffuse, fragTexCoord).rgb, 0);
 	outNormal = (N*vec4(normal,1)).xyz;
 	outPosition = world_pos;
 }
 ` + "\x00"
 
-		//shouldnt be there
 		_gbufferAggregateFragmentShader = `#version 330
 #define MAX_POINT_LIGHT 8
 #define MIN_LUX 0.3
 
-//GBuffer textures
-uniform sampler2D diffusetex;
+// GBuffer textures
+uniform sampler2D albedoTex;
 uniform sampler2D normaltex;
 uniform sampler2D postex;
 uniform sampler2D depthtex;
 
-//cook
+// cook
 uniform float roughnessValue;
 uniform float F0;
 uniform float k;
 
-//Lights
+// Lights
 uniform int NUM_POINT_LIGHT;
 uniform vec3 point_light_pos[MAX_POINT_LIGHT];
 uniform vec3 point_light_color[MAX_POINT_LIGHT];
 
-//Shadows
+// Shadows
 uniform sampler2DShadow shadowmap;
 uniform mat4 shadowmat;
 
-//View
+// View
 uniform vec3 cam_pos;
 
 in vec2 uv;
 
 layout (location=0) out vec4 outColor;
 
-void main(){
+void cook() {
 	vec3 normal = normalize(texture(normaltex, uv).xyz);
 	vec3 world_position = texture(postex, uv).xyz;
 
@@ -113,9 +129,9 @@ void main(){
 	shadowcoord.z+=0.005;
 	float shadow = texture(shadowmap, shadowcoord.xyz,0);
 
-	//////cook torrance
+	////// cook torrance
 
-	//material values
+	// material values
 	vec3 lightColor = vec3(0.9,0.1,0.1);
 
 	vec3 world_pos = texture(postex, uv).xyz;
@@ -146,7 +162,25 @@ void main(){
 	if(lux < MIN_LUX){
 		lux=MIN_LUX;
 	}
-	outColor = texture(diffusetex, uv)*lux;
+	outColor = texture(albedoTex, uv)*lux;
+}
+
+void colMulLux(){
+	vec4 t = texture(albedoTex, uv);
+	outColor = vec4(t.rgb*t.a, 1);
+}
+
+void colOnly(){
+	outColor = texture(albedoTex, uv);
+}
+
+void luxOnly(){
+	float r = texture(albedoTex, uv).a;
+	outColor = vec4(r,r,r,1);
+}
+
+void main(){
+	colMulLux();
 }
 ` + "\x00"
 	)
@@ -165,13 +199,13 @@ void main(){
 	depthtex.WrapT(gl2.CLAMP_TO_EDGE)
 	depthtex.TexImage2D(0, gl2.DEPTH24_STENCIL8, width, height, 0, gl2.DEPTH_STENCIL, gl2.UNSIGNED_INT_24_8, nil)
 
-	diffuseTex := gl2.GenTexture2D()
-	diffuseTex.Bind()
-	diffuseTex.MinFilter(gl2.LINEAR)
-	diffuseTex.MagFilter(gl2.LINEAR)
-	diffuseTex.WrapS(gl2.CLAMP_TO_EDGE)
-	diffuseTex.WrapT(gl2.CLAMP_TO_EDGE)
-	diffuseTex.TexImage2D(0, gl2.RGB16F, width, height, 0, gl2.RGBA, gl2.FLOAT, nil)
+	albedoTex := gl2.GenTexture2D()
+	albedoTex.Bind()
+	albedoTex.MinFilter(gl2.LINEAR)
+	albedoTex.MagFilter(gl2.LINEAR)
+	albedoTex.WrapS(gl2.CLAMP_TO_EDGE)
+	albedoTex.WrapT(gl2.CLAMP_TO_EDGE)
+	albedoTex.TexImage2D(0, gl2.RGBA16F, width, height, 0, gl2.RGBA, gl2.FLOAT, nil)
 
 	normalTex := gl2.GenTexture2D()
 	normalTex.Bind()
@@ -179,7 +213,7 @@ void main(){
 	normalTex.MagFilter(gl2.LINEAR)
 	normalTex.WrapS(gl2.CLAMP_TO_EDGE)
 	normalTex.WrapT(gl2.CLAMP_TO_EDGE)
-	normalTex.TexImage2D(0, gl2.RGB16F, width, height, 0, gl2.RGB, gl2.FLOAT, nil)
+	normalTex.TexImage2D(0, gl2.RGBA16F, width, height, 0, gl2.RGBA, gl2.FLOAT, nil)
 
 	positionTex := gl2.GenTexture2D()
 	positionTex.Bind()
@@ -191,12 +225,12 @@ void main(){
 
 	fb.DrawBuffers(gl2.COLOR_ATTACHMENT0, gl2.COLOR_ATTACHMENT1, gl2.COLOR_ATTACHMENT2)
 
-	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, diffuseTex, 0 /*level*/)
-	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT1, normalTex, 0 /*level*/)
-	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT2, positionTex, 0 /*level*/)
-	fb.Texture(gl2.FRAMEBUFFER, gl2.DEPTH_STENCIL_ATTACHMENT, depthtex, 0 /*level*/)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, albedoTex, 0)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT1, normalTex, 0)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT2, positionTex, 0)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.DEPTH_STENCIL_ATTACHMENT, depthtex, 0)
 
-	gbuffer.DiffuseTex = diffuseTex
+	gbuffer.AlbedoTex = albedoTex
 	gbuffer.NormalTex = normalTex
 	gbuffer.PositionTex = positionTex
 	gbuffer.DepthTex = depthtex
@@ -223,15 +257,14 @@ void main(){
 	gbuffer.NUni = prog.GetUniformLocation("N")
 	gbuffer.MVPUni = prog.GetUniformLocation("MVP")
 	gbuffer.DiffuseUni = prog.GetUniformLocation("diffuse")
-	//shadow map
+	// shadow map
 
 	prog.BindFragDataLocation(0, "")
 	prog.BindFragDataLocation(1, "")
 	prog.BindFragDataLocation(2, "")
 
-	//Aggregated fb and textures, essentially a special post process effect
-	aggfb := AggregateFB{}
-	gbuffer.AggregateFramebuffer = aggfb
+	// Aggregated fb and textures, essentially a special post process effect
+	var aggfb AggregateFB
 
 	avs, err := CompileShader(_fullscreenVertexShader, gl2.VERTEX_SHADER)
 	if err != nil {
@@ -262,27 +295,164 @@ void main(){
 	aggfb.NormalUni = aprog.GetUniformLocation("normaltex")
 	aggfb.PosUni = aprog.GetUniformLocation("postex")
 	aggfb.DepthUni = aprog.GetUniformLocation("depthtex")
-	gbuffer.ShadowMapUni = aprog.GetUniformLocation("shadowmap")
-	gbuffer.ShadowMatUni = aprog.GetUniformLocation("shadowmat")
-
-	gbuffer.NumPointLightUni = aprog.GetUniformLocation("NUM_POINT_LIGHT")
-	gbuffer.PointLightPosUni = aprog.GetUniformLocation("point_light_pos")
-	gbuffer.PointLightColUni = aprog.GetUniformLocation("point_light_color")
-	gbuffer.CamPosUni = aprog.GetUniformLocation("cam_pos")
-
-	//test data for cook torrance shader
-	gbuffer.CookRoughnessValue = aprog.GetUniformLocation("roughnessValue")
-	gbuffer.CookF0 = aprog.GetUniformLocation("F0")
-	gbuffer.CookK = aprog.GetUniformLocation("k")
 
 	aggfb.framebuffer.DrawBuffers(gl2.COLOR_ATTACHMENT0)
 	aggfb.framebuffer.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, aggfb.Out, 0)
 
+	// test data for cook torrance shader
+	aggfb.CookRoughnessValue = aprog.GetUniformLocation("roughnessValue")
+	aggfb.CookF0 = aprog.GetUniformLocation("F0")
+	aggfb.CookK = aprog.GetUniformLocation("k")
+
+	aggfb.ShadowMapUni = aprog.GetUniformLocation("shadowmap")
+	aggfb.ShadowMatUni = aprog.GetUniformLocation("shadowmat")
+
+	aggfb.CamPosUni = aprog.GetUniformLocation("cam_pos")
+
+	aggfb.NumPointLightUni = aprog.GetUniformLocation("NUM_POINT_LIGHT")
+	aggfb.PointLightPosUni = aprog.GetUniformLocation("point_light_pos")
+	aggfb.PointLightColUni = aprog.GetUniformLocation("point_light_color")
+
 	gbuffer.AggregateFramebuffer = aggfb
+
+	gbuffer.setupLightAccumulator()
+
 	return
 }
 
-//Bind binds the FBO and calcualte view-projection.
+func (gb *GBuffer) setupLightAccumulator() error {
+	const (
+		_gbufferLightFS = `#version 330
+#define MIN_LUX 0.3
+
+// GBuffer textures
+uniform sampler2D albedoTex;
+uniform sampler2D normaltex;
+uniform sampler2D postex;
+uniform sampler2D depthtex;
+
+// cook
+uniform float roughnessValue;
+uniform float F0;
+uniform float k;
+
+// Lights
+uniform vec3 point_light_pos;
+
+// Shadows
+uniform sampler2DShadow shadowmap;
+uniform mat4 shadowmat;
+
+// View
+uniform vec3 cam_pos;
+
+in vec2 uv;
+
+layout (location=0) out vec4 outColor;
+
+void cook() {
+	vec3 normal = normalize(texture(normaltex, uv).xyz);
+	vec3 world_position = texture(postex, uv).xyz;
+
+	vec4 shadowcoord = shadowmat*vec4(world_position, 1);
+	shadowcoord.z+=0.005;
+	float shadow = texture(shadowmap, shadowcoord.xyz,0);
+
+	////// cook torrance
+
+	// material values
+	vec3 lightColor = vec3(0.9,0.1,0.1);
+
+	vec3 world_pos = texture(postex, uv).xyz;
+	vec3 lightDir = point_light_pos-world_pos;
+
+	float NdL = max(dot(normal, lightDir), 0);
+
+	float lux = shadow;
+	if(shadow > 0){
+		float specular = 0.0;
+		if(NdL > 0.0){
+			vec3 eyeDir = normalize(cam_pos-world_pos);
+
+			vec3 halfVec = normalize(lightDir+eyeDir);
+			float NdH = max(0,dot(normal,halfVec));
+			float NdV = max(0,dot(normal, eyeDir));
+			float VdH = max(0,dot(eyeDir, halfVec));
+			float mSqu = roughnessValue*roughnessValue;
+
+			float NH2 = 2.0*NdH;
+			float geoAtt = min(1.0,min((NH2*NdV)/VdH,(NH2*NdL)/VdH));
+			float roughness = (1.0 / ( 4.0 * mSqu * pow(NdH, 4.0)))*exp((NdH * NdH - 1.0) / (mSqu * NdH * NdH));
+			float fresnel = pow(1.0 - VdH, 5.0)*(1.0 - F0)+F0;
+			specular = (fresnel*geoAtt*roughness)/(NdV*NdL*3.14);
+		}
+		lux=NdL * (k + specular * (1.0 - k));
+	}
+
+	// add the light to the texture
+	vec4 o = texture(albedoTex, uv);
+	o.a += lux;
+	outColor = o;
+}
+
+void main(){
+	cook();
+}` + "\x00"
+	)
+	// Compile the light program
+	vs, err := CompileShader(_fullscreenVertexShader, gl2.VERTEX_SHADER)
+	if err != nil {
+		return err
+	}
+	fs, err := CompileShader(_gbufferLightFS, gl2.FRAGMENT_SHADER)
+	if err != nil {
+		return err
+	}
+	program, err := NewProgram(vs, fs)
+	if err != nil {
+		return err
+	}
+
+	lacc := LightAccumulator{
+		program: program,
+
+		framebuffer: gl2.GenFramebuffer(),
+
+		AlbedoUni: program.GetUniformLocation("diffusetex"),
+		NormalUni: program.GetUniformLocation("normaltex"),
+		PosUni:    program.GetUniformLocation("postex"),
+		DepthUni:  program.GetUniformLocation("depthtex"),
+
+		CookRoughnessValue: program.GetUniformLocation("roughnessValue"),
+		CookF0:             program.GetUniformLocation("F0"),
+		CookK:              program.GetUniformLocation("k"),
+
+		PointLightPosUni: program.GetUniformLocation("point_light_pos"),
+
+		CamPosUni: program.GetUniformLocation("cam_pos"),
+
+		ShadowMapUni: program.GetUniformLocation("shadowmap"),
+		ShadowMatUni: program.GetUniformLocation("shadowmat"),
+	}
+
+	// setup the framebuffer
+	program.Use()
+
+	lacc.framebuffer.Bind(gl2.FRAMEBUFFER)
+	// Enable texture out 0
+	lacc.framebuffer.DrawBuffers(gl2.COLOR_ATTACHMENT0)
+
+	// Bind the Albedo texture as output as well as input (because we accumulate light)
+	lacc.framebuffer.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, gb.AlbedoTex, 0)
+
+	gb.LightAcc = lacc
+
+	lacc.framebuffer.Unbind(gl2.FRAMEBUFFER)
+	lacc.program.Unuse()
+	return nil
+}
+
+// Bind binds the FBO and calcualte view-projection.
 func (gb *GBuffer) Bind(cam *Camera) {
 	gb.framebuffer.Bind(gl2.FRAMEBUFFER)
 	gb.program.Use()
@@ -295,7 +465,7 @@ func (gb *GBuffer) Bind(cam *Camera) {
 	gl.Clear(gl2.COLOR_BUFFER_BIT | gl2.DEPTH_BUFFER_BIT | gl2.STENCIL_BUFFER_BIT)
 }
 
-//Render will render the mesh in the different textures. No lighting calculation is performed here.
+// Render will render the mesh in the different textures. No lighting calculation is performed here.
 func (gb *GBuffer) Render(cam *Camera, mesh Mesh, tex gl2.Texture2D, t *Transform) {
 
 	model := t.Mat4()
@@ -315,18 +485,69 @@ func (gb *GBuffer) Render(cam *Camera, mesh Mesh, tex gl2.Texture2D, t *Transfor
 	mesh.DrawCall()
 }
 
-//Aggregate performs the lighting calculation per pixel. This is essentially a special post process pass.
+// RenderLight calculates the cook-torrance shader and accumulates its intensity
+// in the geometry buffer.
+func (gb *GBuffer) RenderLight(cam *Camera, light *PointLight, shadowmat glm.Mat4, tex gl2.Texture2D, roughness, F0, Kd float32) {
+	gb.LightAcc.framebuffer.Bind(gl2.FRAMEBUFFER)
+
+	gb.LightAcc.program.Use()
+
+	// cook params
+	gb.LightAcc.CookRoughnessValue.Uniform1f(roughness)
+	gb.LightAcc.CookF0.Uniform1f(F0)
+	gb.LightAcc.CookK.Uniform1f(Kd)
+
+	// Bind all 4 input.
+	gl.ActiveTexture(gl2.TEXTURE0)
+	gb.AlbedoTex.Bind()
+	gb.LightAcc.AlbedoUni.Uniform1i(0)
+
+	gl.ActiveTexture(gl2.TEXTURE1)
+	gb.NormalTex.Bind()
+	gb.LightAcc.NormalUni.Uniform1i(1)
+
+	gl.ActiveTexture(gl2.TEXTURE2)
+	gb.PositionTex.Bind()
+	gb.LightAcc.PosUni.Uniform1i(2)
+
+	gl.ActiveTexture(gl2.TEXTURE3)
+	gb.DepthTex.Bind()
+	gb.LightAcc.DepthUni.Uniform1i(3)
+
+	// cam
+	gb.LightAcc.CamPosUni.Uniform3fv(1, &cam.Pos[0])
+
+	//light pos
+	plightpos := make([]float32, 3)
+	plightpos[0] = light.X
+	plightpos[0+1] = light.Y
+	plightpos[0+2] = light.Z
+	gb.LightAcc.PointLightPosUni.Uniform3fv(int32(1), &plightpos[0])
+
+	// shadows
+	gl.ActiveTexture(gl2.TEXTURE4)
+	tex.Bind()
+	gb.LightAcc.ShadowMapUni.Uniform1i(4)
+	gb.LightAcc.ShadowMatUni.UniformMatrix4fv(1, false, &shadowmat[0])
+
+	Fstri()
+
+	gb.LightAcc.program.Unuse()
+	gb.LightAcc.framebuffer.Unbind(gl2.FRAMEBUFFER)
+}
+
+// Aggregate performs the lighting calculation per pixel. This is essentially a special post process pass.
 func (gb *GBuffer) Aggregate(cam *Camera, plights []*PointLight, shadowmat glm.Mat4, tex gl2.Texture2D, roughness, F0, Kd float32) {
 	gb.AggregateFramebuffer.framebuffer.Bind(gl2.FRAMEBUFFER)
 
 	gb.AggregateFramebuffer.program.Use()
 
-	gb.CookRoughnessValue.Uniform1f(roughness)
-	gb.CookF0.Uniform1f(F0)
-	gb.CookK.Uniform1f(Kd)
+	gb.AggregateFramebuffer.CookRoughnessValue.Uniform1f(roughness)
+	gb.AggregateFramebuffer.CookF0.Uniform1f(F0)
+	gb.AggregateFramebuffer.CookK.Uniform1f(Kd)
 
 	gl.ActiveTexture(gl2.TEXTURE0)
-	gb.DiffuseTex.Bind()
+	gb.AlbedoTex.Bind()
 	gb.AggregateFramebuffer.DiffUni.Uniform1i(0)
 
 	gl.ActiveTexture(gl2.TEXTURE1)
@@ -341,8 +562,8 @@ func (gb *GBuffer) Aggregate(cam *Camera, plights []*PointLight, shadowmat glm.M
 	gb.DepthTex.Bind()
 	gb.AggregateFramebuffer.DepthUni.Uniform1i(3)
 
-	//point lights
-	gb.NumPointLightUni.Uniform1i(int32(len(plights)))
+	// point lights
+	gb.AggregateFramebuffer.NumPointLightUni.Uniform1i(int32(len(plights)))
 	plightpos := make([]float32, len(plights)*3)
 	plightcol := make([]float32, len(plights)*3)
 	for i, light := range plights {
@@ -355,25 +576,28 @@ func (gb *GBuffer) Aggregate(cam *Camera, plights []*PointLight, shadowmat glm.M
 		plightcol[i] = light.B
 	}
 	if len(plights) != 0 {
-		gb.PointLightPosUni.Uniform3fv(int32(len(plights)), &plightpos[0])
-		gb.PointLightColUni.Uniform3fv(int32(len(plights)), &plightcol[0])
+		gb.AggregateFramebuffer.PointLightPosUni.Uniform3fv(int32(len(plights)), &plightpos[0])
+		gb.AggregateFramebuffer.PointLightColUni.Uniform3fv(int32(len(plights)), &plightcol[0])
 	}
-	gb.CamPosUni.Uniform3fv(1, &cam.Pos[0])
+	gb.AggregateFramebuffer.CamPosUni.Uniform3fv(1, &cam.Pos[0])
 
 	//=====shadow=====//
 	gl.ActiveTexture(gl2.TEXTURE4)
 	tex.Bind()
-	gb.ShadowMapUni.Uniform1i(4)
+	gb.AggregateFramebuffer.ShadowMapUni.Uniform1i(4)
 
-	gb.ShadowMatUni.UniformMatrix4fv(1, false, &shadowmat[0])
+	gb.AggregateFramebuffer.ShadowMatUni.UniformMatrix4fv(1, false, &shadowmat[0])
 	//================//
 
 	Fstri()
+
+	gb.AggregateFramebuffer.program.Unuse()
+	gb.AggregateFramebuffer.framebuffer.Unbind(gl2.FRAMEBUFFER)
 }
 
 /*
 sobel operation
-	//experimenting with sobel
+	// experimenting with sobel
 
 	float i00   = texture2D(depthtex, uv).r;
 	float im1m1 = texture2D(depthtex, uv+vec2(-pixwidth,-pixheight)).r;
@@ -389,13 +613,13 @@ sobel operation
 
 	float mag = 1-length(vec2(h, v));
 
-	//outColor = vec4(vec3(mag),1);
+	// outColor = vec4(vec3(mag),1);
 
 
 */
 
 /*
-precision highp float; //set default precision in glsl es 2.0
+precision highp float; // set default precision in glsl es 2.0
 
 uniform vec3 lightDirection;
 
