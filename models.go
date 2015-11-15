@@ -4,6 +4,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	glm "github.com/go-gl/mathgl/mgl32"
 	gl2 "github.com/luxengine/gl"
+	aglm "github.com/luxengine/glm"
 	"github.com/luxengine/lux/utils"
 )
 
@@ -34,6 +35,39 @@ func NewWavefrontModelFromFile(file string) Mesh {
 
 //NewVUNModel process and uploads the data to the GPU.
 func NewVUNModel(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.Vec2, indexedNormals []glm.Vec3) Mesh {
+
+	m := VUNMesh{}
+	m.VAO = gl2.GenVertexArray()
+	m.VAO.Bind()
+	defer m.VAO.Unbind()
+
+	m.Msize = int32(len(indices))
+	//create a bunch of buffers and fill them
+	//Positions
+	m.Positions = gl2.GenBuffer()
+	m.Positions.Bind(gl.ARRAY_BUFFER)
+	m.Positions.Data(gl.ARRAY_BUFFER, len(indexedVertices)*3*4, ptr(indexedVertices), gl.STATIC_DRAW)
+
+	//Uvs
+	m.Uvs = gl2.GenBuffer()
+	m.Uvs.Bind(gl.ARRAY_BUFFER)
+	m.Uvs.Data(gl.ARRAY_BUFFER, len(indexedUvs)*2*4, ptr(indexedUvs), gl.STATIC_DRAW)
+
+	//Normals
+	m.Normals = gl2.GenBuffer()
+	m.Normals.Bind(gl.ARRAY_BUFFER)
+	m.Normals.Data(gl.ARRAY_BUFFER, len(indexedNormals)*3*4, ptr(indexedNormals), gl.STATIC_DRAW)
+
+	//indices
+	m.Indices = gl2.GenBuffer()
+	m.Indices.Bind(gl.ELEMENT_ARRAY_BUFFER)
+	m.Indices.Data(gl.ELEMENT_ARRAY_BUFFER, len(indices)*2, ptr(indices), gl.STATIC_DRAW)
+
+	return &m
+}
+
+//NewVUNModelGlm process and uploads the data to the GPU.
+func NewVUNModelGlm(indices []uint16, indexedVertices []aglm.Vec3, indexedUvs []aglm.Vec2, indexedNormals []aglm.Vec3) Mesh {
 
 	m := VUNMesh{}
 	m.VAO = gl2.GenVertexArray()

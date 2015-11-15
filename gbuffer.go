@@ -316,14 +316,14 @@ func (gb *GBuffer) Render(cam *Camera, mesh Mesh, tex gl2.Texture2D, t *Transfor
 }
 
 //Aggregate performs the lighting calculation per pixel. This is essentially a special post process pass.
-func (gb *GBuffer) Aggregate(cam *Camera, plights []*PointLight, shadowmat glm.Mat4, tex gl2.Texture2D, f1, f2, f3 float32) {
+func (gb *GBuffer) Aggregate(cam *Camera, plights []*PointLight, shadowmat glm.Mat4, tex gl2.Texture2D, roughness, F0, Kd float32) {
 	gb.AggregateFramebuffer.framebuffer.Bind(gl2.FRAMEBUFFER)
 
 	gb.AggregateFramebuffer.program.Use()
 
-	gb.CookRoughnessValue.Uniform1f(f1)
-	gb.CookF0.Uniform1f(f2)
-	gb.CookK.Uniform1f(f3)
+	gb.CookRoughnessValue.Uniform1f(roughness)
+	gb.CookF0.Uniform1f(F0)
+	gb.CookK.Uniform1f(Kd)
 
 	gl.ActiveTexture(gl2.TEXTURE0)
 	gb.DiffuseTex.Bind()
