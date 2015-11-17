@@ -31,15 +31,15 @@ func NewShadowFBO(width, height int32) (*ShadowFBO, error) {
 	sfbo.texture = shadowtex
 	shadowtex.Bind()
 	defer shadowtex.Unbind()
-	shadowtex.TexParameteriv(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-	shadowtex.TexParameteriv(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-	shadowtex.TexParameteriv(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-	shadowtex.TexParameteriv(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-	shadowtex.TexParameteriv(gl.TEXTURE_2D, gl.TEXTURE_COMPARE_MODE, gl.COMPARE_REF_TO_TEXTURE)
-	shadowtex.TexParameteriv(gl.TEXTURE_2D, gl.TEXTURE_COMPARE_FUNC, gl.LEQUAL)
+	shadowtex.TexParameteri(gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+	shadowtex.TexParameteri(gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+	shadowtex.TexParameteri(gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+	shadowtex.TexParameteri(gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+	shadowtex.TexParameteri(gl.TEXTURE_COMPARE_MODE, gl.COMPARE_REF_TO_TEXTURE)
+	shadowtex.TexParameteri(gl.TEXTURE_COMPARE_FUNC, gl.LEQUAL)
 	shadowtex.TexImage2D(0, gl.DEPTH_COMPONENT16, width, height, 0, gl.DEPTH_COMPONENT, gl.FLOAT, nil)
 
-	fbo.Texture(gl2.FRAMEBUFFER, gl2.DEPTH_ATTACHMENT, shadowtex, 0 /*level*/)
+	fbo.Texture(gl2.FRAMEBUFFER, gl2.DEPTH_ATTACHMENT, gl2.Texture(shadowtex), 0 /*level*/)
 
 	fbo.DrawBuffer(gl2.NONE)
 	fbo.ReadBuffer(gl2.NONE)

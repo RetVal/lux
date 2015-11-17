@@ -155,10 +155,10 @@ void main(){
 
 	fb.DrawBuffers(gl2.COLOR_ATTACHMENT0, gl2.COLOR_ATTACHMENT1, gl2.COLOR_ATTACHMENT2)
 
-	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, albedoTex, 0)
-	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT1, normalTex, 0)
-	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT2, positionTex, 0)
-	fb.Texture(gl2.FRAMEBUFFER, gl2.DEPTH_STENCIL_ATTACHMENT, depthtex, 0)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, gl2.Texture(albedoTex), 0)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT1, gl2.Texture(normalTex), 0)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT2, gl2.Texture(positionTex), 0)
+	fb.Texture(gl2.FRAMEBUFFER, gl2.DEPTH_STENCIL_ATTACHMENT, gl2.Texture(depthtex), 0)
 
 	gbuffer.AlbedoTex = albedoTex
 	gbuffer.NormalTex = normalTex
@@ -227,7 +227,7 @@ void main(){
 	aggfb.DepthUni = aprog.GetUniformLocation("depthtex")
 
 	aggfb.framebuffer.DrawBuffers(gl2.COLOR_ATTACHMENT0)
-	aggfb.framebuffer.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, aggfb.Out, 0)
+	aggfb.framebuffer.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, gl2.Texture(aggfb.Out), 0)
 
 	gbuffer.AggregateFramebuffer = aggfb
 
@@ -359,7 +359,7 @@ void main(){
 	lacc.framebuffer.DrawBuffers(gl2.COLOR_ATTACHMENT0)
 
 	// Bind the Albedo texture as output as well as input (because we accumulate light)
-	lacc.framebuffer.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, gb.AlbedoTex, 0)
+	lacc.framebuffer.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, gl2.Texture(gb.AlbedoTex), 0)
 
 	gb.LightAcc = lacc
 

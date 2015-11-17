@@ -2,7 +2,8 @@ package terrain
 
 import (
 	"errors"
-	glm "github.com/go-gl/mathgl/mgl32"
+	"github.com/luxengine/glm"
+
 	"github.com/luxengine/lux"
 )
 
@@ -29,10 +30,14 @@ func NewTerrain(heightmap [][]float32, scale float32) (lux.Mesh, error) {
 			nxp := glm.Vec3{float32(x) * scale, heightmap[x+1][y], float32(y-1) * scale}
 			nym := glm.Vec3{float32(x-1) * scale, heightmap[x][y-1], float32(y-2) * scale}
 			nyp := glm.Vec3{float32(x-1) * scale, heightmap[x][y+1], float32(y) * scale}
-			n1 := NormalToPlane(n, nyp, nxp).Normalize()
-			n2 := NormalToPlane(n, nxp, nym).Normalize()
-			n3 := NormalToPlane(n, nym, nxm).Normalize()
-			n4 := NormalToPlane(n, nxm, nyp).Normalize()
+			n1 := NormalToPlane(n, nyp, nxp)
+			n1.Normalize()
+			n2 := NormalToPlane(n, nxp, nym)
+			n2.Normalize()
+			n3 := NormalToPlane(n, nym, nxm)
+			n3.Normalize()
+			n4 := NormalToPlane(n, nxm, nyp)
+			n4.Normalize()
 			normals[(y-1)*width+(x-1)] = AverageVec(n1, n2, n3, n4)
 		}
 	}
@@ -47,15 +52,16 @@ func NewTerrain(heightmap [][]float32, scale float32) (lux.Mesh, error) {
 	return lux.NewVUNModel(indices, vertices, uvs, normals), nil
 }
 
-//given 3 vertices, returns the normal of the plane formed by this triangle
+// NormalToPlane returns the normal to the triangle defined by the 3 vertices
+// given
 //TODO: move to a math package
 func NormalToPlane(v1, v2, v3 glm.Vec3) glm.Vec3 {
-	u := v2.Sub(v1)
-	v := v3.Sub(v1)
+	u := v2.Sub(&v1)
+	v := v3.Sub(&v1)
 	return glm.Vec3{u.Y()*v.Z() - u.Z()*v.Y(), u.Z()*v.X() - u.X()*v.Z(), u.X()*v.Y() - u.Y()*v.X()}
 }
 
-//Return the average of the vectors. they must be normalized.
+// AverageVec returns the average of the vectors. they must be normalized.
 func AverageVec(vecs ...glm.Vec3) glm.Vec3 {
 	x, y, z := float32(0), float32(0), float32(0)
 	for _, vec := range vecs {
@@ -66,5 +72,6 @@ func AverageVec(vecs ...glm.Vec3) glm.Vec3 {
 	x /= float32(len(vecs))
 	y /= float32(len(vecs))
 	z /= float32(len(vecs))
-	return (glm.Vec3{x, y, z}).Normalize()
+	out := glm.Vec3{x, y, z}
+	return out.Normalized()
 }

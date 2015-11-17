@@ -5,19 +5,19 @@
 package utils
 
 import (
-	"github.com/go-gl/mathgl/mgl32"
+	"github.com/luxengine/glm"
 )
 
 // Note: is_near is implemented in mathgl already as FloatEqual
 
 type PackedVertex struct {
-	Position mgl32.Vec3
-	UV       mgl32.Vec2
-	Norm     mgl32.Vec3
+	Position glm.Vec3
+	UV       glm.Vec2
+	Norm     glm.Vec3
 }
 
 // Doesn't work like in C++ because Go maps use ==
-/*func IndexVBO(vertices []mgl32.Vec3, uvs []mgl32.Vec2, normals []mgl32.Vec3) (outIndices []uint16, outVertices []mgl32.Vec3, outUVs []mgl32.Vec2, outNorms []mgl32.Vec3) {
+/*func IndexVBO(vertices []glm.Vec3, uvs []glm.Vec2, normals []glm.Vec3) (outIndices []uint16, outVertices []glm.Vec3, outUVs []glm.Vec2, outNorms []glm.Vec3) {
 	vertToOutIndex := make(map[PackedVertex]uint16, 0)
 
 	for i := range vertices {
@@ -39,7 +39,7 @@ type PackedVertex struct {
 	return
 }*/
 
-func IndexVBOSlow(vertices []mgl32.Vec3, uvs []mgl32.Vec2, normals []mgl32.Vec3) (outIndices []uint16, outVertices []mgl32.Vec3, outUVs []mgl32.Vec2, outNorms []mgl32.Vec3) {
+func IndexVBOSlow(vertices []glm.Vec3, uvs []glm.Vec2, normals []glm.Vec3) (outIndices []uint16, outVertices []glm.Vec3, outUVs []glm.Vec2, outNorms []glm.Vec3) {
 
 	for i := range vertices {
 
@@ -58,12 +58,12 @@ func IndexVBOSlow(vertices []mgl32.Vec3, uvs []mgl32.Vec2, normals []mgl32.Vec3)
 	return
 }
 
-func SimilarVertexIndexSlow(vertex mgl32.Vec3, uv mgl32.Vec2, normal mgl32.Vec3, vertices []mgl32.Vec3, uvs []mgl32.Vec2, normals []mgl32.Vec3) (index uint16, found bool) {
+func SimilarVertexIndexSlow(vertex glm.Vec3, uv glm.Vec2, normal glm.Vec3, vertices []glm.Vec3, uvs []glm.Vec2, normals []glm.Vec3) (index uint16, found bool) {
 	// Lame linear search
 	for i := range vertices {
-		if mgl32.FloatEqualThreshold(vertex[0], vertices[i][0], .01) && mgl32.FloatEqualThreshold(vertex[1], vertices[i][1], .01) && mgl32.FloatEqualThreshold(vertex[2], vertices[i][2], .01) &&
-			mgl32.FloatEqualThreshold(uv[0], uvs[i][0], .01) && mgl32.FloatEqualThreshold(uv[1], uvs[i][1], .01) &&
-			mgl32.FloatEqualThreshold(normal[0], normals[i][0], .01) && mgl32.FloatEqualThreshold(normal[1], normals[i][1], .01) && mgl32.FloatEqualThreshold(normal[2], normals[i][2], .01) {
+		if glm.FloatEqualThreshold(vertex[0], vertices[i][0], .01) && glm.FloatEqualThreshold(vertex[1], vertices[i][1], .01) && glm.FloatEqualThreshold(vertex[2], vertices[i][2], .01) &&
+			glm.FloatEqualThreshold(uv[0], uvs[i][0], .01) && glm.FloatEqualThreshold(uv[1], uvs[i][1], .01) &&
+			glm.FloatEqualThreshold(normal[0], normals[i][0], .01) && glm.FloatEqualThreshold(normal[1], normals[i][1], .01) && glm.FloatEqualThreshold(normal[2], normals[i][2], .01) {
 			return uint16(i), true
 		}
 	}

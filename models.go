@@ -2,9 +2,8 @@ package lux
 
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
-	glm "github.com/go-gl/mathgl/mgl32"
 	gl2 "github.com/luxengine/gl"
-	aglm "github.com/luxengine/glm"
+	"github.com/luxengine/glm"
 	"github.com/luxengine/lux/utils"
 )
 
@@ -67,7 +66,7 @@ func NewVUNModel(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.
 }
 
 //NewVUNModelGlm process and uploads the data to the GPU.
-func NewVUNModelGlm(indices []uint16, indexedVertices []aglm.Vec3, indexedUvs []aglm.Vec2, indexedNormals []aglm.Vec3) Mesh {
+func NewVUNModelGlm(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.Vec2, indexedNormals []glm.Vec3) Mesh {
 
 	m := VUNMesh{}
 	m.VAO = gl2.GenVertexArray()

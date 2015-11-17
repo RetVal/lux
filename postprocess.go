@@ -86,7 +86,7 @@ func NewPostProcessFramebuffer(width, height int32, fragmentSource string) (*Pos
 	ppf.Fb.Bind(gl2.FRAMEBUFFER)
 	defer ppf.Fb.Unbind(gl2.FRAMEBUFFER)
 
-	ppf.Fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, ppf.Tex, 0)
+	ppf.Fb.Texture(gl2.FRAMEBUFFER, gl2.COLOR_ATTACHMENT0, gl2.Texture(ppf.Tex), 0)
 	ppf.Fb.DrawBuffers(gl2.COLOR_ATTACHMENT0)
 
 	if gl.CheckFramebufferStatus(gl.FRAMEBUFFER) != gl.FRAMEBUFFER_COMPLETE {
