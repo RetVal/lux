@@ -1,5 +1,9 @@
 package control
 
+//TODO:
+// - add a way to differentiate between player 1-4
+// - add drivers of some sort so you can chose between glfw, steam or Xinput (or other input methods)
+
 // LoadControls loads the control in the given file.
 func LoadControls() {}
 
