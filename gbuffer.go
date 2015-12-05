@@ -79,7 +79,6 @@ void main() {
 ` + "\x00"
 
 		_gbufferAggregateFragmentShader = `#version 330
-#define MIN_LUX 0.3
 
 // GBuffer textures
 uniform sampler2D albedoTex;
@@ -93,9 +92,6 @@ layout (location=0) out vec4 outColor;
 
 float Lux() {
 	float lux = texture(albedoTex, uv).a;
-	if(lux < MIN_LUX){
-		return MIN_LUX;
-	}
 	return lux;
 }
 
