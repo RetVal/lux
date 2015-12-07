@@ -25,7 +25,7 @@ void main(){
 }
 ` + "\x00"
 
-//Sample post process shader to visualise depth (works differently on my mac and linux, weird)
+//Sample post process shader to visualise depth (works differently on my mac and gnu+linux, weird)
 var PostprocessfragmentshaderViewdepth = `#version 330
 uniform sampler2D tex;
 uniform vec2 resolution;
