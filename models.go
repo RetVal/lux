@@ -45,23 +45,23 @@ func NewVUNModel(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.
 	//create a bunch of buffers and fill them
 	//Positions
 	m.Positions = gl2.GenBuffer()
-	m.Positions.Bind(gl.ARRAY_BUFFER)
-	m.Positions.Data(gl.ARRAY_BUFFER, len(indexedVertices)*3*4, unsafe.Pointer(&indexedVertices[0]), gl.STATIC_DRAW)
+	m.Positions.Bind(gl2.ARRAY_BUFFER)
+	m.Positions.Data(gl2.ARRAY_BUFFER, len(indexedVertices)*3*4, unsafe.Pointer(&indexedVertices[0]), gl2.STATIC_DRAW)
 
 	//Uvs
 	m.Uvs = gl2.GenBuffer()
-	m.Uvs.Bind(gl.ARRAY_BUFFER)
-	m.Uvs.Data(gl.ARRAY_BUFFER, len(indexedUvs)*2*4, unsafe.Pointer(&indexedUvs[0]), gl.STATIC_DRAW)
+	m.Uvs.Bind(gl2.ARRAY_BUFFER)
+	m.Uvs.Data(gl2.ARRAY_BUFFER, len(indexedUvs)*2*4, unsafe.Pointer(&indexedUvs[0]), gl2.STATIC_DRAW)
 
 	//Normals
 	m.Normals = gl2.GenBuffer()
-	m.Normals.Bind(gl.ARRAY_BUFFER)
-	m.Normals.Data(gl.ARRAY_BUFFER, len(indexedNormals)*3*4, unsafe.Pointer(&indexedNormals[0]), gl.STATIC_DRAW)
+	m.Normals.Bind(gl2.ARRAY_BUFFER)
+	m.Normals.Data(gl2.ARRAY_BUFFER, len(indexedNormals)*3*4, unsafe.Pointer(&indexedNormals[0]), gl2.STATIC_DRAW)
 
 	//indices
 	m.Indices = gl2.GenBuffer()
-	m.Indices.Bind(gl.ELEMENT_ARRAY_BUFFER)
-	m.Indices.Data(gl.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl.STATIC_DRAW)
+	m.Indices.Bind(gl2.ELEMENT_ARRAY_BUFFER)
+	m.Indices.Data(gl2.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl2.STATIC_DRAW)
 
 	return &m
 }
@@ -78,23 +78,23 @@ func NewVUNModelGlm(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []g
 	//create a bunch of buffers and fill them
 	//Positions
 	m.Positions = gl2.GenBuffer()
-	m.Positions.Bind(gl.ARRAY_BUFFER)
-	m.Positions.Data(gl.ARRAY_BUFFER, len(indexedVertices)*3*4, unsafe.Pointer(&indexedVertices[0]), gl.STATIC_DRAW)
+	m.Positions.Bind(gl2.ARRAY_BUFFER)
+	m.Positions.Data(gl2.ARRAY_BUFFER, len(indexedVertices)*3*4, unsafe.Pointer(&indexedVertices[0]), gl2.STATIC_DRAW)
 
 	//Uvs
 	m.Uvs = gl2.GenBuffer()
-	m.Uvs.Bind(gl.ARRAY_BUFFER)
-	m.Uvs.Data(gl.ARRAY_BUFFER, len(indexedUvs)*2*4, unsafe.Pointer(&indexedUvs[0]), gl.STATIC_DRAW)
+	m.Uvs.Bind(gl2.ARRAY_BUFFER)
+	m.Uvs.Data(gl2.ARRAY_BUFFER, len(indexedUvs)*2*4, unsafe.Pointer(&indexedUvs[0]), gl2.STATIC_DRAW)
 
 	//Normals
 	m.Normals = gl2.GenBuffer()
-	m.Normals.Bind(gl.ARRAY_BUFFER)
-	m.Normals.Data(gl.ARRAY_BUFFER, len(indexedNormals)*3*4, unsafe.Pointer(&indexedNormals[0]), gl.STATIC_DRAW)
+	m.Normals.Bind(gl2.ARRAY_BUFFER)
+	m.Normals.Data(gl2.ARRAY_BUFFER, len(indexedNormals)*3*4, unsafe.Pointer(&indexedNormals[0]), gl2.STATIC_DRAW)
 
 	//indices
 	m.Indices = gl2.GenBuffer()
-	m.Indices.Bind(gl.ELEMENT_ARRAY_BUFFER)
-	m.Indices.Data(gl.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl.STATIC_DRAW)
+	m.Indices.Bind(gl2.ELEMENT_ARRAY_BUFFER)
+	m.Indices.Data(gl2.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl2.STATIC_DRAW)
 
 	return &m
 }
@@ -105,18 +105,18 @@ func (m *VUNMesh) Bind() {
 	vao.Bind()
 
 	vao.EnableVertexAttribArray(0)
-	m.Positions.Bind(gl.ARRAY_BUFFER)
-	vao.VertexAttribPointer(0, 3, gl.FLOAT, false, 0, nil)
+	m.Positions.Bind(gl2.ARRAY_BUFFER)
+	vao.VertexAttribPointer(0, 3, gl2.FLOAT, false, 0, nil)
 
 	vao.EnableVertexAttribArray(1)
-	m.Uvs.Bind(gl.ARRAY_BUFFER)
-	vao.VertexAttribPointer(1, 2, gl.FLOAT, false, 0, nil)
+	m.Uvs.Bind(gl2.ARRAY_BUFFER)
+	vao.VertexAttribPointer(1, 2, gl2.FLOAT, false, 0, nil)
 
 	vao.EnableVertexAttribArray(2)
-	m.Normals.Bind(gl.ARRAY_BUFFER)
-	vao.VertexAttribPointer(2, 3, gl.FLOAT, false, 0, nil)
+	m.Normals.Bind(gl2.ARRAY_BUFFER)
+	vao.VertexAttribPointer(2, 3, gl2.FLOAT, false, 0, nil)
 
-	m.Indices.Bind(gl.ELEMENT_ARRAY_BUFFER)
+	m.Indices.Bind(gl2.ELEMENT_ARRAY_BUFFER)
 }
 
 //Unbind all the resources.
@@ -140,5 +140,5 @@ func (m *VUNMesh) Size() int32 {
 
 //DrawCall send a single draw call
 func (m *VUNMesh) DrawCall() {
-	gl.DrawElements(gl.TRIANGLES, m.Size(), gl.UNSIGNED_SHORT, nil)
+	gl.DrawElements(gl2.TRIANGLES, m.Size(), gl2.UNSIGNED_SHORT, nil)
 }
