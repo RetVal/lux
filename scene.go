@@ -1,5 +1,10 @@
 package lux
 
+import (
+	"github.com/luxengine/glm"
+)
+
+// SceneGraph is a graph for a scene.
 type SceneGraph struct {
 	root *Node
 }
@@ -15,9 +20,8 @@ func Traverse(*Camera, func(*Node)) { panic("scene tree not implemented") }
 // it may be a model.
 type Node struct {
 	Transform
-	parent     *Node
-	children   []Node
-	renderNode *RenderNode
+	parent   *Node
+	children []Node
 
 	needUpdate bool
 }
@@ -35,7 +39,8 @@ func (n *Node) propagateNeedUpdate() {
 	}
 }
 
-func (n *Node) AttachChildren()
+// AttachChildren attaches a children to this node
+func (n *Node) AttachChildren() { panic("scene tree not implemented") }
 
 // Translate add the translation (x,y,z) to the current transform.
 func (n *Node) Translate(x, y, z float32) {
@@ -50,13 +55,13 @@ func (n *Node) SetTranslate(x, y, z float32) {
 }
 
 // QuatRotate add the rotation represented by this (angle,quat) to the current transform.
-func (n *Node) QuatRotate(angle float32, axis glm.Vec3) {
+func (n *Node) QuatRotate(angle float32, axis *glm.Vec3) {
 	n.propagateNeedUpdate()
 	n.Transform.QuatRotate(angle, axis)
 }
 
 // SetQuatRotate will reset this transform to represent the rotation represented by this (angle,quat).
-func (n *Node) SetQuatRotate(angle float32, axis glm.Vec3) {
+func (n *Node) SetQuatRotate(angle float32, axis *glm.Vec3) {
 	n.propagateNeedUpdate()
 	n.Transform.SetQuatRotate(angle, axis)
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/glfw/v3.1/glfw"
 	gl2 "github.com/luxengine/gl"
+	"unsafe"
 )
 
 //the post process fullscreen quad mesh
@@ -22,12 +23,13 @@ func InitPostProcessSystem() {
 	defer quadvao.Unbind()
 
 	vertpos := gl2.GenBuffer()
+
 	vertpos.Bind(gl.ARRAY_BUFFER)
-	gl.BufferData(gl.ARRAY_BUFFER, len(_quadvertpos)*2*4, ptr(_quadvertpos), gl.STATIC_DRAW)
+	gl.BufferData(gl.ARRAY_BUFFER, len(_quadvertpos)*2*4, unsafe.Pointer(&_quadvertpos[0]), gl.STATIC_DRAW)
 
 	vertuv := gl2.GenBuffer()
 	vertuv.Bind(gl.ARRAY_BUFFER)
-	gl.BufferData(gl.ARRAY_BUFFER, len(_quadvertuv)*2*4, ptr(_quadvertuv), gl.STATIC_DRAW)
+	gl.BufferData(gl.ARRAY_BUFFER, len(_quadvertuv)*2*4, unsafe.Pointer(&_quadvertuv[0]), gl.STATIC_DRAW)
 
 	fstri.vao = quadvao
 	fstri.pos = vertpos

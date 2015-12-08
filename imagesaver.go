@@ -36,7 +36,7 @@ func SaveTexture2D(t gl2.Texture2D, filename string) error {
 			nrgba.SetRGBA((x/4)%width, height-(x/4)/width, color.RGBA{pixels[x], pixels[x+1], pixels[x+2], 255})
 		}
 	} else {
-		fmt.Errorf("unsupported texture type")
+		return fmt.Errorf("unsupported texture type")
 	}
 	png.Encode(file, nrgba)
 	return nil

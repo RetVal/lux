@@ -5,6 +5,7 @@ import (
 	gl2 "github.com/luxengine/gl"
 	"github.com/luxengine/glm"
 	"github.com/luxengine/lux/utils"
+	"unsafe"
 )
 
 //Mesh is an interface to represent any renderable mesh
@@ -45,22 +46,22 @@ func NewVUNModel(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.
 	//Positions
 	m.Positions = gl2.GenBuffer()
 	m.Positions.Bind(gl.ARRAY_BUFFER)
-	m.Positions.Data(gl.ARRAY_BUFFER, len(indexedVertices)*3*4, ptr(indexedVertices), gl.STATIC_DRAW)
+	m.Positions.Data(gl.ARRAY_BUFFER, len(indexedVertices)*3*4, unsafe.Pointer(&indexedVertices[0]), gl.STATIC_DRAW)
 
 	//Uvs
 	m.Uvs = gl2.GenBuffer()
 	m.Uvs.Bind(gl.ARRAY_BUFFER)
-	m.Uvs.Data(gl.ARRAY_BUFFER, len(indexedUvs)*2*4, ptr(indexedUvs), gl.STATIC_DRAW)
+	m.Uvs.Data(gl.ARRAY_BUFFER, len(indexedUvs)*2*4, unsafe.Pointer(&indexedUvs[0]), gl.STATIC_DRAW)
 
 	//Normals
 	m.Normals = gl2.GenBuffer()
 	m.Normals.Bind(gl.ARRAY_BUFFER)
-	m.Normals.Data(gl.ARRAY_BUFFER, len(indexedNormals)*3*4, ptr(indexedNormals), gl.STATIC_DRAW)
+	m.Normals.Data(gl.ARRAY_BUFFER, len(indexedNormals)*3*4, unsafe.Pointer(&indexedNormals[0]), gl.STATIC_DRAW)
 
 	//indices
 	m.Indices = gl2.GenBuffer()
 	m.Indices.Bind(gl.ELEMENT_ARRAY_BUFFER)
-	m.Indices.Data(gl.ELEMENT_ARRAY_BUFFER, len(indices)*2, ptr(indices), gl.STATIC_DRAW)
+	m.Indices.Data(gl.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl.STATIC_DRAW)
 
 	return &m
 }
@@ -78,22 +79,22 @@ func NewVUNModelGlm(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []g
 	//Positions
 	m.Positions = gl2.GenBuffer()
 	m.Positions.Bind(gl.ARRAY_BUFFER)
-	m.Positions.Data(gl.ARRAY_BUFFER, len(indexedVertices)*3*4, ptr(indexedVertices), gl.STATIC_DRAW)
+	m.Positions.Data(gl.ARRAY_BUFFER, len(indexedVertices)*3*4, unsafe.Pointer(&indexedVertices[0]), gl.STATIC_DRAW)
 
 	//Uvs
 	m.Uvs = gl2.GenBuffer()
 	m.Uvs.Bind(gl.ARRAY_BUFFER)
-	m.Uvs.Data(gl.ARRAY_BUFFER, len(indexedUvs)*2*4, ptr(indexedUvs), gl.STATIC_DRAW)
+	m.Uvs.Data(gl.ARRAY_BUFFER, len(indexedUvs)*2*4, unsafe.Pointer(&indexedUvs[0]), gl.STATIC_DRAW)
 
 	//Normals
 	m.Normals = gl2.GenBuffer()
 	m.Normals.Bind(gl.ARRAY_BUFFER)
-	m.Normals.Data(gl.ARRAY_BUFFER, len(indexedNormals)*3*4, ptr(indexedNormals), gl.STATIC_DRAW)
+	m.Normals.Data(gl.ARRAY_BUFFER, len(indexedNormals)*3*4, unsafe.Pointer(&indexedNormals[0]), gl.STATIC_DRAW)
 
 	//indices
 	m.Indices = gl2.GenBuffer()
 	m.Indices.Bind(gl.ELEMENT_ARRAY_BUFFER)
-	m.Indices.Data(gl.ELEMENT_ARRAY_BUFFER, len(indices)*2, ptr(indices), gl.STATIC_DRAW)
+	m.Indices.Data(gl.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl.STATIC_DRAW)
 
 	return &m
 }

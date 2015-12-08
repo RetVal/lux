@@ -2,12 +2,10 @@ package lux
 
 import (
 	"errors"
-	"fmt"
-	glm "github.com/go-gl/mathgl/mgl32"
 	"testing"
-)
 
-var _ = fmt.Printf
+	"github.com/luxengine/glm"
+)
 
 func TestCameraSetPerspective(t *testing.T) {
 	cam := Camera{}

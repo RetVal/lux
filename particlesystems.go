@@ -2,12 +2,14 @@ package lux
 
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
-	glm "github.com/go-gl/mathgl/mgl32"
 	gl2 "github.com/luxengine/gl"
+	"github.com/luxengine/glm"
 	"strings"
 	"unsafe"
 )
 
+// ParticleSystem is a particle system, it generates tiny points in space and
+// renders them
 type ParticleSystem struct {
 	root, direction         glm.Vec3
 	transformfeedbacks      []gl2.TransformFeedback //size 2
@@ -25,16 +27,19 @@ type ParticleSystem struct {
 	gSecondaryShellLifetime gl2.UniformLocation
 }
 
+// Particle is a single particle.
 type Particle struct {
 	Type               int32
 	Position, Velocity glm.Vec3
 	Lifetime           float32
 }
 
+// the types of particle there are
 const (
 	Launcher int32 = 0
 )
 
+// NewParticleSystem builds a particle system
 func NewParticleSystem(position, direction glm.Vec3, size int) *ParticleSystem {
 	ps := ParticleSystem{}
 	ps.root = position
@@ -96,6 +101,7 @@ func NewParticleSystem(position, direction glm.Vec3, size int) *ParticleSystem {
 	return &ps
 }
 
+// Render renders this particle system
 func (ps *ParticleSystem) Render(delta float64, VP glm.Mat4, camera glm.Vec3) {
 	ps.time += delta
 

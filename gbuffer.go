@@ -2,8 +2,8 @@ package lux
 
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
-	glm "github.com/go-gl/mathgl/mgl32"
 	gl2 "github.com/luxengine/gl"
+	"github.com/luxengine/glm"
 )
 
 // GBuffer is lux implementation of a geometry buffer for defered rendering
@@ -369,7 +369,7 @@ func (gb *GBuffer) Bind(cam *Camera) {
 	gb.framebuffer.Bind(gl2.FRAMEBUFFER)
 	gb.program.Use()
 
-	gb.vp = cam.Projection.Mul4(cam.View)
+	gb.vp = cam.Projection.Mul4(&cam.View)
 	gb.view = cam.View
 
 	ViewportChange(gb.width, gb.height)
@@ -381,12 +381,12 @@ func (gb *GBuffer) Bind(cam *Camera) {
 func (gb *GBuffer) Render(cam *Camera, mesh Mesh, tex gl2.Texture2D, t *Transform) {
 
 	model := t.Mat4()
-	mvp := gb.vp.Mul4(model)
+	mvp := gb.vp.Mul4(&model)
 	gb.MVPUni.UniformMatrix4fv(1, false, &mvp[0])
 
 	gb.MUni.UniformMatrix4fv(1, false, &model[0])
 
-	normal := model.Inv()
+	normal := model.Inverse()
 	gb.NUni.UniformMatrix4fv(1, true, &normal[0])
 
 	gl.ActiveTexture(gl2.TEXTURE0)

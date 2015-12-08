@@ -3,8 +3,8 @@ package lux
 import (
 	"errors"
 	"github.com/go-gl/gl/v3.3-core/gl"
-	glm "github.com/go-gl/mathgl/mgl32"
 	gl2 "github.com/luxengine/gl"
+	"github.com/luxengine/glm"
 )
 
 //ShadowFBO is the structure to hold all the resources required to render shadow maps.
@@ -83,7 +83,7 @@ func (sfbo *ShadowFBO) LookAt(ex, ey, ez, tx, ty, tz float32) {
 func (sfbo *ShadowFBO) BindForDrawing() {
 	sfbo.framebuffer.Bind(gl2.FRAMEBUFFER)
 	sfbo.program.Use()
-	sfbo.vp = sfbo.projection.Mul4(sfbo.view)
+	sfbo.vp = sfbo.projection.Mul4(&sfbo.view)
 	gl.Clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT)
 	ViewportChange(sfbo.width, sfbo.height)
 	gl.CullFace(gl.FRONT)
@@ -97,7 +97,8 @@ func (sfbo *ShadowFBO) Unbind() {
 
 //Render takes a mesh and a transform and render them, adding them to the depth texture data.
 func (sfbo *ShadowFBO) Render(mesh Mesh, transform *Transform) {
-	mvpmat := sfbo.vp.Mul4(transform.Mat4())
+	m := transform.Mat4()
+	mvpmat := sfbo.vp.Mul4(&m)
 	sfbo.mvpUni.UniformMatrix4fv(1, false, &mvpmat[0])
 	mesh.Bind()
 	mesh.DrawCall()
@@ -110,7 +111,7 @@ func (sfbo *ShadowFBO) ShadowMap() gl2.Texture2D {
 
 //ShadowMat return the 4x4 matric that represent world-to-screen transform used to check pixel occlusion.
 func (sfbo *ShadowFBO) ShadowMat() glm.Mat4 {
-	return depthscaling.Mul4(sfbo.vp)
+	return depthscaling.Mul4(&sfbo.vp)
 }
 
 //Delete will clean up all the resources allocated to this FBO.
