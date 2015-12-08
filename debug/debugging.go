@@ -18,12 +18,13 @@ func glDebugCallback(source uint32, gltype uint32, id uint32, severity uint32, l
 	}
 }
 
-//Call this function once to enable debug print message (to stdout). Will not crash if your machine does not support GL_ARB_debug_output
+// EnableGLDebugLogging enables debug print message (to stdout). Will not crash
+// if your machine does not support GL_ARB_debug_output. Only call this once.
 func EnableGLDebugLogging() {
 	if lux.Extensions["GL_ARB_debug_output"] {
 		log.Print("debugging enabled")
 		gl.Enable(gl.DEBUG_OUTPUT_SYNCHRONOUS_ARB)
-		gl.DebugMessageCallbackARB(gl.DebugProc(glDebugCallback), gl.Ptr(nil))
+		gl.DebugMessageCallbackARB(gl.DebugProc(glDebugCallback), nil)
 	}
 }
 

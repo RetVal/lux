@@ -7,17 +7,19 @@ package utils
 import (
 	"bufio"
 	"fmt"
-	"github.com/luxengine/glm"
-
 	"os"
+
+	"github.com/luxengine/glm"
 )
 
+// MeshObject is a VUN mesh
 type MeshObject struct {
 	Vertices []glm.Vec3
 	UVs      []glm.Vec2
 	Normals  []glm.Vec3
 }
 
+// LoadObject loads the wavefront object in the given file.
 func LoadObject(fname string, invertV bool) *MeshObject {
 	file, err := os.Open(fname)
 	if err != nil {
@@ -31,7 +33,7 @@ func LoadObject(fname string, invertV bool) *MeshObject {
 	vIndices, uvIndices, nIndices := make([]uint, 0), make([]uint, 0), make([]uint, 0)
 
 	for line, err := reader.ReadString('\n'); err == nil; line, err = reader.ReadString('\n') {
-		lineReader := bufio.NewReader(StringReader(line))
+		lineReader := bufio.NewReader(stringReader(line))
 		header, _ := lineReader.ReadString(' ')
 		restOfLine, _ := lineReader.ReadString('\n')
 
@@ -93,9 +95,9 @@ func LoadObject(fname string, invertV bool) *MeshObject {
 	return obj
 }
 
-type StringReader string
+type stringReader string
 
-func (s StringReader) Read(byt []byte) (n int, err error) {
+func (s stringReader) Read(byt []byte) (n int, err error) {
 	copy(byt, string(s))
 	return len(byt), nil
 }

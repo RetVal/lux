@@ -5,7 +5,8 @@ import (
 	"github.com/luxengine/gl"
 )
 
-//NewProgram will create an OpenGL program from the given shaders, any combinations can be used
+// NewProgram will create an OpenGL program from the given shaders, any
+// combinations can be used.
 func NewProgram(shaders ...Shader) (gl.Program, error) {
 	program := gl.CreateProgram()
 
@@ -21,14 +22,15 @@ func NewProgram(shaders ...Shader) (gl.Program, error) {
 	return program, nil
 }
 
-//MustNotGLError will check opengl for error and panic if one was generated
+// MustNotGLError will check opengl for error and panic if one was generated
 func MustNotGLError() {
 	if err := gl.GetError(); err != nil {
 		panic(err)
 	}
 }
 
-//GenRGBTexture2D is a utility function to generate an empty 2D textures of size (width,height), internal format RGB adn data type UNSIGNED_BYTE
+// GenRGBTexture2D is a utility function to generate an empty 2D textures of
+// size (width,height), internal format RGB adn data type UNSIGNED_BYTE
 func GenRGBTexture2D(width, height int32) gl.Texture2D {
 	tex := gl.GenTexture2D()
 	tex.Bind()

@@ -2,12 +2,12 @@ package terrain
 
 import (
 	"errors"
-	"github.com/luxengine/glm"
 
+	"github.com/luxengine/glm"
 	"github.com/luxengine/lux"
 )
 
-//Will return a (n-2)(n-2) heightmap. We need the 4 adjacent vertices to accuratelly calculate normals.
+// NewTerrain returns a (n-2)(n-2) heightmap. We need the 4 adjacent vertices to accuratelly calculate normals.
 func NewTerrain(heightmap [][]float32, scale float32) (lux.Mesh, error) {
 	width := len(heightmap) - 2
 	height := len(heightmap[0]) - 2

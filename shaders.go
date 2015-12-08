@@ -6,18 +6,19 @@ import (
 	"strings"
 )
 
-//Shader represent an OpenGL shader object along with its type.
+// Shader represent an OpenGL shader object along with its type.
 type Shader struct {
 	Stype uint32
 	Loc   uint32
 }
 
-//Delete releases all the resources held by this shader object.
+// Delete releases all the resources held by this shader object.
 func (s Shader) Delete() {
 	gl.DeleteShader(s.Loc)
 }
 
-//CompileShader will take the shader source and generate a shader object based on which type you give it. Returns an error if it fails
+// CompileShader will take the shader source and generate a shader object based
+// on which type you give it. Returns an error if it fails.
 func CompileShader(source string, shaderType uint32) (Shader, error) {
 	shader := gl.CreateShader(uint32(shaderType))
 
