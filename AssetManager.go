@@ -1,9 +1,10 @@
 package lux
 
 import (
-	"github.com/luxengine/gl"
 	"log"
 	"strings"
+
+	"github.com/luxengine/gl"
 )
 
 //AssetManager keeps track of loaded textures, models and programs
@@ -17,7 +18,7 @@ type AssetManager struct {
 //NewAssetManager makes a new asset manager
 //	-root: the root of all the other folders. eg. "assets"
 //	-models: location of models. eg. "models", located at "assets/models"
-//	-shaders: location of shaders. Not really used right now becasue everything is hard coded :\. eg. "shaders", located at "assets/shaders"
+//	-shaders: location of shaders. Not really used right now because everything is hard coded :\. eg. "shaders", located at "assets/shaders"
 //	-textures: location of texture. eg. "textures", located at "assets/textures"
 func NewAssetManager(root, models, shaders, textures string) (out AssetManager) {
 	out.modelsDir, out.shadersDir, out.texturesDir = root+models, root+shaders, root+textures
@@ -36,7 +37,7 @@ func (am *AssetManager) LoadModel(name, iname string) {
 	}
 }
 
-//LoadRenderProgram is supose to load a render program, althouhg with the geometry buffer takes care of most of it. Do not use.
+//LoadRenderProgram is supposed to load a render program, although with the geometry buffer takes care of most of it. Do not use.
 func (am *AssetManager) LoadRenderProgram(vertexShader, fragmentShader, iname string) {
 	//program, err := LoadProgram(am.shadersDir+"standard.vert", am.shadersDir+"standard.frag")
 	//if err != nil {

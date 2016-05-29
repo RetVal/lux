@@ -4,7 +4,7 @@ import (
 	"github.com/go-gl/gl/v3.3-core/gl"
 )
 
-//On load will contain all available OpenGL extension.
+//Extensions will contain all available OpenGL extension on load.
 var Extensions map[string]bool
 
 func init() {
