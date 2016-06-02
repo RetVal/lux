@@ -40,7 +40,7 @@ func LoadObject(fname string, invertV bool) *MeshObject {
 		switch header[:len(header)-1] {
 		case "v":
 			vert := glm.Vec3{}
-			count, _ := fmt.Sscanf(restOfLine, "%f %f %f\n", &vert[0], &vert[1], &vert[2])
+			count, _ := fmt.Sscanf(restOfLine, "%f %f %f\n", &vert.X, &vert.Y, &vert.Z)
 			if count != 3 {
 				panic("Wrong vert count")
 			}
@@ -48,18 +48,18 @@ func LoadObject(fname string, invertV bool) *MeshObject {
 
 		case "vt":
 			uv := glm.Vec2{}
-			count, _ := fmt.Sscanf(restOfLine, "%f %f\n", &uv[0], &uv[1])
+			count, _ := fmt.Sscanf(restOfLine, "%f %f\n", &uv.X, &uv.Y)
 			if count != 2 {
 				panic("Wrong uv count")
 			}
 			if invertV {
 				// For DDS textures
-				uv = glm.Vec2{uv[0], 1 - uv[1]}
+				uv = glm.Vec2{uv.X, 1 - uv.Y}
 			}
 			uvs = append(uvs, uv)
 		case "vn":
 			norm := glm.Vec3{}
-			count, _ := fmt.Sscanf(restOfLine, "%f %f %f\n", &norm[0], &norm[1], &norm[2])
+			count, _ := fmt.Sscanf(restOfLine, "%f %f %f\n", &norm.X, &norm.Y, &norm.Z)
 			if count != 3 {
 				panic("Wrong norm count")
 			}

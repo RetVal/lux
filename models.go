@@ -1,12 +1,11 @@
 package lux
 
 import (
-	"unsafe"
-
 	"github.com/go-gl/gl/v3.3-core/gl"
 	gl2 "github.com/luxengine/gl"
 	"github.com/luxengine/glm"
 	"github.com/luxengine/lux/utils"
+	"unsafe"
 )
 
 //Mesh is an interface to represent any renderable mesh
@@ -24,7 +23,7 @@ type VUNMesh struct { //Vertex, Uv, Normal Model
 	Msize                            int32
 }
 
-//NewWavefrontModelFromFile loads a wavefront from the given file. Can only load files that are triangulated and with UV. Does not do anything with material property.
+//NewWavefrontModelFromFile loads a wavefront from the given file. Can only load files that are triangulated and with UV. Does not do anythign with material property.
 func NewWavefrontModelFromFile(file string) Mesh {
 	//load object
 	meshObj := utils.LoadObject(file, false)

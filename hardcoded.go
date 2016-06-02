@@ -1,6 +1,6 @@
 package lux
 
-// PostprocessfragmentshaderNormalvisual is a sample post process shader to visualise normals
+// Sample post process shader to visualise normals
 var PostprocessfragmentshaderNormalvisual = `#version 330
 uniform sampler2D tex;
 uniform vec2 resolution;
@@ -12,7 +12,7 @@ void main(){
 }
 ` + "\x00"
 
-// PostprocessfragmentShaderNothing is a sample post process shader to just blit the texture (could use texture blit as well)
+// Sample post process shader to just blit the texture (could use texture blit as well)
 var PostprocessfragmentshaderNothing = `#version 330
 uniform sampler2D tex;
 uniform vec2 resolution;
@@ -25,7 +25,7 @@ void main(){
 }
 ` + "\x00"
 
-// PostprocessfragmentshaderViewdepth is a sample post process shader to visualise depth (works differently on my mac and gnu+linux, weird)
+// Sample post process shader to visualise depth (works differently on my mac and gnu+linux, weird)
 var PostprocessfragmentshaderViewdepth = `#version 330
 uniform sampler2D tex;
 uniform vec2 resolution;
@@ -45,7 +45,7 @@ void main(){
 }
 ` + "\x00"
 
-// PostprocessfragmentshaderInverse is a sample post process shader to inverse colors
+// Sample post process shader to inverse colors
 var PostprocessfragmentshaderInverse = `#version 330
 uniform sampler2D tex;
 uniform vec2 resolution;
@@ -57,7 +57,7 @@ void main(){
 }
 ` + "\x00"
 
-// PostprocessfragmentshaderFxaa is a sample post process shader to apply FXAA
+// Sample post process shader to apply FXAA
 var PostprocessfragmentshaderFxaa = `#version 330
 #define FXAA_REDUCE_MIN (1.0/128.0)
 #define FXAA_REDUCE_MUL (1.0/8.0)
@@ -100,7 +100,7 @@ void main(){
 	}
 }` + "\x00"
 
-// PostprocessfragmentshaderWobbly is a sample post process shader to make the texture all wavy
+// Sample post process shader to make the texture all wavy
 var PostprocessfragmentshaderWobbly = `#version 330
 uniform sampler2D tex;
 uniform vec2 resolution;
@@ -117,7 +117,7 @@ void main() {
 }
 ` + "\x00"
 
-// PostprocessfragmentshaderFlip is a ample post process shader to flip texture top-botom (usefull for awesomium)
+// Sample post process shader to flip texture top-botom (usefull for awesomium)
 var PostprocessfragmentshaderFlip = `#version 330
 uniform sampler2D tex;
 uniform vec2 resolution;
@@ -156,5 +156,31 @@ vec3 tone(vec3 x) {
 void main(){
 	vec3 x = vec3(texture(tex,uv));
 	outputColor = vec4(tone(x), 1);
+}
+` + "\x00"
+
+var PostProcessFragmentShaderGarenUlt = `#version 330
+#define width 0.1
+
+uniform sampler2D tex;
+uniform vec2 resolution;
+uniform float time;
+in vec2 uv;
+
+layout (location=0) out vec4 outputColor;
+
+void main() {
+	vec2 center = vec2(0.5, 0.5);
+	vec2 dir = uv-center;
+	float m = mod(length(dir)-time, 1);
+	if(m < width){
+		vec2 coord = uv;
+		float coeff = m*sin(m*(3.1415/width))*0.8;
+		coord.x = coord.x+dir.x*coeff;
+		coord.y = coord.y+dir.y*coeff;
+		outputColor = texture(tex, coord);
+	}else {
+		outputColor = texture(tex, uv);
+	}
 }
 ` + "\x00"

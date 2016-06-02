@@ -1,10 +1,10 @@
+#Install
+`go get github.com/luxengine/lux`
+
+#development
+Currently on hold waiting to for algorithms in the physics engine. HOWEVER, if you want to use this lib but you're missing something. TELL ME!!, ill bring it up my priority list.
+
 #Lux  
-
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![GoDoc](https://godoc.org/github.com/luxengine/lux?status.svg)](https://godoc.org/github.com/luxengine/lux)
-[![Go Report Card](https://goreportcard.com/badge/github.com/luxengine/lux)](https://goreportcard.com/report/github.com/luxengine/lux)
-
- 
 Lux is a 3D game engine written almost entirely in [Go](http://golang.org/). We aim to provide our users with powerfull and flexible tools to make games (and other 3D application too!).
 Every lines of code in Lux is coded with the following goal in mind:
 * Performance: Our code should be the fastest.!
@@ -42,9 +42,3 @@ Future work:
 * More common CG techniques preimplemented, ready to use for developpers.
 * Framework for mods. (dynamic library loading/initialising)
 * Network game solution.
-
-#Install
-`go get github.com/luxengine/lux`
-
-#Development
-Currently on hold waiting to for algorithms in the physics engine. HOWEVER, if you want to use this lib but you're missing something. TELL ME!!, ill bring it up my priority list.

@@ -2,7 +2,6 @@ package lux
 
 import (
 	"fmt" //for error
-
 	"github.com/luxengine/gl"
 )
 
@@ -31,7 +30,7 @@ func MustNotGLError() {
 }
 
 // GenRGBTexture2D is a utility function to generate an empty 2D textures of
-// size (width,height), internal format RGB and data type UNSIGNED_BYTE
+// size (width,height), internal format RGB adn data type UNSIGNED_BYTE
 func GenRGBTexture2D(width, height int32) gl.Texture2D {
 	tex := gl.GenTexture2D()
 	tex.Bind()

@@ -13,7 +13,7 @@ func letsglowLETSGLOW() {
 	}
 }
 
-//SetContext will set a OpenGL core 3.3 context with forward compatibility and debug context
+//SetContext will set a OpenGL core 3.3 context with foward compatibility and debug context
 func SetContext() {
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 3)
