@@ -356,7 +356,7 @@ func (gb *GBuffer) RenderLight(cam *Camera, light *PointLight, shadowmat glm.Mat
 	gb.LightAcc.DepthUni.Uniform1i(3)
 
 	// cam
-	gb.LightAcc.CamPosUni.Uniform3fv(1, &cam.Pos[0])
+	gb.LightAcc.CamPosUni.Uniform3fv(1, &cam.Pos.X)
 
 	//light pos
 	plightpos := make([]float32, 3)

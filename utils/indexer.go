@@ -37,9 +37,9 @@ func IndexVBOSlow(vertices []glm.Vec3, uvs []glm.Vec2, normals []glm.Vec3) (outI
 func similarVertexIndexSlow(vertex glm.Vec3, uv glm.Vec2, normal glm.Vec3, vertices []glm.Vec3, uvs []glm.Vec2, normals []glm.Vec3) (index uint16, found bool) {
 	// Lame linear search
 	for i := range vertices {
-		if glm.FloatEqualThreshold(vertex[0], vertices[i][0], .01) && glm.FloatEqualThreshold(vertex[1], vertices[i][1], .01) && glm.FloatEqualThreshold(vertex[2], vertices[i][2], .01) &&
-			glm.FloatEqualThreshold(uv[0], uvs[i][0], .01) && glm.FloatEqualThreshold(uv[1], uvs[i][1], .01) &&
-			glm.FloatEqualThreshold(normal[0], normals[i][0], .01) && glm.FloatEqualThreshold(normal[1], normals[i][1], .01) && glm.FloatEqualThreshold(normal[2], normals[i][2], .01) {
+		if glm.FloatEqualThreshold(vertex.X, vertices[i].X, .01) && glm.FloatEqualThreshold(vertex.Y, vertices[i].Y, .01) && glm.FloatEqualThreshold(vertex.Z, vertices[i].Z, .01) &&
+			glm.FloatEqualThreshold(uv.X, uvs[i].X, .01) && glm.FloatEqualThreshold(uv.Y, uvs[i].Y, .01) &&
+			glm.FloatEqualThreshold(normal.X, normals[i].X, .01) && glm.FloatEqualThreshold(normal.Y, normals[i].Y, .01) && glm.FloatEqualThreshold(normal.Z, normals[i].Z, .01) {
 			return uint16(i), true
 		}
 	}
