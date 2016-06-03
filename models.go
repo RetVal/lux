@@ -23,12 +23,14 @@ type VUNMesh struct { //Vertex, Uv, Normal Model
 	Msize                            int32
 }
 
-//NewWavefrontModelFromFile loads a wavefront from the given file. Can only load files that are triangulated and with UV. Does not do anythign with material property.
+// NewWavefrontModelFromFile loads a wavefront from the given file. Can only
+// load files that are triangulated and with UV. Does not do anything with
+// material property.
 func NewWavefrontModelFromFile(file string) Mesh {
 	//load object
 	meshObj := utils.LoadObject(file, false)
 
-	//prepare indices //to optimise later
+	//prepare indices //TODO(hydroflame): optimise
 	indices, indexedVertices, indexedUvs, indexedNormals := utils.IndexVBOSlow(meshObj.Vertices, meshObj.UVs, meshObj.Normals)
 	return NewVUNModel(indices, indexedVertices, indexedUvs, indexedNormals)
 }

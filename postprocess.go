@@ -59,7 +59,7 @@ type PostProcessFramebuffer struct {
 // NewPostProcessFramebuffer creates a new PostProcessFramebuffer and allocated all the ressources.
 // You do not control the vertex shader but you can give a fragment shader. The fragment shader must have the following uniforms:
 // 	-resolution: float vec2, representing the size of the texture
-// 	-time: float, glfw time since the begining of the program
+// 	-time: float, glfw time since the beginning of the program
 // 	-tex: sampler2D, the input texture to this post process pass
 func NewPostProcessFramebuffer(width, height int32, fragmentSource string) (*PostProcessFramebuffer, error) {
 	ppf := PostProcessFramebuffer{}
