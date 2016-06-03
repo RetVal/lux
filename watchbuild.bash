@@ -1,1 +1,0 @@
-while inotifywait -r -e create -e delete -e modify  . > /dev/null 2>&1; do go install github.com/hydroflame/noname && go install github.com/hydroflame/noname/debug && go install github.com/hydroflame/noname/ui && echo -e 'build success\n'; done
