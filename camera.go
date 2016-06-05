@@ -22,8 +22,8 @@ func (c *Camera) SetOrtho(left, right, bottom, top, near, far float32) {
 	c.Projection = glm.Ortho(left, right, bottom, top, near, far)
 }
 
-// func to project from 2d to 3d
-// func to project from 3d to 2d
+// TODO(hydroflame): func to project from 2d to 3d
+// TODO(hydroflame): func to project from 3d to 2d
 
 // LookAtval sets the camera view direction by value.
 func (c *Camera) LookAtval(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ float32) {

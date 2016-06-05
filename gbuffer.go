@@ -18,7 +18,8 @@ type GBuffer struct {
 	width, height                               int32
 }
 
-// AggregateFB is the FBO used to aggregate all the textures that the geometry shader built.
+// AggregateFB is the FBO used to aggregate all the textures that the geometry
+// shader built.
 type AggregateFB struct {
 	framebuffer                          gl2.Framebuffer
 	program                              gl2.Program
@@ -26,7 +27,8 @@ type AggregateFB struct {
 	Out                                  gl2.Texture2D
 }
 
-// LightAccumulator takes all the lights and accumulates their effect in a gbuffer
+// LightAccumulator takes all the lights and accumulates their effect in a
+// gbuffer.
 type LightAccumulator struct {
 	framebuffer                            gl2.Framebuffer
 	program                                gl2.Program
@@ -38,7 +40,8 @@ type LightAccumulator struct {
 	ShadowMapUni, ShadowMatUni             gl2.UniformLocation
 }
 
-// NewGBuffer will create a new geometry buffer and allocate all the resources required
+// NewGBuffer will create a new geometry buffer and allocate all the resources
+// required.
 func NewGBuffer(width, height int32) (gbuffer GBuffer, err error) {
 	gbuffer.width, gbuffer.height = width, height
 	fb := gl2.GenFramebuffer()

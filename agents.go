@@ -33,7 +33,8 @@ func NewAgentManager() *AgentManager {
 	}
 }
 
-// Tick will notify every agent that they need to execute their callback.
+// Tick will notify every agent that they need to execute their callback. This
+// function is not thread safe.
 func (am *AgentManager) Tick() {
 	if am.numAgents == 0 {
 		return

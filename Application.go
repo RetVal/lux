@@ -5,7 +5,7 @@ import (
 	"github.com/luxengine/gl"
 )
 
-//obvious ryze quote
+// obvious ryze quote
 func letsglowLETSGLOW() {
 	// Initialize Glow
 	if err := gl.Init(); err != nil {
@@ -13,7 +13,8 @@ func letsglowLETSGLOW() {
 	}
 }
 
-//SetContext will set a OpenGL core 3.3 context with forward compatibility and debug context
+// SetContext will set a OpenGL core 3.3 context with forward compatibility and
+// debug context.
 func SetContext() {
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 3)
@@ -39,19 +40,20 @@ func glbs() {
 	gl.CullFace.Enable()
 }
 
-//InitGLFW will call glfw.Init and panic if it fails
+// InitGLFW will call glfw.Init and panic if it fails
 func InitGLFW() {
 	if err := glfw.Init(); err != nil {
 		panic("failed to initialize glfw")
 	}
 }
 
-//TerminateGLFW is an alias for glfw.Terminate
+// TerminateGLFW is an alias for glfw.Terminate
 func TerminateGLFW() {
 	glfw.Terminate()
 }
 
-//CreateWindow creates a new glfw window. If fullscreen will place the screen on primary monitor.
+// CreateWindow creates a new glfw window. If fullscreen will place the screen
+// on primary monitor.
 func CreateWindow(width, height int, title string, fullscreen bool) (window *glfw.Window) {
 	SetContext()
 	var x *glfw.Monitor
@@ -69,11 +71,11 @@ func CreateWindow(width, height int, title string, fullscreen bool) (window *glf
 	return
 }
 
-//StartHeadless will initialize everything but wont actually create a window, so you can test your application.
-func StartHeadless() (window *glfw.Window) {
-	var err error
+// StartHeadless will initialize everything but won't actually create a window
+// so you can test your application.
+func StartHeadless() *glfw.Window {
 	headlessContext()
-	window, err = glfw.CreateWindow(1, 1, "", nil, nil)
+	window, err := glfw.CreateWindow(1, 1, "", nil, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -81,5 +83,5 @@ func StartHeadless() (window *glfw.Window) {
 	letsglowLETSGLOW()
 	glbs()
 	QueryExtentions()
-	return
+	return window
 }

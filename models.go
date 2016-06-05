@@ -8,7 +8,7 @@ import (
 	"unsafe"
 )
 
-//Mesh is an interface to represent any renderable mesh
+// Mesh is an interface to represent any renderable mesh
 type Mesh interface {
 	Bind()
 	Delete()
@@ -16,7 +16,7 @@ type Mesh interface {
 	DrawCall()
 }
 
-//VUNMesh is a Vertex-Uv-Normal mesh
+// VUNMesh is a Vertex-Uv-Normal mesh
 type VUNMesh struct { //Vertex, Uv, Normal Model
 	VAO                              gl2.VertexArray
 	Indices, Positions, Uvs, Normals gl2.Buffer
@@ -35,13 +35,12 @@ func NewWavefrontModelFromFile(file string) Mesh {
 	return NewVUNModel(indices, indexedVertices, indexedUvs, indexedNormals)
 }
 
-//NewVUNModel process and uploads the data to the GPU.
+// NewVUNModel process and uploads the data to the GPU.
 func NewVUNModel(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.Vec2, indexedNormals []glm.Vec3) Mesh {
+	var m VUNMesh
 
-	m := VUNMesh{}
 	m.VAO = gl2.GenVertexArray()
 	m.VAO.Bind()
-	defer m.VAO.Unbind()
 
 	m.Msize = int32(len(indices))
 	//create a bunch of buffers and fill them
@@ -65,16 +64,16 @@ func NewVUNModel(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.
 	m.Indices.Bind(gl2.ELEMENT_ARRAY_BUFFER)
 	m.Indices.Data(gl2.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl2.STATIC_DRAW)
 
+	m.VAO.Unbind()
 	return &m
 }
 
-//NewVUNModelGlm process and uploads the data to the GPU.
+// NewVUNModelGlm process and uploads the data to the GPU.
 func NewVUNModelGlm(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []glm.Vec2, indexedNormals []glm.Vec3) Mesh {
+	var m VUNMesh
 
-	m := VUNMesh{}
 	m.VAO = gl2.GenVertexArray()
 	m.VAO.Bind()
-	defer m.VAO.Unbind()
 
 	m.Msize = int32(len(indices))
 	//create a bunch of buffers and fill them
@@ -98,10 +97,11 @@ func NewVUNModelGlm(indices []uint16, indexedVertices []glm.Vec3, indexedUvs []g
 	m.Indices.Bind(gl2.ELEMENT_ARRAY_BUFFER)
 	m.Indices.Data(gl2.ELEMENT_ARRAY_BUFFER, len(indices)*2, unsafe.Pointer(&indices[0]), gl2.STATIC_DRAW)
 
+	m.VAO.Unbind()
 	return &m
 }
 
-//Bind the vertex array and all vertex attrib required to render this mesh.
+// Bind the vertex array and all vertex attrib required to render this mesh.
 func (m *VUNMesh) Bind() {
 	vao := m.VAO
 	vao.Bind()
@@ -121,12 +121,12 @@ func (m *VUNMesh) Bind() {
 	m.Indices.Bind(gl2.ELEMENT_ARRAY_BUFFER)
 }
 
-//Unbind all the resources.
+// Unbind all the resources.
 func (m *VUNMesh) Unbind() {
 	m.VAO.Unbind()
 }
 
-//Delete all allocated resources (buffers, vertexarray,etc).
+// Delete all allocated resources (buffers, vertexarray, etc).
 func (m VUNMesh) Delete() {
 	defer m.Positions.Delete()
 	defer m.Uvs.Delete()
@@ -135,12 +135,12 @@ func (m VUNMesh) Delete() {
 	defer m.VAO.Delete()
 }
 
-//Size returns the amount of verteices to be drawn.
+// Size returns the amount of vertices to be drawn.
 func (m *VUNMesh) Size() int32 {
 	return m.Msize
 }
 
-//DrawCall send a single draw call
+// DrawCall send a single draw call
 func (m *VUNMesh) DrawCall() {
 	gl.DrawElements(gl2.TRIANGLES, m.Size(), gl2.UNSIGNED_SHORT, nil)
 }
