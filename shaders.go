@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Shader represent an OpenGL shader object along with its type.
+// Shader represent an OpenGL shader object along with it's type.
 type Shader struct {
 	Stype uint32
 	Loc   uint32

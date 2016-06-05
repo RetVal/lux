@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-//LoadPng tries to load a png file from hard drive and upload it to the GPU.
+// LoadPng tries to load a png file from hard drive and upload it to the GPU.
 func LoadPng(file string) (gl2.Texture2D, error) {
 	imgFile, err := os.Open(file)
 	if err != nil {
