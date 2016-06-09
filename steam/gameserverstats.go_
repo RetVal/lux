@@ -1,0 +1,62 @@
+package steam
+
+/*
+#cgo CFLAGS: -Ih
+#cgo linux LDFLAGS: -Llib -lsteam_capi -lsteam_api
+#cgo darwin LDFLAGS: -Llib -lsteam_capi
+#include <steam_capi.h>
+#include <stdlib.h>
+*/
+import "C"
+
+import (
+	"unsafe"
+)
+
+func GameServerStats() IGameServerStats {
+	return IGameServerStats{C.CSteamGameServerStats()}
+}
+
+type IGameServerStats struct {
+	unsafe.Pointer
+}
+
+func (s IGameServerStats) RequestUserStats(steamIDUser CSteamID) SteamAPICall {
+	return SteamAPICall(C.ISteamGameServerStats_RequestUserStats(s.Pointer, steamIDUser))
+}
+
+func (s IGameServerStats) GetUserStati(steamIDUser CSteamID, pchName string, pData *int) bool {
+	return bool(C.ISteamGameServerStats_GetUserStati(s.Pointer, steamIDUser, pchName, pData))
+}
+
+func (s IGameServerStats) GetUserStatf(steamIDUser CSteamID, pchName string, pData *float32) bool {
+	return bool(C.ISteamGameServerStats_GetUserStatf(s.Pointer, steamIDUser, pchName, pData))
+}
+
+func (s IGameServerStats) GetUserAchievement(steamIDUser CSteamID, pchName string, pbAchieved *bool) bool {
+	return bool(C.ISteamGameServerStats_GetUserAchievement(s.Pointer, steamIDUser, pchName, pbAchieved))
+}
+
+func (s IGameServerStats) SetUserStati(steamIDUser CSteamID, pchName string, nData int) bool {
+	return bool(C.ISteamGameServerStats_SetUserStati(s.Pointer, steamIDUser, pchName, nData))
+}
+
+func (s IGameServerStats) SetUserStatf(steamIDUser CSteamID, pchName string, fData float32) bool {
+	return bool(C.ISteamGameServerStats_SetUserStatf(s.Pointer, steamIDUser, pchName, fData))
+}
+
+func (s IGameServerStats) UpdateUserAvgRateStat(steamIDUser CSteamID, pchName string, flCountThisSession float32, dSessionLength float64) bool {
+	return bool(C.ISteamGameServerStats_UpdateUserAvgRateStat(s.Pointer, steamIDUser, pchName, flCountThisSession, dSessionLength))
+}
+
+func (s IGameServerStats) SetUserAchievement(steamIDUser CSteamID, pchName string) bool {
+	return bool(C.ISteamGameServerStats_SetUserAchievement(s.Pointer, steamIDUser, pchName))
+}
+
+func (s IGameServerStats) ClearUserAchievement(steamIDUser CSteamID, pchName string) bool {
+	return bool(C.ISteamGameServerStats_ClearUserAchievement(s.Pointer, steamIDUser, pchName))
+}
+
+func (s IGameServerStats) StoreUserStats(steamIDUser CSteamID) SteamAPICall {
+	return SteamAPICall(C.ISteamGameServerStats_StoreUserStats(s.Pointer, steamIDUser))
+}

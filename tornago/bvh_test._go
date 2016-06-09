@@ -1,0 +1,38 @@
+package tornago
+
+import (
+	"luxengine.net/glm"
+	"testing"
+)
+
+func TestBVHNode_New(t *testing.T) {
+	const (
+		radius = 4
+	)
+	var b RigidBody
+	center := glm.Vec3{1, 0, 0}
+	sphere := NewBoundingSphere(&center, radius)
+	n := NewBVHNode(&b, &sphere)
+	if n.children[0] != nil || n.children[1] != nil || n.parent != nil || n.BoundingSphere != sphere || n.body != &b {
+		t.Errorf("Error building BVH node %+v", n)
+		return
+	}
+}
+
+func TestBVHNode_IsLeaf(t *testing.T) {
+	const (
+		radius = 4
+	)
+	var b RigidBody
+	center := glm.Vec3{1, 0, 0}
+	sphere := NewBoundingSphere(&center, radius)
+	n := NewBVHNode(&b, &sphere)
+	if !n.IsLeaf() {
+		t.Error("n should be a leaf")
+	}
+
+	n.body = nil
+	if n.IsLeaf() {
+		t.Error("n should not be a lead")
+	}
+}

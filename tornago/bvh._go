@@ -1,0 +1,154 @@
+package tornago
+
+// this line makes sure that *BVHNode is a valid Broadphase
+var _ Broadphase = (*BVHNode)(nil)
+
+// BVHNode represents a single node in a bounding volume hierarchy.
+type BVHNode struct {
+	children [2]*BVHNode
+	parent   *BVHNode
+	BoundingSphere
+	body *RigidBody
+}
+
+// NewBVHNode returns a new bvh node. Use this to start a bvh tree.
+func NewBVHNode(b *RigidBody, volume *BoundingSphere) BVHNode {
+	return BVHNode{
+		body:           b,
+		BoundingSphere: *volume,
+	}
+}
+
+// IsLeaf returns true if this node has no children.
+func (n *BVHNode) IsLeaf() bool {
+	return n.body != nil
+}
+
+// GeneratePotentialContacts sends all colliding bounding sphere to the narrow
+// phase detector.
+func (n *BVHNode) GeneratePotentialContacts(narrowPhaseDetector chan<- PotentialContact) {
+	if n.IsLeaf() {
+		return
+	}
+	n.children[0].GeneratePotentialContactsWith(n.children[1], narrowPhaseDetector)
+}
+
+// GeneratePotentialContactsWith accepts a second node with a bounding volume to
+// test against.
+func (n *BVHNode) GeneratePotentialContactsWith(o *BVHNode, narrowPhaseDetector chan<- PotentialContact) {
+	//df("inspecting %p,%p\n", n, o)
+	// If they don't overlap then we are done.
+	if !n.Overlaps(&o.BoundingSphere) {
+		return
+	}
+
+	// If they're both leaves, then we have a potential contact.
+	if n.IsLeaf() && o.IsLeaf() {
+		narrowPhaseDetector <- PotentialContact{
+			[2]*RigidBody{n.body, o.body},
+		}
+		return
+	}
+
+	// Determine which node to descend into. If either is a leaf, then we
+	// descend the other. If both are branches, then we use the one with the
+	// largest size.
+	if n.IsLeaf() {
+		n.GeneratePotentialContactsWith(o.children[0], narrowPhaseDetector)
+		n.GeneratePotentialContactsWith(o.children[1], narrowPhaseDetector)
+		o.GeneratePotentialContacts(narrowPhaseDetector)
+		return
+	}
+
+	if o.IsLeaf() {
+		o.GeneratePotentialContactsWith(n.children[0], narrowPhaseDetector)
+		o.GeneratePotentialContactsWith(n.children[1], narrowPhaseDetector)
+		n.GeneratePotentialContacts(narrowPhaseDetector)
+		return
+	}
+
+	// If they're both branches then descent into the biggest.
+	if n.GetSize() < o.GetSize() {
+		n.GeneratePotentialContactsWith(o.children[0], narrowPhaseDetector)
+		n.GeneratePotentialContactsWith(o.children[1], narrowPhaseDetector)
+		n.GeneratePotentialContacts(narrowPhaseDetector)
+	} else {
+		n.children[0].GeneratePotentialContactsWith(o, narrowPhaseDetector)
+		n.children[1].GeneratePotentialContactsWith(o, narrowPhaseDetector)
+		o.GeneratePotentialContacts(narrowPhaseDetector)
+	}
+
+	// and then like do them separatelly because yknow thats what things.
+
+}
+
+// RecalculateBoundingVolume recalculates the bounding sphere of this node.
+func (n *BVHNode) RecalculateBoundingVolume() {
+	if n.IsLeaf() {
+		return
+	}
+	n.BoundingSphere = NewBoundingSphereFromSpheres(&n.children[0].BoundingSphere, &n.children[1].BoundingSphere)
+	if n.parent != nil {
+		n.parent.RecalculateBoundingVolume()
+	}
+}
+
+// Insert inserts this rigid body in this node of one of it's childs.
+func (n *BVHNode) Insert(b *RigidBody, volume *BoundingSphere) {
+	if n.IsLeaf() {
+		n.children[0] = &BVHNode{
+			BoundingSphere: n.BoundingSphere,
+			body:           n.body,
+			parent:         n,
+		}
+		n.children[1] = &BVHNode{
+			BoundingSphere: *volume,
+			body:           b,
+			parent:         n,
+		}
+		n.body = nil
+		n.RecalculateBoundingVolume()
+		return
+	}
+
+	if n.children[0].GetGrowth(volume) < n.children[1].GetGrowth(volume) {
+		n.children[0].Insert(b, volume)
+	} else {
+		n.children[1].Insert(b, volume)
+	}
+}
+
+// Delete removes this node from the world.
+func (n *BVHNode) Delete() {
+	if n.parent != nil {
+
+		// find the sibling
+		sibling := n.parent.children[0]
+		if sibling == n {
+			sibling = n.parent.children[1]
+		}
+
+		//uproot the sibling to the parent
+		n.parent.children = sibling.children
+		n.parent.parent = sibling.parent
+		n.parent.BoundingSphere = sibling.BoundingSphere
+		n.parent.body = sibling.body
+
+		sibling.children[0] = nil
+		sibling.children[1] = nil
+		sibling.parent = nil
+		sibling.body = nil
+
+		sibling.Delete()
+
+		n.parent.RecalculateBoundingVolume()
+	}
+
+	if n.children[0] != nil {
+		n.children[0].parent = nil
+	}
+
+	if n.children[1] != nil {
+		n.children[1].parent = nil
+	}
+}
