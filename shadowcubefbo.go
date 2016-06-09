@@ -1,8 +1,8 @@
 package lux
 
 import (
-	"github.com/luxengine/gl"
 	"github.com/luxengine/glm"
+	"github.com/luxengine/lux/gl"
 )
 
 // ShadowCubeFBO is a packed framebuffer and cubemap with depth only for

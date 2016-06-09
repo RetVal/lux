@@ -2,7 +2,7 @@ package lux
 
 import (
 	"errors"
-	"github.com/luxengine/gl"
+	"github.com/luxengine/lux/gl"
 	"image"
 	"image/color"
 	"image/png"

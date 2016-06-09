@@ -1,7 +1,7 @@
 package lux
 
 import (
-	"github.com/luxengine/gl"
+	"github.com/luxengine/lux/gl"
 )
 
 //GenDepthTexture is a utility function to generate a depth Texture2D

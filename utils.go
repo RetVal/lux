@@ -2,7 +2,7 @@ package lux
 
 import (
 	"fmt" //for error
-	"github.com/luxengine/gl"
+	"github.com/luxengine/lux/gl"
 )
 
 // NewProgram will create an OpenGL program from the given shaders, any

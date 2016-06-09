@@ -2,7 +2,7 @@ package lux
 
 import (
 	"github.com/go-gl/glfw/v3.1/glfw"
-	"github.com/luxengine/gl"
+	"github.com/luxengine/lux/gl"
 )
 
 // obvious ryze quote

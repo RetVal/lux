@@ -14,12 +14,12 @@ type Camera struct {
 // SetPerspective sets the projection of this camera to a perspective
 // projection.
 func (c *Camera) SetPerspective(angle, ratio, zNear, zFar float32) {
-	c.Projection = glm.Perspective(angle, ratio, zNear, zFar)
+	glm.PerspectiveIn(angle, ratio, zNear, zFar, &c.Projection)
 }
 
 // SetOrtho sets the projection of this camera to an orthographic projection.
 func (c *Camera) SetOrtho(left, right, bottom, top, near, far float32) {
-	c.Projection = glm.Ortho(left, right, bottom, top, near, far)
+	glm.OrthoIn(left, right, bottom, top, near, far, &c.Projection)
 }
 
 // TODO(hydroflame): func to project from 2d to 3d

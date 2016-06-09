@@ -3,8 +3,8 @@ package lux
 import (
 	"errors"
 	"github.com/go-gl/gl/v3.3-core/gl"
-	gl2 "github.com/luxengine/gl"
 	"github.com/luxengine/glm"
+	gl2 "github.com/luxengine/lux/gl"
 )
 
 // ShadowFBO is the structure to hold all the resources required to render

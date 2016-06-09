@@ -2,8 +2,8 @@ package lux
 
 import (
 	"github.com/go-gl/gl/v3.3-core/gl"
-	gl2 "github.com/luxengine/gl"
 	"github.com/luxengine/glm"
+	gl2 "github.com/luxengine/lux/gl"
 	"github.com/luxengine/lux/utils"
 	"unsafe"
 )

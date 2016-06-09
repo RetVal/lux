@@ -1,7 +1,7 @@
 package lux
 
 import (
-	"github.com/luxengine/gl"
+	"github.com/luxengine/lux/gl"
 	"io/ioutil"
 )
 

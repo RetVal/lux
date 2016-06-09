@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/glfw/v3.1/glfw"
-	gl2 "github.com/luxengine/gl"
+	gl2 "github.com/luxengine/lux/gl"
 	"unsafe"
 )
 
