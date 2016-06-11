@@ -1,8 +1,8 @@
 package glmtesting
 
 import (
-	"github.com/luxengine/glm"
-	"github.com/luxengine/math"
+	"github.com/luxengine/lux/glm"
+	"github.com/luxengine/lux/math"
 	"testing"
 )
 

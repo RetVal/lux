@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/luxengine/glm"
+	"github.com/luxengine/lux/glm"
 )
 
 func TestCameraSetPerspective(t *testing.T) {

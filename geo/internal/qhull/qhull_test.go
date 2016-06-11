@@ -3,7 +3,7 @@ package qhull
 import (
 	"testing"
 
-	"github.com/luxengine/glm"
+	"github.com/luxengine/lux/glm"
 )
 
 func TestBuildInitialTetrahedron(t *testing.T) {

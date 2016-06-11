@@ -808,7 +808,7 @@ func TestTestOBBPlane(t *testing.T) {
 		},
 		{
 			OBB{glm.Vec3{},
-				glm.Mat3{X: math.NaN(), Y: math.NaN(), Z: math.NaN(), 1, 0, 0, 0, 0, 1},
+				glm.Mat3{math.NaN(), math.NaN(), math.NaN(), 1, 0, 0, 0, 0, 1},
 				glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			Plane{glm.Vec3{X: 0, Y: 1, Z: 0}, 0},
 			false,
