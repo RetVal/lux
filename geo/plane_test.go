@@ -18,16 +18,16 @@ func TestPlaneFromPoints(t *testing.T) {
 			Plane{glmtesting.NaN3, math.NaN()}},
 		{glm.Vec3{}, glm.Vec3{}, glmtesting.NaN3,
 			Plane{glmtesting.NaN3, math.NaN()}},
-		{glm.Vec3{0, 1, 0}, glm.Vec3{0, 1, 1}, glm.Vec3{1, 1, 0},
-			Plane{glm.Vec3{0, 1, 0}, 1}},
-		{glm.Vec3{0, 1, 0}, glm.Vec3{1, 1, 0}, glm.Vec3{0, 1, 1},
-			Plane{glm.Vec3{0, -1, 0}, -1}},
-		{glm.Vec3{0, -1, 0}, glm.Vec3{1, -1, 0}, glm.Vec3{0, -1, 1},
-			Plane{glm.Vec3{0, -1, 0}, 1}},
-		{glm.Vec3{0, -1, 0}, glm.Vec3{0, -1, 1}, glm.Vec3{1, -1, 0},
-			Plane{glm.Vec3{0, 1, 0}, -1}},
-		{glm.Vec3{1, 0, 0}, glm.Vec3{0, 1, 0}, glm.Vec3{0, 0, 1},
-			Plane{glm.Vec3{0.577350, 0.577350, 0.577350}, 0.577350}},
+		{glm.Vec3{X: 0, Y: 1, Z: 0}, glm.Vec3{X: 0, Y: 1, Z: 1}, glm.Vec3{X: 1, Y: 1, Z: 0},
+			Plane{glm.Vec3{X: 0, Y: 1, Z: 0}, 1}},
+		{glm.Vec3{X: 0, Y: 1, Z: 0}, glm.Vec3{X: 1, Y: 1, Z: 0}, glm.Vec3{X: 0, Y: 1, Z: 1},
+			Plane{glm.Vec3{X: 0, Y: -1, Z: 0}, -1}},
+		{glm.Vec3{X: 0, Y: -1, Z: 0}, glm.Vec3{X: 1, Y: -1, Z: 0}, glm.Vec3{X: 0, Y: -1, Z: 1},
+			Plane{glm.Vec3{X: 0, Y: -1, Z: 0}, 1}},
+		{glm.Vec3{X: 0, Y: -1, Z: 0}, glm.Vec3{X: 0, Y: -1, Z: 1}, glm.Vec3{X: 1, Y: -1, Z: 0},
+			Plane{glm.Vec3{X: 0, Y: 1, Z: 0}, -1}},
+		{glm.Vec3{X: 1, Y: 0, Z: 0}, glm.Vec3{X: 0, Y: 1, Z: 0}, glm.Vec3{X: 0, Y: 0, Z: 1},
+			Plane{glm.Vec3{X: 0.577350, Y: 0.577350, Z: 0.577350}, 0.577350}},
 	}
 	for i, test := range tests {
 		plane := PlaneFromPoints(&test.a, &test.b, &test.c)
@@ -46,11 +46,11 @@ func TestDistanceToPlane(t *testing.T) {
 		point glm.Vec3
 		dist  float32
 	}{
-		{PlaneFromPoints(&glm.Vec3{0, 1, 0}, &glm.Vec3{0, 1, 1}, &glm.Vec3{1, 1, 0}),
-			glm.Vec3{0, 2, 0},
+		{PlaneFromPoints(&glm.Vec3{X: 0, Y: 1, Z: 0}, &glm.Vec3{X: 0, Y: 1, Z: 1}, &glm.Vec3{X: 1, Y: 1, Z: 0}),
+			glm.Vec3{X: 0, Y: 2, Z: 0},
 			1},
-		{Plane{glm.Vec3{0, -1, 0}, 1},
-			glm.Vec3{0, 0, 0},
+		{Plane{glm.Vec3{X: 0, Y: -1, Z: 0}, 1},
+			glm.Vec3{X: 0, Y: 0, Z: 0},
 			-1},
 	}
 	for i, test := range tests {

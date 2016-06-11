@@ -10,11 +10,11 @@ func TestTestCapsuleCapsule(t *testing.T) {
 		c0, c1    Capsule
 		intersect bool
 	}{
-		{Capsule{glm.Vec3{-10, 0, 0}, glm.Vec3{10, 0, 0}, 1},
-			Capsule{glm.Vec3{0, -10, 0}, glm.Vec3{0, 10, 0}, 1},
+		{Capsule{glm.Vec3{X: -10, Y: 0, Z: 0}, glm.Vec3{X: 10, Y: 0, Z: 0}, 1},
+			Capsule{glm.Vec3{X: 0, Y: -10, Z: 0}, glm.Vec3{X: 0, Y: 10, Z: 0}, 1},
 			true},
-		{Capsule{glm.Vec3{-10, 0, 5}, glm.Vec3{10, 0, 5}, 1},
-			Capsule{glm.Vec3{0, -10, 0}, glm.Vec3{0, 10, 0}, 1},
+		{Capsule{glm.Vec3{X: -10, Y: 0, Z: 5}, glm.Vec3{X: 10, Y: 0, Z: 5}, 1},
+			Capsule{glm.Vec3{X: 0, Y: -10, Z: 0}, glm.Vec3{X: 0, Y: 10, Z: 0}, 1},
 			false},
 	}
 	for i, test := range tests {
@@ -31,11 +31,11 @@ func TestTestCapsuleSphere(t *testing.T) {
 		s         Sphere
 		intersect bool
 	}{
-		{Capsule{glm.Vec3{-10, 0, 0}, glm.Vec3{10, 0, 0}, 1},
-			Sphere{glm.Vec3{-5, 0, 0}, 1},
+		{Capsule{glm.Vec3{X: -10, Y: 0, Z: 0}, glm.Vec3{X: 10, Y: 0, Z: 0}, 1},
+			Sphere{glm.Vec3{X: -5, Y: 0, Z: 0}, 1},
 			true},
-		{Capsule{glm.Vec3{-10, 0, 5}, glm.Vec3{10, 0, 5}, 1},
-			Sphere{glm.Vec3{-5, 0, 0}, 1},
+		{Capsule{glm.Vec3{X: -10, Y: 0, Z: 5}, glm.Vec3{X: 10, Y: 0, Z: 5}, 1},
+			Sphere{glm.Vec3{X: -5, Y: 0, Z: 0}, 1},
 			false},
 	}
 	for i, test := range tests {

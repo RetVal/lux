@@ -123,10 +123,10 @@ func (ps *ParticleSystem) Render(delta float64, VP glm.Mat4, camera glm.Vec3) {
 	gl.EnableVertexAttribArray(2)
 	gl.EnableVertexAttribArray(3)
 
-	gl.VertexAttribPointer(0, 1, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), unsafe.Pointer(uintptr(0)))
-	gl.VertexAttribPointer(1, 3, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), unsafe.Pointer(uintptr(4)))
-	gl.VertexAttribPointer(2, 3, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), unsafe.Pointer(uintptr(16)))
-	gl.VertexAttribPointer(3, 1, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), unsafe.Pointer(uintptr(28)))
+	gl.VertexAttribPointer(0, 1, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), IntToUnsafePointer(0))
+	gl.VertexAttribPointer(1, 3, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), IntToUnsafePointer(4))
+	gl.VertexAttribPointer(2, 3, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), IntToUnsafePointer(16))
+	gl.VertexAttribPointer(3, 1, gl.FLOAT, false, int32(unsafe.Sizeof(Particle{})), IntToUnsafePointer(28))
 
 	gl.BeginTransformFeedback(gl.POINTS)
 

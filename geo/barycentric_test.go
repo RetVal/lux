@@ -10,37 +10,37 @@ var barycentrictests = []struct {
 	u, v, w    float32
 }{
 	{
-		a: glm.Vec3{-1, 0, 0},
-		b: glm.Vec3{0, 1, 0},
-		c: glm.Vec3{1, 0, 0},
-		p: glm.Vec3{0, 0.5, 0},
+		a: glm.Vec3{X: -1, Y: 0, Z: 0},
+		b: glm.Vec3{X: 0, Y: 1, Z: 0},
+		c: glm.Vec3{X: 1, Y: 0, Z: 0},
+		p: glm.Vec3{X: 0, Y: 0.5, Z: 0},
 		u: 0.41666663,
 		v: 0.16666667,
 		w: 0.4166667,
 	},
 	{
-		a: glm.Vec3{-1, 0, 0},
-		b: glm.Vec3{0, 1, 0},
-		c: glm.Vec3{1, 0, 0},
-		p: glm.Vec3{-1, 0, 0},
+		a: glm.Vec3{X: -1, Y: 0, Z: 0},
+		b: glm.Vec3{X: 0, Y: 1, Z: 0},
+		c: glm.Vec3{X: 1, Y: 0, Z: 0},
+		p: glm.Vec3{X: -1, Y: 0, Z: 0},
 		u: 1,
 		v: 0,
 		w: 0,
 	},
 	{
-		a: glm.Vec3{-1, 0, 0},
-		b: glm.Vec3{0, 1, 0},
-		c: glm.Vec3{1, 0, 0},
-		p: glm.Vec3{1, 0, 0},
+		a: glm.Vec3{X: -1, Y: 0, Z: 0},
+		b: glm.Vec3{X: 0, Y: 1, Z: 0},
+		c: glm.Vec3{X: 1, Y: 0, Z: 0},
+		p: glm.Vec3{X: 1, Y: 0, Z: 0},
 		u: 0,
 		v: 0,
 		w: 1,
 	},
 	{
-		a: glm.Vec3{-1, 0, 0},
-		b: glm.Vec3{0, 1, 0},
-		c: glm.Vec3{1, 0, 0},
-		p: glm.Vec3{2, 0, 0},
+		a: glm.Vec3{X: -1, Y: 0, Z: 0},
+		b: glm.Vec3{X: 0, Y: 1, Z: 0},
+		c: glm.Vec3{X: 1, Y: 0, Z: 0},
+		p: glm.Vec3{X: 2, Y: 0, Z: 0},
 		u: -0.5,
 		v: 0,
 		w: 1.5,
@@ -73,7 +73,7 @@ func TestBarycentric_WithCache(t *testing.T) {
 }
 
 func BenchmarkBarycentric(tb *testing.B) {
-	a, b, c, p := glm.Vec3{1, 2, 3}, glm.Vec3{4, 2, 3}, glm.Vec3{1, 2, 5}, glm.Vec3{2, 3, 4}
+	a, b, c, p := glm.Vec3{X: 1, Y: 2, Z: 3}, glm.Vec3{X: 4, Y: 2, Z: 3}, glm.Vec3{X: 1, Y: 2, Z: 5}, glm.Vec3{X: 2, Y: 3, Z: 4}
 
 	for n := 0; n < tb.N; n++ {
 		Barycentric(&a, &b, &c, &p)
@@ -81,7 +81,7 @@ func BenchmarkBarycentric(tb *testing.B) {
 }
 
 func BenchmarkBarycentricCache(tb *testing.B) {
-	a, b, c, p := glm.Vec3{1, 2, 3}, glm.Vec3{4, 2, 3}, glm.Vec3{1, 2, 5}, glm.Vec3{2, 3, 4}
+	a, b, c, p := glm.Vec3{X: 1, Y: 2, Z: 3}, glm.Vec3{X: 4, Y: 2, Z: 3}, glm.Vec3{X: 1, Y: 2, Z: 5}, glm.Vec3{X: 2, Y: 3, Z: 4}
 
 	cache := BarycentricCacheFromTriangle(&a, &b, &c)
 

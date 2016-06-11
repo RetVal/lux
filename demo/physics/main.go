@@ -83,7 +83,7 @@ func main() {
 	boxBody2 := tornago.NewRigidBody()
 	boxBody2.SetPosition3f(0.25, 5, 0)
 	boxBody2.SetVelocity3f(0, 0, 0)
-	boxShape := tornago.NewCollisionBox(glm.Vec3{0.5, 0.5, 0.5})
+	boxShape := tornago.NewCollisionBox(glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5})
 	boxBody2.SetCollisionShape(boxShape)
 	boxBody2.SetRestitution(0)
 	boxBody2.SetAngularDamping(1)
@@ -91,7 +91,7 @@ func main() {
 	boxBody2.SetFriction(1)
 
 	b2 := tornago.NewRigidBody()
-	boxShapeGround := tornago.NewCollisionBox(glm.Vec3{4, 0.5, 4})
+	boxShapeGround := tornago.NewCollisionBox(glm.Vec3{X: 4, Y: 0.5, Z: 4})
 	b2.SetCollisionShape(boxShapeGround)
 	b2.SetPosition3f(0, 0, 0)
 	b2.SetMass(0)
@@ -99,7 +99,7 @@ func main() {
 	b2.SetRestitution(0)
 	b2.SetFriction(1)
 
-	gravity := glm.Vec3{0, -5, 0}
+	gravity := glm.Vec3{X: 0, Y: -5, Z: 0}
 	gravFG := tornago.NewGravityForceGenerator(&gravity)
 	w.AddForceGenerator(sphereBody, gravFG)
 	w.AddForceGenerator(boxBody2, gravFG)

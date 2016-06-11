@@ -13,80 +13,80 @@ func TestAABB_Intersects(t *testing.T) {
 	}{
 		{ // 0
 			a: AABB{
-				Center:     glm.Vec3{0, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			b: AABB{
-				Center:     glm.Vec3{0.5, 0.5, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0.5, Y: 0.5, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			intersects: true,
 		},
 		{ // 1
 			a: AABB{
-				Center:     glm.Vec3{0, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			b: AABB{
-				Center:     glm.Vec3{5, 5, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 5, Y: 5, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			intersects: false,
 		},
 		{ // 2
 			a: AABB{
-				Center:     glm.Vec3{5, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 5, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			b: AABB{
-				Center:     glm.Vec3{7, 0, 1},
-				HalfExtend: glm.Vec3{1, 0, 1},
+				Center:     glm.Vec3{X: 7, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 0, Z: 1},
 			},
 			intersects: true,
 		},
 		{ // 3
 			a: AABB{
-				Center:     glm.Vec3{0, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			b: AABB{
-				Center:     glm.Vec3{0, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			intersects: true,
 		},
 		{ // 4
 			a: AABB{
-				Center:     glm.Vec3{0, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			b: AABB{
-				Center:     glm.Vec3{2, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 2, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			intersects: true,
 		},
 
 		{ // 5
 			a: AABB{
-				Center:     glm.Vec3{0, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			b: AABB{
-				Center:     glm.Vec3{0, 6, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 6, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			intersects: false,
 		},
 
 		{ // 6
 			a: AABB{
-				Center:     glm.Vec3{0, 0, 1},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 1},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			b: AABB{
-				Center:     glm.Vec3{0, 0, 7},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 0, Y: 0, Z: 7},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 			intersects: false,
 		},
@@ -105,10 +105,10 @@ func TestClosestPointPointAABB(t *testing.T) {
 		point   glm.Vec3
 		closest glm.Vec3
 	}{
-		{AABB{glm.Vec3{0, 0, 0},
-			glm.Vec3{0.5, 0.5, 0.5}},
-			glm.Vec3{0, 1, 0},
-			glm.Vec3{0, 0.5, 0}},
+		{AABB{glm.Vec3{},
+			glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
+			glm.Vec3{X: 0, Y: 1, Z: 0},
+			glm.Vec3{X: 0, Y: 0.5, Z: 0}},
 	}
 	for i, test := range tests {
 		closest := ClosestPointPointAABB(&test.point, &test.aabb)
@@ -124,66 +124,66 @@ func TestUpdateAABB(t *testing.T) {
 		transform glm.Mat3x4
 		fill      AABB
 	}{
-		{AABB{glm.Vec3{0, 0, 0},
-			glm.Vec3{0.5, 0.5, 0.5}},
+		{AABB{glm.Vec3{},
+			glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			glm.Mat3x4{
 				1, 0, 0,
 				0, 1, 0,
 				0, 0, 1,
 				0, 0, 0,
 			},
-			AABB{glm.Vec3{0, 0, 0},
-				glm.Vec3{0.5, 0.5, 0.5}}},
-		{AABB{glm.Vec3{0, 0, 0},
-			glm.Vec3{0.5, 0.5, 0.5}},
+			AABB{glm.Vec3{},
+				glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}}},
+		{AABB{glm.Vec3{},
+			glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			glm.Mat3x4{
 				0, 1, 0,
 				1, 0, 0,
 				0, 0, 1,
 				0, 0, 0,
 			},
-			AABB{glm.Vec3{0, 0, 0},
-				glm.Vec3{0.5, 0.5, 0.5}}},
-		{AABB{glm.Vec3{0, 0, 0},
-			glm.Vec3{0.5, 0.5, 0.5}},
+			AABB{glm.Vec3{},
+				glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}}},
+		{AABB{glm.Vec3{},
+			glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			glm.Mat3x4{
 				1, 0, 0,
 				0, 0, 1,
 				0, 1, 0,
 				0, 0, 0,
 			},
-			AABB{glm.Vec3{0, 0, 0},
-				glm.Vec3{0.5, 0.5, 0.5}}},
-		{AABB{glm.Vec3{0, 0, 0},
-			glm.Vec3{0.5, 0.5, 0.5}},
+			AABB{glm.Vec3{},
+				glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}}},
+		{AABB{glm.Vec3{},
+			glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			glm.Mat3x4{
 				1, 0, 0,
 				0, 1, 0,
 				0, 0, 1,
 				0, 0, 0,
 			},
-			AABB{glm.Vec3{0, 0, 0},
-				glm.Vec3{0.5, 0.5, 0.5}}},
-		{AABB{glm.Vec3{0, 0, 0},
-			glm.Vec3{0.5, 1, 0.5}},
+			AABB{glm.Vec3{},
+				glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}}},
+		{AABB{glm.Vec3{},
+			glm.Vec3{X: 0.5, Y: 1, Z: 0.5}},
 			glm.Mat3x4{
 				0, 1, 0,
 				1, 0, 0,
 				0, 0, 1,
 				0, 0, 0,
 			},
-			AABB{glm.Vec3{0, 0, 0},
-				glm.Vec3{1, 0.5, 0.5}}},
-		{AABB{glm.Vec3{0, 0, 0},
-			glm.Vec3{0.5, 0.5, 0.5}},
+			AABB{glm.Vec3{},
+				glm.Vec3{X: 1, Y: 0.5, Z: 0.5}}},
+		{AABB{glm.Vec3{},
+			glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			glm.Mat3x4{
 				1, 0, 0,
 				0, 1, 0,
 				0, 0, 1,
 				0, 0, 5,
 			},
-			AABB{glm.Vec3{0, 0, 5},
-				glm.Vec3{0.5, 0.5, 0.5}}},
+			AABB{glm.Vec3{X: 0, Y: 0, Z: 5},
+				glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}}},
 	}
 	for i, test := range tests {
 		var fill AABB
@@ -200,33 +200,33 @@ func TestSqDistPointAABB(t *testing.T) {
 		aabb   AABB
 		sqdist float32
 	}{
-		{glm.Vec3{0, 2, 0},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 0, Y: 2, Z: 0},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			1.5 * 1.5},
-		{glm.Vec3{0, -2, 0},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 0, Y: -2, Z: 0},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			1.5 * 1.5},
-		{glm.Vec3{-2, 0, 0},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: -2, Y: 0, Z: 0},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			1.5 * 1.5},
-		{glm.Vec3{2, 0, 0},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 2, Y: 0, Z: 0},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			1.5 * 1.5},
-		{glm.Vec3{0, 0, -2},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 0, Y: 0, Z: -2},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			1.5 * 1.5},
-		{glm.Vec3{0, 0, 2},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 0, Y: 0, Z: 2},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			1.5 * 1.5},
 
-		{glm.Vec3{0, 0, 0.4},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 0, Y: 0, Z: 0.4},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			0},
-		{glm.Vec3{0, 0.4, 0},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 0, Y: 0.4, Z: 0},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			0},
-		{glm.Vec3{0.4, 0, 0},
-			AABB{glm.Vec3{0, 0, 0}, glm.Vec3{0.5, 0.5, 0.5}},
+		{glm.Vec3{X: 0.4, Y: 0, Z: 0},
+			AABB{glm.Vec3{}, glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 			0},
 	}
 	for i, test := range tests {
@@ -240,12 +240,12 @@ func TestSqDistPointAABB(t *testing.T) {
 
 func BenchmarkTestAABBAABB(tb *testing.B) {
 	a := AABB{
-		Center:     glm.Vec3{0, 0, 0},
-		HalfExtend: glm.Vec3{1, 1, 1},
+		Center:     glm.Vec3{},
+		HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 	}
 	b := AABB{
-		Center:     glm.Vec3{0, 0, 0},
-		HalfExtend: glm.Vec3{1, 1, 1},
+		Center:     glm.Vec3{},
+		HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 	}
 	for n := 0; n < tb.N; n++ {
 		TestAABBAABB(&a, &b)

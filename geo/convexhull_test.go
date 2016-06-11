@@ -14,23 +14,23 @@ func TestConvexhull_Support(t *testing.T) {
 	}{
 		{
 			[]glm.Vec3{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-			glm.Vec3{0, 1, 0},
-			glm.Vec3{0, 1, 0},
+			glm.Vec3{X: 0, Y: 1, Z: 0},
+			glm.Vec3{X: 0, Y: 1, Z: 0},
 		},
 		{
 			[]glm.Vec3{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-			glm.Vec3{-1, -1, -1},
-			glm.Vec3{0, 0, 0},
+			glm.Vec3{X: -1, Y: -1, Z: -1},
+			glm.Vec3{X: 0, Y: 0, Z: 0},
 		},
 		{
 			[]glm.Vec3{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-			glm.Vec3{1, 0, 0},
-			glm.Vec3{1, 0, 0},
+			glm.Vec3{X: 1, Y: 0, Z: 0},
+			glm.Vec3{X: 1, Y: 0, Z: 0},
 		},
 		{
 			[]glm.Vec3{{0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-			glm.Vec3{0, 0, 1},
-			glm.Vec3{0, 0, 1},
+			glm.Vec3{X: 0, Y: 0, Z: 1},
+			glm.Vec3{X: 0, Y: 0, Z: 1},
 		},
 	}
 	for i, test := range tests {
@@ -90,15 +90,15 @@ func TestConvexhull_CalculateInternals(t *testing.T) {
 		{[]glm.Vec3{{1, 1, 1}, {1, 1, 0}, {1, 0, 1}, {1, 0, 0},
 			{0, 1, 1}, {0, 1, 0}, {0, 0, 1}, {0, 0, 0}},
 			1,
-			glm.Vec3{0.5, 0.5, 0.5}},
+			glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5}},
 		{[]glm.Vec3{{2, 2, 2}, {2, 2, 0}, {2, 0, 2}, {2, 0, 0},
 			{0, 2, 2}, {0, 2, 0}, {0, 0, 2}, {0, 0, 0}},
 			8,
-			glm.Vec3{1, 1, 1}},
+			glm.Vec3{X: 1, Y: 1, Z: 1}},
 		{[]glm.Vec3{{2, 2, 2}, {2, 2, 1}, {2, 1, 2}, {2, 1, 1},
 			{1, 2, 2}, {1, 2, 1}, {1, 1, 2}, {1, 1, 1}},
 			1,
-			glm.Vec3{1.5, 1.5, 1.5}},
+			glm.Vec3{X: 1.5, Y: 1.5, Z: 1.5}},
 	}
 	for i, test := range tests {
 		hull := Quickhull(test.points)

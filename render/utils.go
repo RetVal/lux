@@ -2,6 +2,7 @@ package lux
 
 import (
 	"fmt" //for error
+	"unsafe"
 
 	"github.com/luxengine/lux/gl"
 )
@@ -41,4 +42,10 @@ func GenRGBTexture2D(width, height int32) gl.Texture2D {
 	tex.WrapT(gl.CLAMP_TO_EDGE)
 	tex.TexImage2D(0, gl.RGB, width, height, 0, gl.RGB, gl.UNSIGNED_BYTE, nil)
 	return tex
+}
+
+// IntToUnsafePointer returns an unsafe.Pointer from an integer, used in certain
+// OpenGL calls to delimitate data.
+func IntToUnsafePointer(i int) unsafe.Pointer {
+	return unsafe.Pointer(uintptr(i))
 }

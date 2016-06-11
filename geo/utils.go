@@ -1137,56 +1137,56 @@ func ClosestPointSegmentAABB(aabb *AABB, p, q *glm.Vec3) glm.Vec3 {
 	var minlen2 float32 = math.MaxFloat32
 	var closest, c glm.Vec3
 
-	c = glm.Vec3{-aabb.HalfExtend.X, -aabb.HalfExtend.Y, aabb.HalfExtend.Z}
+	c = glm.Vec3{X: -aabb.HalfExtend.X, Y: -aabb.HalfExtend.Y, Z: aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		minlen2 = l2
 		closest = c
 	}
 
-	c = glm.Vec3{-aabb.HalfExtend.X, -aabb.HalfExtend.Y, -aabb.HalfExtend.Z}
+	c = glm.Vec3{X: -aabb.HalfExtend.X, Y: -aabb.HalfExtend.Y, Z: -aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		minlen2 = l2
 		closest = c
 	}
 
-	c = glm.Vec3{-aabb.HalfExtend.X, aabb.HalfExtend.Y, aabb.HalfExtend.Z}
+	c = glm.Vec3{X: -aabb.HalfExtend.X, Y: aabb.HalfExtend.Y, Z: aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		minlen2 = l2
 		closest = c
 	}
 
-	c = glm.Vec3{-aabb.HalfExtend.X, aabb.HalfExtend.Y, -aabb.HalfExtend.Z}
+	c = glm.Vec3{X: -aabb.HalfExtend.X, Y: aabb.HalfExtend.Y, Z: -aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		minlen2 = l2
 		closest = c
 	}
 
-	c = glm.Vec3{aabb.HalfExtend.X, -aabb.HalfExtend.Y, aabb.HalfExtend.Z}
+	c = glm.Vec3{X: aabb.HalfExtend.X, Y: -aabb.HalfExtend.Y, Z: aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		minlen2 = l2
 		closest = c
 	}
 
-	c = glm.Vec3{aabb.HalfExtend.X, -aabb.HalfExtend.Y, -aabb.HalfExtend.Z}
+	c = glm.Vec3{X: aabb.HalfExtend.X, Y: -aabb.HalfExtend.Y, Z: -aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		minlen2 = l2
 		closest = c
 	}
 
-	c = glm.Vec3{aabb.HalfExtend.X, aabb.HalfExtend.Y, aabb.HalfExtend.Z}
+	c = glm.Vec3{X: aabb.HalfExtend.X, Y: aabb.HalfExtend.Y, Z: aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		minlen2 = l2
 		closest = c
 	}
 
-	c = glm.Vec3{aabb.HalfExtend.X, aabb.HalfExtend.Y, -aabb.HalfExtend.Z}
+	c = glm.Vec3{X: aabb.HalfExtend.X, Y: aabb.HalfExtend.Y, Z: -aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
 		//minlen2 = l2

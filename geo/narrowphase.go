@@ -36,7 +36,6 @@ func TestShapeShape(s0, s1 Shape) bool {
 		case *Capsule:
 			return TestAABBCapsule(c0, c1)
 		case *Convexhull:
-			break
 			return TestAABBConvexhull(c0, c1)
 		}
 	case *OBB:
@@ -58,7 +57,6 @@ func TestShapeShape(s0, s1 Shape) bool {
 		case *Sphere:
 			return TestCapsuleSphere(c0, c1)
 		case *AABB:
-			break
 			return TestAABBCapsule(c1, c0)
 		case *OBB:
 			return TestCapsuleOBB(c0, c1)
@@ -74,7 +72,6 @@ func TestShapeShape(s0, s1 Shape) bool {
 		case *Sphere:
 			return TestConvexhullSphere(c0, c1)
 		case *AABB:
-			break
 			return TestAABBConvexhull(c1, c0)
 		case *OBB:
 			break
@@ -83,7 +80,6 @@ func TestShapeShape(s0, s1 Shape) bool {
 			break
 			// return TestCapsuleConvexhull(c1, c0)
 		case *Convexhull:
-			break
 			return TestConvexhullConvexhull(c0, c1)
 		}
 	}
