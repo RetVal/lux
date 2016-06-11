@@ -1,16 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"runtime"
 
 	"github.com/luxengine/lux/gl"
-	"github.com/luxengine/lux/glm"
 	"github.com/luxengine/lux/math"
 	lux "github.com/luxengine/lux/render"
 	"github.com/luxengine/lux/render/debug"
-	"github.com/luxengine/lux/tornago"
 
 	"github.com/go-gl/glfw/v3.1/glfw"
 )
@@ -45,21 +42,20 @@ func main() {
 	assman.LoadModel("suzanne.obj", "monkey")
 	assman.LoadModel("skydome.obj", "skydome")
 	assman.LoadModel("ground.obj", "ground")
-	assman.LoadModel("door.obj", "door")
-	assman.LoadModel("sphere.obj", "sphere")
 	assman.LoadTexture("square.png", "square")
 	assman.LoadTexture("skydome.png", "skydome")
 	assman.LoadTexture("red.png", "red")
 	assman.LoadTexture("brown.png", "brown")
 	skydome := assman.Models["skydome"]
 	ground := assman.Models["ground"]
+	monkey := assman.Models["monkey"]
 	// === //
 
 	// === transf === //
 	skydomeTransf := lux.NewTransform()
 	groundTransf := lux.NewTransform()
-	groundTransf.Translate(0, -2, 0)
-	// ============== //
+	monkeyTransf := lux.NewTransform()
+	monkeyTransf.Translate(0, 2, 0)
 
 	gbuf, err := lux.NewGBuffer(int32(WindowWidth), int32(WindowHeight))
 	if err != nil {
@@ -70,32 +66,27 @@ func main() {
 	angle := 0.0
 	previousTime := glfw.GetTime()
 
-	// ==fps== //
-	nbFrames := 0
-	lastTime := glfw.GetTime()
-
 	// ==camera== //
 	var cam lux.Camera
 	cam.SetPerspective(70.0, float32(int32(WindowWidth))/float32(WindowHeight), 0.1, 100.0)
-	cam.LookAtval(-10, 10, 10, 0, 0, 0, 0, 1, 0)
+	cam.LookAtval(-5, 7, 5, 0, 0, 0, 0, 1, 0)
 
 	// post process //
 	lux.InitPostProcessSystem()
-
 	tonemap, err := lux.NewPostProcessFramebuffer(int32(WindowWidth), int32(WindowHeight), lux.PostProcessFragmentShaderToneMapping)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer tonemap.Delete()
-	/*
 
-		fxaa, err := lux.NewPostProcessFramebuffer(int32(WindowWidth), int32(WindowHeight), lux.PostprocessfragmentshaderFxaa)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer fxaa.Delete()
-		fxaa.SetNext(tonemap)
-		woobly, err := lux.NewPostProcessFramebuffer(int32(WindowWidth), int32(WindowHeight), `#version 330
+	fxaa, err := lux.NewPostProcessFramebuffer(int32(WindowWidth), int32(WindowHeight), lux.PostprocessfragmentshaderFxaa)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fxaa.Delete()
+	tonemap.SetNext(fxaa)
+
+	woobly, err := lux.NewPostProcessFramebuffer(int32(WindowWidth), int32(WindowHeight), `#version 330
 				#define width 0.1
 
 				uniform sampler2D tex;
@@ -120,11 +111,11 @@ func main() {
 					}
 				}
 				`+"\x00")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer woobly.Delete()*/
-	//tonemap.SetNext(woobly)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer woobly.Delete()
+	fxaa.SetNext(woobly)
 
 	// === shadow === //
 	shadowfbo, err := lux.NewShadowFBO(4096, 4096)
@@ -138,62 +129,34 @@ func main() {
 
 	// === lights === //
 	var lamp lux.PointLight
-	lamp.Move(0, 5, 5)
 
-	var i int
 	// ===render loop=== //
 	quit := false
 	for !window.ShouldClose() && !quit {
 		if window.GetKey(glfw.KeyEscape) == glfw.Press {
 			quit = true
 		}
-		// ===fps=== //
-		currTime := glfw.GetTime()
-		nbFrames++
-		if currTime-lastTime >= 1.0 {
-			mspf := 1000.0 / float64(nbFrames)
-			mspf = float64(int(mspf*100.0)) / 100.0
-			window.SetTitle("FPS: " + fmt.Sprintf("%d", nbFrames))
-			nbFrames = 0
-			lastTime += 1.0
-		}
-		// =end fps= //
-
 		// ==Update== //
-
 		time := glfw.GetTime()
 		elapsed := time - previousTime
 		previousTime = time
 		angle += elapsed
 
-		// === tornago === //
-		i++
-		w.Step(float32(elapsed))
-		am.Tick()
-
 		// ==shadow== //
 		shadowfbo.BindForDrawing()
-		//shadowfbo.Render(sphere, sphereTransf)
 		shadowfbo.Render(ground, groundTransf)
-		shadowfbo.Render(boxModel, boxRBTransf)
-		shadowfbo.Render(boxModel2, boxRBTransf2)
+		shadowfbo.Render(monkey, monkeyTransf)
 		shadowfbo.Unbind()
 
-		// cam.LookAtval(float32(5*math.Cos(angle/2)), 5, float32(5*math.Sin(angle/2)), 0, 0, 0, 0, 1, 0)
 		lamp.Move(5*math.Cos(float32(angle/2)), 5, 5*math.Sin(float32(angle/2)))
 		shadowfbo.LookAt(lamp.X, lamp.Y, lamp.Z, 0, 0, 0)
-		// lamp.Move(-5, 0, 0)
 
 		// ==Render== //
 		gbuf.Bind(&cam)
 
 		// normal rendering
 		gbuf.Render(&cam, skydome, assman.Textures["skydome"], skydomeTransf)
-		// gbuf.Render(&cam, terrain, assman.Textures["square"], doorTransf)
-
-		//gbuf.Render(&cam, sphere, assman.Textures["brown"], sphereTransf)
-		gbuf.Render(&cam, boxModel, assman.Textures["brown"], boxRBTransf)
-		gbuf.Render(&cam, boxModel2, assman.Textures["brown"], boxRBTransf2)
+		gbuf.Render(&cam, monkey, assman.Textures["square"], monkeyTransf)
 		gbuf.Render(&cam, ground, assman.Textures["square"], groundTransf)
 
 		// render lights
