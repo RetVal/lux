@@ -426,13 +426,23 @@ func (m1 *Mat3) EqualThreshold(m2 *Mat3, threshold float32) bool {
 // Equal performs an element-wise approximate equality test between two matrices,
 // as if FloatEqual had been used.
 func (m1 *Mat4) Equal(m2 *Mat4) bool {
-	return flops.Eq(m1[0], m2[0]) && flops.Eq(m1[1], m2[1]) && flops.Eq(m1[2], m2[2]) && flops.Eq(m1[3], m2[3]) && flops.Eq(m1[4], m2[4]) && flops.Eq(m1[5], m2[5]) && flops.Eq(m1[6], m2[6]) && flops.Eq(m1[7], m2[7]) && flops.Eq(m1[8], m2[8]) && flops.Eq(m1[9], m2[9]) && flops.Eq(m1[10], m2[10]) && flops.Eq(m1[11], m2[11]) && flops.Eq(m1[12], m2[12]) && flops.Eq(m1[13], m2[13]) && flops.Eq(m1[14], m2[14]) && flops.Eq(m1[15], m2[15])
+	for n := 0; n < 16; n++ {
+		if !flops.Eq(m1[n], m2[n]) {
+			return false
+		}
+	}
+	return true
 }
 
 // EqualThreshold performs an element-wise approximate equality test between two matrices
 // with a given epsilon threshold, as if FloatEqualThreshold had been used.
 func (m1 *Mat4) EqualThreshold(m2 *Mat4, threshold float32) bool {
-	return FloatEqualThreshold(m1[0], m2[0], threshold) && FloatEqualThreshold(m1[1], m2[1], threshold) && FloatEqualThreshold(m1[2], m2[2], threshold) && FloatEqualThreshold(m1[3], m2[3], threshold) && FloatEqualThreshold(m1[4], m2[4], threshold) && FloatEqualThreshold(m1[5], m2[5], threshold) && FloatEqualThreshold(m1[6], m2[6], threshold) && FloatEqualThreshold(m1[7], m2[7], threshold) && FloatEqualThreshold(m1[8], m2[8], threshold) && FloatEqualThreshold(m1[9], m2[9], threshold) && FloatEqualThreshold(m1[10], m2[10], threshold) && FloatEqualThreshold(m1[11], m2[11], threshold) && FloatEqualThreshold(m1[12], m2[12], threshold) && FloatEqualThreshold(m1[13], m2[13], threshold) && FloatEqualThreshold(m1[14], m2[14], threshold) && FloatEqualThreshold(m1[15], m2[15], threshold)
+	for n := 0; n < 16; n++ {
+		if !FloatEqualThreshold(m1[n], m2[n], threshold) {
+			return false
+		}
+	}
+	return true
 }
 
 // Equal performs an element-wise approximate equality test between two matrices,
