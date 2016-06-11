@@ -13,64 +13,82 @@ import (
 	"unsafe"
 )
 
+// consts related to steam controllers
 const (
-	MAX_STEAM_CONTROLLERS = 16
+	MaxSteamControllers = 16
 
-	STEAM_RIGHT_TRIGGER_MASK           = 0x0000001
-	STEAM_LEFT_TRIGGER_MASK            = 0x0000002
-	STEAM_RIGHT_BUMPER_MASK            = 0x0000004
-	STEAM_LEFT_BUMPER_MASK             = 0x0000008
-	STEAM_BUTTON_0_MASK                = 0x0000010
-	STEAM_BUTTON_1_MASK                = 0x0000020
-	STEAM_BUTTON_2_MASK                = 0x0000040
-	STEAM_BUTTON_3_MASK                = 0x0000080
-	STEAM_TOUCH_0_MASK                 = 0x0000100
-	STEAM_TOUCH_1_MASK                 = 0x0000200
-	STEAM_TOUCH_2_MASK                 = 0x0000400
-	STEAM_TOUCH_3_MASK                 = 0x0000800
-	STEAM_BUTTON_MENU_MASK             = 0x0001000
-	STEAM_BUTTON_STEAM_MASK            = 0x0002000
-	STEAM_BUTTON_ESCAPE_MASK           = 0x0004000
-	STEAM_BUTTON_BACK_LEFT_MASK        = 0x0008000
-	STEAM_BUTTON_BACK_RIGHT_MASK       = 0x0010000
-	STEAM_BUTTON_LEFTPAD_CLICKED_MASK  = 0x0020000
-	STEAM_BUTTON_RIGHTPAD_CLICKED_MASK = 0x0040000
-	STEAM_LEFTPAD_FINGERDOWN_MASK      = 0x0080000
-	STEAM_RIGHTPAD_FINGERDOWN_MASK     = 0x0100000
-	STEAM_JOYSTICK_BUTTON_MASK         = 0x0400000
+	SteamRightTriggerMask          = 0x0000001
+	SteamLeftTriggerMask           = 0x0000002
+	SteamRightBumperMask           = 0x0000004
+	SteamLeftBumperMask            = 0x0000008
+	SteamButton0Mask               = 0x0000010
+	SteamButton1Mask               = 0x0000020
+	SteamButton2Mask               = 0x0000040
+	SteamButton3Mask               = 0x0000080
+	SteamTouch0Mask                = 0x0000100
+	SteamTouch1Mask                = 0x0000200
+	SteamTouch2Mask                = 0x0000400
+	SteamTouch3Mask                = 0x0000800
+	SteamButtonMenuMask            = 0x0001000
+	SteamButtonSteamMask           = 0x0002000
+	SteamButtonEscapeMask          = 0x0004000
+	SteamButtonBackLeftMask        = 0x0008000
+	SteamButtonBackRightMask       = 0x0010000
+	SteamButtonLeftpadClickedMask  = 0x0020000
+	SteamButtonRightpadClickedMask = 0x0040000
+	SteamLeftpadFingerdownMask     = 0x0080000
+	SteamRightpadFingerdownMask    = 0x0100000
+	SteamJoystickButtonMask        = 0x0400000
 )
 
+// ESteamControllerPad is an enum to differentiate the 2 different steam
+// controller pads.
 type ESteamControllerPad int32
 
+// enum to differentiate the 2 different steam controller pads.
 const (
-	SteamControllerPad_Left ESteamControllerPad = iota
-	SteamControllerPad_Right
+	SteamControllerPadLeft ESteamControllerPad = iota
+	SteamControllerPadRight
 )
 
+// EControllerSourceMode is an enum that defines the different controller source
+// modes.
 type EControllerSourceMode int32
 
+// controller source mode enums
 const (
-	EControllerSourceMode_None EControllerSourceMode = iota
-	EControllerSourceMode_Dpad
-	EControllerSourceMode_Buttons
-	EControllerSourceMode_FourButtons
-	EControllerSourceMode_AbsoluteMouse
-	EControllerSourceMode_RelativeMouse
-	EControllerSourceMode_JoystickMove
-	EControllerSourceMode_JoystickCamera
-	EControllerSourceMode_ScrollWheel
-	EControllerSourceMode_Trigger
-	EControllerSourceMode_TouchMenu
+	EControllerSourceModeNone EControllerSourceMode = iota
+	EControllerSourceModeDpad
+	EControllerSourceModeButtons
+	EControllerSourceModeFourButtons
+	EControllerSourceModeAbsoluteMouse
+	EControllerSourceModeRelativeMouse
+	EControllerSourceModeJoystickMove
+	EControllerSourceModeJoystickCamera
+	EControllerSourceModeScrollWheel
+	EControllerSourceModeTrigger
+	EControllerSourceModeTouchMenu
 )
 
-type (
-	ControllerActionSetHandle     uint64
-	ControllerDigitalActionHandle uint64
-	ControllerAnalogActionHandle  uint64
-	ControllerHandle              uint64
-	EControllerActionOrigin       int32
-)
+// EControllerActionOrigin is an enum to differentiate the different steam
+// controller action origins.
+type EControllerActionOrigin int32
 
+// ControllerActionSetHandle is a handle to a steam controller action set.
+type ControllerActionSetHandle uint64
+
+// ControllerDigitalActionHandle is a handle to a steam controller digital
+// action.
+type ControllerDigitalActionHandle uint64
+
+// ControllerAnalogActionHandle is a handle to a steam controller analog
+// action.
+type ControllerAnalogActionHandle uint64
+
+// ControllerHandle is a handle to a steam controller.
+type ControllerHandle uint64
+
+// ControllerDigitalActionData is a struct returned by digital action queries.
 type ControllerDigitalActionData struct {
 	// The current state of this action; will be true if currently pressed
 	State bool
@@ -89,6 +107,7 @@ func controllerDigitalActionDataFromC(c C.ControllerDigitalActionData_t) Control
 	}
 }
 
+// ControllerAnalogActionData is a struct returned by analog action queries.
 type ControllerAnalogActionData struct {
 	// Type of data coming from this action, this will match what got specified in the action set
 	Mode EControllerSourceMode
@@ -112,9 +131,9 @@ func controllerAnalogActionDatafromC(c C.ControllerAnalogActionData_t) Controlle
 // ISteamController is a handler for the steam controller API.
 type ISteamController struct{ unsafe.Pointer }
 
-// SteamController returns the controller interface, will return an invalid
+// Controller returns the controller interface, will return an invalid
 // interface if Init returned false or has not been called yet.
-func SteamController() ISteamController {
+func Controller() ISteamController {
 	return ISteamController{C.CSteamController()}
 }
 
@@ -220,6 +239,7 @@ func (c ISteamController) GetAnalogActionOrigins(controllerHandle ControllerHand
 	return int(C.SteamCAPI_SteamController_GetAnalogActionOrigins(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerActionSetHandle_t(actionSetHandle), C.ControllerAnalogActionHandle_t(analogActionHandle), (*C.EControllerActionOrigin)(originsOut)))
 }
 
+// StopAnalogActionMomentum has no documentation.
 func (c ISteamController) StopAnalogActionMomentum(controllerHandle ControllerHandle, eAction ControllerAnalogActionHandle) {
 	C.SteamCAPI_SteamController_StopAnalogActionMomentum(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerAnalogActionHandle_t(eAction))
 }

@@ -1,5 +1,6 @@
 package steam
 
+// APICall is an enum for steam API calls.
 type APICall uint64
 
 /*

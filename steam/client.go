@@ -18,6 +18,8 @@ type HSteamPipe int32
 
 // HSteamUser is a handle to single instance of a steam user.
 type HSteamUser int32
+
+// EAccountType is an enum for all the possible account type.
 type EAccountType int32
 
 // ISteamClient is a handler for the SteamClient API.
@@ -257,6 +259,7 @@ func (c ISteamClient) Set_SteamAPI_CCheckCallbackRegisteredInProcess(xfunc Steam
 	C.SteamCAPI_SteamClient_Set_SteamAPI_CCheckCallbackRegisteredInProcess(c.Pointer, xfunc)
 }
 */
+
 // GetISteamInventory returns the inventory interface.
 func (c ISteamClient) GetISteamInventory(hSteamuser HSteamUser, hSteamPipe HSteamPipe, pchVersion string) unsafe.Pointer {
 	cpchVersion := C.CString(pchVersion)

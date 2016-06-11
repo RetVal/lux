@@ -595,7 +595,7 @@ func ClosestPointLineTriangle(p, q, a, b, c *glm.Vec3) (c0, c1 glm.Vec3) {
 
 	dist, v0 = ClosestPointPlanePoint(&plane, q)
 	if sqdist = dist * dist; sqdist < minSqdist {
-		minSqdist = sqdist
+		//minSqdist = sqdist
 		c0, c1 = *q, v0
 	}
 
@@ -1189,7 +1189,7 @@ func ClosestPointSegmentAABB(aabb *AABB, p, q *glm.Vec3) glm.Vec3 {
 	c = glm.Vec3{aabb.HalfExtend.X, aabb.HalfExtend.Y, -aabb.HalfExtend.Z}
 	_, c = ClosestPointSegmentPoint(&v0, &v1, &c)
 	if l2 := c.Len2(); l2 < minlen2 {
-		minlen2 = l2
+		//minlen2 = l2
 		closest = c
 	}
 	return closest

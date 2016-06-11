@@ -26,29 +26,34 @@ func Apps() ISteamApps {
 	return ISteamApps{C.SteamCAPI_SteamApps()}
 }
 
+// IsSubscribed has no valve documentation.
 func (a ISteamApps) IsSubscribed() bool {
 	return bool(C.SteamCAPI_ISteamApps_BIsSubscribed(a.Pointer))
 }
 
+// IsLowViolence has no valve documentation.
 func (a ISteamApps) IsLowViolence() bool {
 	return bool(C.SteamCAPI_ISteamApps_BIsLowViolence(a.Pointer))
 }
 
+// IsCybercafe has no valve documentation.
 func (a ISteamApps) IsCybercafe() bool {
 	return bool(C.SteamCAPI_ISteamApps_BIsCybercafe(a.Pointer))
 }
 
+// IsVACBanned has no valve documentation.
 func (a ISteamApps) IsVACBanned() bool {
 	return bool(C.SteamCAPI_ISteamApps_BIsVACBanned(a.Pointer))
 }
 
-// No documentation, do i release the string they give me ? no clue.
+// GetCurrentGameLanguage has no valve documentation.
 func (a ISteamApps) GetCurrentGameLanguage() string {
 	ret := C.SteamCAPI_ISteamApps_GetCurrentGameLanguage(a.Pointer)
 	out := C.GoString(ret)
 	return out
 }
 
+// GetAvailableGameLanguages has no valve documentation.
 func (a ISteamApps) GetAvailableGameLanguages() string {
 	ret := C.SteamCAPI_ISteamApps_GetAvailableGameLanguages(a.Pointer)
 	out := C.GoString(ret)
@@ -57,18 +62,18 @@ func (a ISteamApps) GetAvailableGameLanguages() string {
 
 // IsSubscribedApp check ownership of another game related to yours, a demo for
 // example.
-func (a ISteamApps) IsSubscribedApp(appID AppId) bool {
+func (a ISteamApps) IsSubscribedApp(appID AppID) bool {
 	return bool(C.SteamCAPI_ISteamApps_BIsSubscribedApp(a.Pointer, C.AppId_t(appID)))
 }
 
 // IsDlcInstalled takes AppID of DLC and checks if the user owns the DLC and if
 // the DLC is installed.
-func (a ISteamApps) IsDlcInstalled(appID AppId) bool {
+func (a ISteamApps) IsDlcInstalled(appID AppID) bool {
 	return bool(C.SteamCAPI_ISteamApps_BIsDlcInstalled(a.Pointer, C.AppId_t(appID)))
 }
 
 // GetEarliestPurchaseUnixTime returns the Unix time of the purchase of the app.
-func (a ISteamApps) GetEarliestPurchaseUnixTime(nAppID AppId) uint32 {
+func (a ISteamApps) GetEarliestPurchaseUnixTime(nAppID AppID) uint32 {
 	return uint32(C.SteamCAPI_ISteamApps_GetEarliestPurchaseUnixTime(a.Pointer, C.AppId_t(nAppID)))
 }
 
@@ -86,19 +91,19 @@ func (a ISteamApps) GetDLCCount() int32 {
 }
 
 // GetDLCDataByIndex returns metadata for DLC by index, of range [0, GetDLCCount()]
-func (a ISteamApps) GetDLCDataByIndex(iDLC int32, pAppID *AppId, pbAvailable *bool, pchName string, cchNameBufferSize int32) bool {
+func (a ISteamApps) GetDLCDataByIndex(iDLC int32, pAppID *AppID, pbAvailable *bool, pchName string, cchNameBufferSize int32) bool {
 	cpchName := C.CString(pchName)
 	defer C.free(unsafe.Pointer(cpchName))
 	return bool(C.SteamCAPI_ISteamApps_BGetDLCDataByIndex(a.Pointer, C.int(iDLC), (*C.AppId_t)(pAppID), (*C._Bool)(pbAvailable), cpchName, C.int(cchNameBufferSize)))
 }
 
 // InstallDLC is the install control for optional DLC.
-func (a ISteamApps) InstallDLC(nAppID AppId) {
+func (a ISteamApps) InstallDLC(nAppID AppID) {
 	C.SteamCAPI_ISteamApps_InstallDLC(a.Pointer, C.AppId_t(nAppID))
 }
 
 // UninstallDLC is the uninstall control for optional DLC.
-func (a ISteamApps) UninstallDLC(nAppID AppId) {
+func (a ISteamApps) UninstallDLC(nAppID AppID) {
 	C.SteamCAPI_ISteamApps_UninstallDLC(a.Pointer, C.AppId_t(nAppID))
 }
 
@@ -107,7 +112,7 @@ func (a ISteamApps) UninstallDLC(nAppID AppId) {
 // valid keys to be distributed to users when they purchase the game, before the
 // game ships. You'll receive an AppProofOfPurchaseKeyResponse_t callback when
 // the key is available (which may be immediately).
-func (a ISteamApps) RequestAppProofOfPurchaseKey(nAppID AppId) {
+func (a ISteamApps) RequestAppProofOfPurchaseKey(nAppID AppID) {
 	C.SteamCAPI_ISteamApps_RequestAppProofOfPurchaseKey(a.Pointer, C.AppId_t(nAppID))
 }
 
@@ -125,20 +130,20 @@ func (a ISteamApps) MarkContentCorrupt(bMissingFilesOnly bool) bool {
 }
 
 // GetInstalledDepots returns installed depots in mount order
-func (a ISteamApps) GetInstalledDepots(appID AppId, pvecDepots *DepotID, cMaxDepots uint32) uint32 {
+func (a ISteamApps) GetInstalledDepots(appID AppID, pvecDepots *DepotID, cMaxDepots uint32) uint32 {
 	return uint32(C.SteamCAPI_ISteamApps_GetInstalledDepots(a.Pointer, C.AppId_t(appID), (*C.DepotId_t)(pvecDepots), C.uint(cMaxDepots)))
 }
 
 // GetAppInstallDir returns current app install folder for AppID, returns folder
 // name length.
-func (a ISteamApps) GetAppInstallDir(appID AppId, pchFolder string, cchFolderBufferSize uint32) uint32 {
+func (a ISteamApps) GetAppInstallDir(appID AppID, pchFolder string, cchFolderBufferSize uint32) uint32 {
 	cpchFolder := C.CString(pchFolder)
 	defer C.free(unsafe.Pointer(cpchFolder))
 	return uint32(C.SteamCAPI_ISteamApps_GetAppInstallDir(a.Pointer, C.AppId_t(appID), cpchFolder, C.uint(cchFolderBufferSize)))
 }
 
 // IsAppInstalled returns true if that app is installed (not necessarily owned).
-func (a ISteamApps) IsAppInstalled(appID AppId) bool {
+func (a ISteamApps) IsAppInstalled(appID AppID) bool {
 	return bool(C.SteamCAPI_ISteamApps_BIsAppInstalled(a.Pointer, C.AppId_t(appID)))
 }
 
@@ -165,12 +170,12 @@ func (a ISteamApps) GetLaunchQueryParam(pchKey string) string {
 }
 
 // GetDlcDownloadProgress gets download progress for optional DLC.
-func (a ISteamApps) GetDlcDownloadProgress(nAppID AppId, punBytesDownloaded *uint64, punBytesTotal *uint64) bool {
+func (a ISteamApps) GetDlcDownloadProgress(nAppID AppID, punBytesDownloaded *uint64, punBytesTotal *uint64) bool {
 	return bool(C.SteamCAPI_ISteamApps_GetDlcDownloadProgress(a.Pointer, C.AppId_t(nAppID), (*C.ulonglong)(punBytesDownloaded), (*C.ulonglong)(punBytesTotal)))
 }
 
-// GetAppBuildId return the buildid of this app, may change at any time based on
+// GetAppBuildID return the buildid of this app, may change at any time based on
 // backend updates to the game.
-func (a ISteamApps) GetAppBuildId() int32 {
+func (a ISteamApps) GetAppBuildID() int32 {
 	return int32(C.SteamCAPI_ISteamApps_GetAppBuildId(a.Pointer))
 }

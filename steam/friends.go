@@ -13,12 +13,16 @@ import (
 	"unsafe"
 )
 
+// FriendsGroupID is an ID for friends group.
 type FriendsGroupID int16
 
+// PersonaState is a enum for a user steam status (offline/online/away)
 type PersonaState int
 
+// EOverlayToStoreFlag are passed as parameters to the store
 type EOverlayToStoreFlag int
 
+// the different enums for PersonaState
 const (
 	PersonaStateOffline        PersonaState = iota // friend is not currently logged on
 	PersonaStateOnline                             // friend is logged on
@@ -277,7 +281,7 @@ func (f ISteamFriends) ActivateGameOverlayToWebPage(pchURL string) {
 }
 
 // ActivateGameOverlayToStore activates game overlay to store page for app.
-func (f ISteamFriends) ActivateGameOverlayToStore(nAppID AppId, eFlag EOverlayToStoreFlag) {
+func (f ISteamFriends) ActivateGameOverlayToStore(nAppID AppID, eFlag EOverlayToStoreFlag) {
 	C.SteamFriends_ActivateGameOverlayToStore(f.Pointer, C.AppId_t(nAppID), C.EOverlayToStoreFlag(eFlag))
 }
 
@@ -436,8 +440,11 @@ func (f ISteamFriends) CloseClanChatWindowInSteam(CSteamID steamIDClanChat) bool
 }
 */
 
-func (f ISteamFriends) SetListenForFriendsMessages(bInterceptEnabled bool) bool {
-	return bool(C.SteamFriends_SetListenForFriendsMessages(f.Pointer, C._Bool(bInterceptEnabled)))
+// SetListenForFriendsMessages has no documentation. But does has "this is so
+// you can show P2P chats inline in the game" near the declaration of this
+// function.
+func (f ISteamFriends) SetListenForFriendsMessages(interceptEnabled bool) bool {
+	return bool(C.SteamFriends_SetListenForFriendsMessages(f.Pointer, C._Bool(interceptEnabled)))
 }
 
 /*
@@ -458,6 +465,7 @@ func (f ISteamFriends) IsFollowing(CSteamID steamID) SteamAPICall_t {
 }
 */
 
-func (f ISteamFriends) EnumerateFollowingList(unStartIndex uint32) SteamAPICall {
-	return SteamAPICall(C.SteamFriends_EnumerateFollowingList(f.Pointer, C.uint(unStartIndex)))
+// EnumerateFollowingList has no documentation beside "following apis"
+func (f ISteamFriends) EnumerateFollowingList(unStartIndex uint32) APICall {
+	return APICall(C.SteamFriends_EnumerateFollowingList(f.Pointer, C.uint(unStartIndex)))
 }
