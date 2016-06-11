@@ -17,7 +17,7 @@ func TestCameraSetPerspective(t *testing.T) {
 }
 
 func TestCameraLookAtVec(t *testing.T) {
-	eye, center, up := glm.Vec3{5, 5, 5}, glm.Vec3{0, 0, 0}, glm.Vec3{0, 1, 0}
+	eye, center, up := glm.Vec3{X: 5, Y: 5, Z: 5}, glm.Vec3{X: 0, Y: 0, Z: 0}, glm.Vec3{X: 0, Y: 1, Z: 0}
 	cam := Camera{}
 	cam.LookAtVec(&eye, &center, &up)
 	expected := glm.Mat4{0.70710677, -0.40824825, 0.5773502, 0, 0, 0.8164965, 0.5773502, 0, -0.70710677, -0.40824825, 0.5773502, 0, 0, 0, -8.660253, 1}

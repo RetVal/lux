@@ -24,7 +24,7 @@ func TestRodConstraintToWorld_GenerateContacts(t *testing.T) {
 				Length:     10,
 				Body:       b,
 				LocalPoint: glm.Vec3{},
-				WorldPoint: glm.Vec3{10, 0, 0},
+				WorldPoint: glm.Vec3{X: 10, Y: 0, Z: 0},
 			}
 			return Case{
 				rod:     rod,
@@ -41,12 +41,12 @@ func TestRodConstraintToWorld_GenerateContacts(t *testing.T) {
 					Length:     10,
 					Body:       b,
 					LocalPoint: glm.Vec3{},
-					WorldPoint: glm.Vec3{10, 0, 0},
+					WorldPoint: glm.Vec3{X: 10, Y: 0, Z: 0},
 				},
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b, nil},
-					point:       glm.Vec3{0.1, 0, 0},
-					normal:      glm.Vec3{1, 0, 0},
+					point:       glm.Vec3{X: 0.1, Y: 0, Z: 0},
+					normal:      glm.Vec3{X: 1, Y: 0, Z: 0},
 					penetration: -0.10000038146972656,
 				},
 			}
@@ -61,12 +61,12 @@ func TestRodConstraintToWorld_GenerateContacts(t *testing.T) {
 					Length:     10,
 					Body:       b,
 					LocalPoint: glm.Vec3{},
-					WorldPoint: glm.Vec3{10, 0, 0},
+					WorldPoint: glm.Vec3{X: 10, Y: 0, Z: 0},
 				},
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b, nil},
-					point:       glm.Vec3{-0.1, 0, 0},
-					normal:      glm.Vec3{0.99999994039535522, 0, 0},
+					point:       glm.Vec3{X: -0.1, Y: 0, Z: 0},
+					normal:      glm.Vec3{X: 0.99999994039535522, Y: 0, Z: 0},
 					penetration: 0.10000038146972656,
 				},
 			}
@@ -80,13 +80,13 @@ func TestRodConstraintToWorld_GenerateContacts(t *testing.T) {
 				rod: &RodConstraintToWorld{
 					Length:     10,
 					Body:       b,
-					LocalPoint: glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
-					WorldPoint: glm.Vec3{10, 0, 0},
+					LocalPoint: glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
+					WorldPoint: glm.Vec3{X: 10, Y: 0, Z: 0},
 				},
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b, nil},
-					point:       glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
-					normal:      glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+					point:       glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
+					normal:      glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 					penetration: math.NaN(),
 				},
 			}
@@ -100,13 +100,13 @@ func TestRodConstraintToWorld_GenerateContacts(t *testing.T) {
 				rod: &RodConstraintToWorld{
 					Length:     10,
 					Body:       b,
-					LocalPoint: glm.Vec3{0, 0, 0},
-					WorldPoint: glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+					LocalPoint: glm.Vec3{},
+					WorldPoint: glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 				},
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b, nil},
-					point:       glm.Vec3{-0.1, 0, 0},
-					normal:      glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+					point:       glm.Vec3{X: -0.1, Y: 0, Z: 0},
+					normal:      glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 					penetration: math.NaN(),
 				},
 			}
@@ -178,8 +178,8 @@ func TestRodConstraintToBody_GenerateContacts(t *testing.T) {
 				rod: rod,
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b0, b1},
-					point:       glm.Vec3{0, 0, 0},
-					normal:      glm.Vec3{0, -1, 0},
+					point:       glm.Vec3{},
+					normal:      glm.Vec3{X: 0, Y: -1, Z: 0},
 					penetration: -0.10000038146972656,
 				},
 			}
@@ -200,8 +200,8 @@ func TestRodConstraintToBody_GenerateContacts(t *testing.T) {
 				rod: rod,
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b0, b1},
-					point:       glm.Vec3{0, 0, 0},
-					normal:      glm.Vec3{0, -0.99999994039535522, 0},
+					point:       glm.Vec3{},
+					normal:      glm.Vec3{X: 0, Y: -0.99999994039535522, Z: 0},
 					penetration: 0.10000038146972656,
 				},
 			}
@@ -216,14 +216,14 @@ func TestRodConstraintToBody_GenerateContacts(t *testing.T) {
 			rod := &RodConstraintToBody{
 				Length:      10,
 				Bodies:      [2]*RigidBody{b0, b1},
-				LocalPoints: [2]glm.Vec3{{math.NaN(), math.NaN(), math.NaN()}, {}},
+				LocalPoints: [2]glm.Vec3{{X: math.NaN(), Y: math.NaN(), Z: math.NaN()}, {}},
 			}
 			return Case{
 				rod: rod,
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b0, b1},
-					point:       glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
-					normal:      glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+					point:       glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
+					normal:      glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 					penetration: math.NaN(),
 				},
 			}
@@ -238,14 +238,14 @@ func TestRodConstraintToBody_GenerateContacts(t *testing.T) {
 			rod := &RodConstraintToBody{
 				Length:      10,
 				Bodies:      [2]*RigidBody{b0, b1},
-				LocalPoints: [2]glm.Vec3{{}, {math.NaN(), math.NaN(), math.NaN()}},
+				LocalPoints: [2]glm.Vec3{{}, {X: math.NaN(), Y: math.NaN(), Z: math.NaN()}},
 			}
 			return Case{
 				rod: rod,
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b0, b1},
-					point:       glm.Vec3{0, 0, 0},
-					normal:      glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+					point:       glm.Vec3{},
+					normal:      glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 					penetration: math.NaN(),
 				},
 			}
@@ -266,8 +266,8 @@ func TestRodConstraintToBody_GenerateContacts(t *testing.T) {
 				rod: rod,
 				contact: &Contact{
 					bodies:      [2]*RigidBody{b0, b1},
-					point:       glm.Vec3{0, 0, 0},
-					normal:      glm.Vec3{0, -1, 0},
+					point:       glm.Vec3{},
+					normal:      glm.Vec3{X: 0, Y: -1, Z: 0},
 					penetration: math.NaN(),
 				},
 			}

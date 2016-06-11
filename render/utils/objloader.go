@@ -54,7 +54,7 @@ func LoadObject(fname string, invertV bool) *MeshObject {
 			}
 			if invertV {
 				// For DDS textures
-				uv = glm.Vec2{uv.X, 1 - uv.Y}
+				uv = glm.Vec2{X: uv.X, Y: 1 - uv.Y}
 			}
 			uvs = append(uvs, uv)
 		case "vn":

@@ -119,7 +119,7 @@ func TestWorld_AddForceGenerator(t *testing.T) {
 	bodeh2 := NewRigidBody()
 	bodeh2.SetCollisionShape(NewCollisionSphere(2))
 
-	earth := glm.Vec3{0, -9.8, 0}
+	earth := glm.Vec3{X: 0, Y: -9.8, Z: 0}
 	gravity := NewGravityForceGenerator(&earth)
 
 	w.AddForceGenerator(bodeh, gravity)
@@ -153,7 +153,7 @@ func TestWorld_RemoveForceGenerator(t *testing.T) {
 	bodeh2 := NewRigidBody()
 	bodeh2.SetCollisionShape(NewCollisionSphere(2))
 
-	earth := glm.Vec3{0, -9.8, 0}
+	earth := glm.Vec3{X: 0, Y: -9.8, Z: 0}
 	gravity := NewGravityForceGenerator(&earth)
 
 	w.AddForceGenerator(bodeh, gravity)
@@ -220,7 +220,7 @@ func TestWorld_RayTest(t *testing.T) {
 
 	w.AddRigidBody(bodeh)
 
-	r := NewRay(glm.Vec3{-5, 5, 0}, glm.Vec3{1, 0, 0}, 100)
+	r := NewRay(glm.Vec3{X: -5, Y: 5, Z: 0}, glm.Vec3{X: 1, Y: 0, Z: 0}, 100)
 	rr := RayResultAny{}
 
 	w.RayTest(r, &rr)
@@ -238,9 +238,9 @@ func TestWorld_AddConstraints(t *testing.T) {
 	bodeh := NewRigidBody()
 	bodeh.SetCollisionShape(NewCollisionSphere(1))
 
-	str := NewStringToWorldConstraint(glm.Vec3{0, 10, 0}, glm.Vec3{}, bodeh, 10, 0)
+	str := NewStringToWorldConstraint(glm.Vec3{X: 0, Y: 10, Z: 0}, glm.Vec3{}, bodeh, 10, 0)
 
-	str2 := NewStringToWorldConstraint(glm.Vec3{0, 11, 0}, glm.Vec3{}, bodeh, 1, 0)
+	str2 := NewStringToWorldConstraint(glm.Vec3{X: 0, Y: 11, Z: 0}, glm.Vec3{}, bodeh, 1, 0)
 
 	if len(w.constraints) != 0 {
 		t.Errorf("World should contain 0 constraints: %d", len(w.constraints))
@@ -273,8 +273,8 @@ func TestWorld_RemoveConstraints(t *testing.T) {
 	bodeh := NewRigidBody()
 	bodeh.SetCollisionShape(NewCollisionSphere(1))
 
-	str := NewStringToWorldConstraint(glm.Vec3{0, 10, 0}, glm.Vec3{}, bodeh, 10, 0)
-	str2 := NewStringToWorldConstraint(glm.Vec3{0, 11, 0}, glm.Vec3{}, bodeh, 1, 0)
+	str := NewStringToWorldConstraint(glm.Vec3{X: 0, Y: 10, Z: 0}, glm.Vec3{}, bodeh, 10, 0)
+	str2 := NewStringToWorldConstraint(glm.Vec3{X: 0, Y: 11, Z: 0}, glm.Vec3{}, bodeh, 1, 0)
 
 	w.AddConstraint(str)
 	w.AddConstraint(str2)

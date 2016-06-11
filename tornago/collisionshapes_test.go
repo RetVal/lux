@@ -10,10 +10,10 @@ var _ CollisionShape = &CollisionBox{}
 var _ CollisionShape = &CollisionSphere{}
 
 func TestCollisionBox_GetBoundingVolume(t *testing.T) {
-	b := NewCollisionBox(glm.Vec3{1, 2, 3})
-	b.body = &RigidBody{position: glm.Vec3{5, 5, 5}}
+	b := NewCollisionBox(glm.Vec3{X: 1, Y: 2, Z: 3})
+	b.body = &RigidBody{position: glm.Vec3{X: 5, Y: 5, Z: 5}}
 	vol := b.GetBoundingVolume()
-	if vol.Center() != (glm.Vec3{5, 5, 5}) {
+	if vol.Center() != (glm.Vec3{X: 5, Y: 5, Z: 5}) {
 		t.Error("center not as expected")
 	}
 	if vol.radius != 3 {
@@ -34,7 +34,7 @@ func TestCollisionSphere_RayTest(t *testing.T) {
 	qi := glm.QuatIdent()
 	originBody.SetOrientationQuat(&qi)
 	movedBody.SetOrientationQuat(&qi)
-	q2 := glm.Quat{0.75, glm.Vec3{1, 2, 3}}
+	q2 := glm.Quat{W: 0.75, Vec3: glm.Vec3{X: 1, Y: 2, Z: 3}}
 	rotatedBody.SetOrientationQuat(&q2)
 	movedRotatedBody.SetOrientationQuat(&q2)
 
@@ -49,7 +49,7 @@ func TestCollisionSphere_RayTest(t *testing.T) {
 				body:   &originBody,
 				radius: 1,
 			},
-			ray: NewRayFromTo(glm.Vec3{-2, -2, 0}, glm.Vec3{2, -2, 0}),
+			ray: NewRayFromTo(glm.Vec3{X: -2, Y: -2, Z: 0}, glm.Vec3{X: 2, Y: -2, Z: 0}),
 			hit: false,
 		},
 		{ //hit axis aligned
@@ -57,45 +57,45 @@ func TestCollisionSphere_RayTest(t *testing.T) {
 				body:   &originBody,
 				radius: 1,
 			},
-			ray:   NewRayFromTo(glm.Vec3{-2, 0, 0}, glm.Vec3{2, 0, 0}),
+			ray:   NewRayFromTo(glm.Vec3{X: -2, Y: 0, Z: 0}, glm.Vec3{X: 2, Y: 0, Z: 0}),
 			hit:   true,
-			point: glm.Vec3{-1, 0, 0},
+			point: glm.Vec3{X: -1, Y: 0, Z: 0},
 		},
 		{ // hit diagonally
 			sphere: CollisionSphere{
 				body:   &originBody,
 				radius: 1,
 			},
-			ray:   NewRayFromTo(glm.Vec3{-2, -2, -2}, glm.Vec3{2, 2, 2}),
+			ray:   NewRayFromTo(glm.Vec3{X: -2, Y: -2, Z: -2}, glm.Vec3{X: 2, Y: 2, Z: 2}),
 			hit:   true,
-			point: glm.Vec3{-0.5773504, -0.5773504, -0.5773504},
+			point: glm.Vec3{X: -0.5773504, Y: -0.5773504, Z: -0.5773504},
 		},
 		{ // miss hit something at {5, 5, 5}
 			sphere: CollisionSphere{
 				body:   &movedBody,
 				radius: 1,
 			},
-			ray:   NewRayFromTo(glm.Vec3{-2, 0, 0}, glm.Vec3{2, 0, 0}),
+			ray:   NewRayFromTo(glm.Vec3{X: -2, Y: 0, Z: 0}, glm.Vec3{X: 2, Y: 0, Z: 0}),
 			hit:   false,
-			point: glm.Vec3{-1, 0, 0},
+			point: glm.Vec3{X: -1, Y: 0, Z: 0},
 		},
 		{ // hit something at {5, 5, 5}
 			sphere: CollisionSphere{
 				body:   &movedBody,
 				radius: 1,
 			},
-			ray:   NewRayFromTo(glm.Vec3{-2 + 5, 0 + 5, 0 + 5}, glm.Vec3{2 + 5, 0 + 5, 0 + 5}),
+			ray:   NewRayFromTo(glm.Vec3{X: -2 + 5, Y: 0 + 5, Z: 0 + 5}, glm.Vec3{X: 2 + 5, Y: 0 + 5, Z: 0 + 5}),
 			hit:   true,
-			point: glm.Vec3{-1 + 5, 0 + 5, 0 + 5},
+			point: glm.Vec3{X: -1 + 5, Y: 0 + 5, Z: 0 + 5},
 		},
 		{ //hit something diagonally at {5, 5, 5}
 			sphere: CollisionSphere{
 				body:   &movedBody,
 				radius: 1,
 			},
-			ray:   NewRayFromTo(glm.Vec3{-2 + 5, -2 + 5, -2 + 5}, glm.Vec3{2 + 5, 2 + 5, 2 + 5}),
+			ray:   NewRayFromTo(glm.Vec3{X: -2 + 5, Y: -2 + 5, Z: -2 + 5}, glm.Vec3{X: 2 + 5, Y: 2 + 5, Z: 2 + 5}),
 			hit:   true,
-			point: glm.Vec3{-0.5773504 + 5, -0.5773504 + 5, -0.5773504 + 5},
+			point: glm.Vec3{X: -0.5773504 + 5, Y: -0.5773504 + 5, Z: -0.5773504 + 5},
 		},
 	}
 
@@ -126,7 +126,7 @@ func TestCollisionBox_RayTest(t *testing.T) {
 	qi := glm.QuatIdent()
 	originBody.SetOrientationQuat(&qi)
 	movedBody.SetOrientationQuat(&qi)
-	q3 := glm.QuatRotate(math.Pi/4, &glm.Vec3{0, 1, 0})
+	q3 := glm.QuatRotate(math.Pi/4, &glm.Vec3{X: 0, Y: 1, Z: 0})
 	rotatedBody.SetOrientationQuat(&q3)
 	movedRotatedBody.SetOrientationQuat(&q3)
 
@@ -144,73 +144,73 @@ func TestCollisionBox_RayTest(t *testing.T) {
 		{ // full on hit
 			box: CollisionBox{
 				body:     &originBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray:   NewRayFromTo(glm.Vec3{-3, 0, 0}, glm.Vec3{3, 0, 0}),
+			ray:   NewRayFromTo(glm.Vec3{X: -3, Y: 0, Z: 0}, glm.Vec3{X: 3, Y: 0, Z: 0}),
 			hit:   true,
-			point: glm.Vec3{-1, 0, 0},
+			point: glm.Vec3{X: -1, Y: 0, Z: 0},
 		},
 		{ // completelly miss
 			box: CollisionBox{
 				body:     &originBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray: NewRayFromTo(glm.Vec3{-3, 5, 0}, glm.Vec3{3, 5, 0}),
+			ray: NewRayFromTo(glm.Vec3{X: -3, Y: 5, Z: 0}, glm.Vec3{X: 3, Y: 5, Z: 0}),
 			hit: false,
 		},
 		{ // full on hit, moved box
 			box: CollisionBox{
 				body:     &movedBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray:   NewRayFromTo(glm.Vec3{2, 5, 5}, glm.Vec3{8, 5, 5}),
+			ray:   NewRayFromTo(glm.Vec3{X: 2, Y: 5, Z: 5}, glm.Vec3{X: 8, Y: 5, Z: 5}),
 			hit:   true,
-			point: glm.Vec3{4, 5, 5},
+			point: glm.Vec3{X: 4, Y: 5, Z: 5},
 		},
 		{ // box rotates by 45 deg
 			box: CollisionBox{
 				body:     &rotatedBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray:   NewRayFromTo(glm.Vec3{-3, 0, 0}, glm.Vec3{3, 0, 0}),
+			ray:   NewRayFromTo(glm.Vec3{X: -3, Y: 0, Z: 0}, glm.Vec3{X: 3, Y: 0, Z: 0}),
 			hit:   true,
-			point: glm.Vec3{-1.4142135, 0, 0},
+			point: glm.Vec3{X: -1.4142135, Y: 0, Z: 0},
 		},
 		{ // box moved and rotated by pi/4
 			box: CollisionBox{
 				body:     &movedRotatedBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray:   NewRayFromTo(glm.Vec3{2, 5, 5}, glm.Vec3{8, 5, 5}),
+			ray:   NewRayFromTo(glm.Vec3{X: 2, Y: 5, Z: 5}, glm.Vec3{X: 8, Y: 5, Z: 5}),
 			hit:   true,
-			point: glm.Vec3{-0.4142135 + 4, 5, 5},
+			point: glm.Vec3{X: -0.4142135 + 4, Y: 5, Z: 5},
 		},
 		{ // hit only a face
 			box: CollisionBox{
 				body:     &originBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray:   NewRayFromTo(glm.Vec3{-3, 1, 0}, glm.Vec3{3, 1, 0}),
+			ray:   NewRayFromTo(glm.Vec3{X: -3, Y: 1, Z: 0}, glm.Vec3{X: 3, Y: 1, Z: 0}),
 			hit:   true,
-			point: glm.Vec3{-1, 1, 0},
+			point: glm.Vec3{X: -1, Y: 1, Z: 0},
 		},
 		{ // full on hit reverse
 			box: CollisionBox{
 				body:     &originBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray:   NewRayFromTo(glm.Vec3{3, 0, 0}, glm.Vec3{-3, 0, 0}),
+			ray:   NewRayFromTo(glm.Vec3{X: 3, Y: 0, Z: 0}, glm.Vec3{X: -3, Y: 0, Z: 0}),
 			hit:   true,
-			point: glm.Vec3{1, 0, 0},
+			point: glm.Vec3{X: 1, Y: 0, Z: 0},
 		},
 		{ // box moved and rotated by pi/4, reverse direction
 			box: CollisionBox{
 				body:     &movedRotatedBody,
-				halfSize: glm.Vec3{1, 1, 1},
+				halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
-			ray:   NewRayFromTo(glm.Vec3{3 + 5, 0 + 5, 0 + 5}, glm.Vec3{-3 + 5, 0 + 5, 0 + 5}),
+			ray:   NewRayFromTo(glm.Vec3{X: 3 + 5, Y: 0 + 5, Z: 0 + 5}, glm.Vec3{X: -3 + 5, Y: 0 + 5, Z: 0 + 5}),
 			hit:   true,
-			point: glm.Vec3{6.4142135, 5, 5},
+			point: glm.Vec3{X: 6.4142135, Y: 5, Z: 5},
 		},
 	}
 
@@ -243,7 +243,7 @@ func BenchmarkCollisionSphere_RayTest(b *testing.B) {
 		body:   &movedBody,
 		radius: 1,
 	}
-	ray := NewRayFromTo(glm.Vec3{-2 + 5, -2 + 5, -2 + 5}, glm.Vec3{2 + 5, 2 + 5, 2 + 5})
+	ray := NewRayFromTo(glm.Vec3{X: -2 + 5, Y: -2 + 5, Z: -2 + 5}, glm.Vec3{X: 2 + 5, Y: 2 + 5, Z: 2 + 5})
 	var rr RayResult
 	rr = RayResultNothing{}
 	b.ResetTimer()
@@ -255,16 +255,16 @@ func BenchmarkCollisionSphere_RayTest(b *testing.B) {
 func BenchmarkCollisionBox_RayTest(b *testing.B) {
 	var movedRotatedBody RigidBody
 	movedRotatedBody.SetPosition3f(5, 5, 5)
-	q3 := glm.QuatRotate(math.Pi/4, &glm.Vec3{0, 1, 0})
+	q3 := glm.QuatRotate(math.Pi/4, &glm.Vec3{X: 0, Y: 1, Z: 0})
 	movedRotatedBody.SetOrientationQuat(&q3)
 
 	movedRotatedBody.calculateDerivedData()
 
 	box := CollisionBox{
 		body:     &movedRotatedBody,
-		halfSize: glm.Vec3{1, 1, 1},
+		halfSize: glm.Vec3{X: 1, Y: 1, Z: 1},
 	}
-	ray := NewRayFromTo(glm.Vec3{-3 + 5, 0 + 5, 0 + 5}, glm.Vec3{3 + 5, 0 + 5, 0 + 5})
+	ray := NewRayFromTo(glm.Vec3{X: -3 + 5, Y: 0 + 5, Z: 0 + 5}, glm.Vec3{X: 3 + 5, Y: 0 + 5, Z: 0 + 5})
 
 	var rr RayResult
 	rr = RayResultNothing{}

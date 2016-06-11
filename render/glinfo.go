@@ -12,9 +12,9 @@ func GetOpenglVersion() string {
 	return gl.GoStr(gl.GetString(gl.VERSION))
 }
 
-// QueryExtentions will grab every extension currently loaded and populate
+// QueryExtensions will grab every extension currently loaded and populate
 // Extensions.
-func QueryExtentions() {
+func QueryExtensions() {
 	var numExtensions int32
 	gl.GetIntegerv(gl.NUM_EXTENSIONS, &numExtensions)
 	for i := int32(0); i < numExtensions; i++ {

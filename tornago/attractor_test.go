@@ -26,9 +26,9 @@ func TestAttractionSphere_UpdateForce(t *testing.T) {
 			}(),
 			sphere: &AttractionSphere{
 				Force:  1,
-				Center: glm.Vec3{0, -1, 0},
+				Center: glm.Vec3{X: 0, Y: -1, Z: 0},
 			},
-			expectedForce: glm.Vec3{0, -1, 0},
+			expectedForce: glm.Vec3{X: 0, Y: -1, Z: 0},
 		},
 		{
 			body: func() *RigidBody {
@@ -39,41 +39,41 @@ func TestAttractionSphere_UpdateForce(t *testing.T) {
 			}(),
 			sphere: &AttractionSphere{
 				Force:  -1,
-				Center: glm.Vec3{0, -1, 0},
+				Center: glm.Vec3{X: 0, Y: -1, Z: 0},
 			},
-			expectedForce: glm.Vec3{0, 1, 0},
+			expectedForce: glm.Vec3{X: 0, Y: 1, Z: 0},
 		},
 		{
 			body: NewRigidBody(),
 			sphere: &AttractionSphere{
 				Force:  1,
-				Center: glm.Vec3{0, 0, 0},
+				Center: glm.Vec3{},
 			},
-			expectedForce: glm.Vec3{0, 0, 0},
+			expectedForce: glm.Vec3{},
 		},
 		{
 			body: NewRigidBody(),
 			sphere: &AttractionSphere{
 				Force:  math.NaN(),
-				Center: glm.Vec3{0, 1, 0},
+				Center: glm.Vec3{X: 0, Y: 1, Z: 0},
 			},
-			expectedForce: glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+			expectedForce: glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 		},
 		{
 			body: NewRigidBody(),
 			sphere: &AttractionSphere{
 				Force:  1,
-				Center: glm.Vec3{math.NaN(), 1, 0},
+				Center: glm.Vec3{X: math.NaN(), Y: 1, Z: 0},
 			},
-			expectedForce: glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+			expectedForce: glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 		},
 		{
 			body: NewRigidBody(),
 			sphere: &AttractionSphere{
 				Force:  1,
-				Center: glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+				Center: glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 			},
-			expectedForce: glm.Vec3{math.NaN(), math.NaN(), math.NaN()},
+			expectedForce: glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()},
 		},
 	}
 	for i, test := range tests {

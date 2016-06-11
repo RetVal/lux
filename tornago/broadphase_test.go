@@ -28,7 +28,7 @@ func TestBroadphases(t *testing.T) {
 	for x := 0; x < cap(objects); x++ {
 		var b RigidBody
 		volume := BoundingSphere{
-			center: glm.Vec3{rand.Float32() * worldsize, rand.Float32() * worldsize, rand.Float32() * worldsize},
+			center: glm.Vec3{X: rand.Float32() * worldsize, Y: rand.Float32() * worldsize, Z: rand.Float32() * worldsize},
 			radius: rand.Float32(),
 		}
 		objects = append(objects, Object{
@@ -179,7 +179,7 @@ func BenchmarkBroadphaseNaive(b *testing.B) {
 	for x := 0; x < cap(objects); x++ {
 		var b RigidBody
 		volume := BoundingSphere{
-			center: glm.Vec3{rand.Float32() * worldsize, rand.Float32() * worldsize, rand.Float32() * worldsize},
+			center: glm.Vec3{X: rand.Float32() * worldsize, Y: rand.Float32() * worldsize, Z: rand.Float32() * worldsize},
 			radius: rand.Float32(),
 		}
 		objects = append(objects, Object{
@@ -219,7 +219,7 @@ func BenchmarkBroadphaseNonPersistentSAP(b *testing.B) {
 	for x := 0; x < cap(objects); x++ {
 		var b RigidBody
 		volume := BoundingSphere{
-			center: glm.Vec3{rand.Float32() * worldsize, rand.Float32() * worldsize, rand.Float32() * worldsize},
+			center: glm.Vec3{X: rand.Float32() * worldsize, Y: rand.Float32() * worldsize, Z: rand.Float32() * worldsize},
 			radius: rand.Float32(),
 		}
 		objects = append(objects, Object{
@@ -260,7 +260,7 @@ func BenchmarkBroadphase_Fake_NonPersistentSAP(b *testing.B) {
 	for x := 0; x < cap(objects); x++ {
 		var b RigidBody
 		volume := BoundingSphere{
-			center: glm.Vec3{rand.Float32() * worldsize, rand.Float32() * worldsize, rand.Float32() * worldsize},
+			center: glm.Vec3{X: rand.Float32() * worldsize, Y: rand.Float32() * worldsize, Z: rand.Float32() * worldsize},
 			radius: rand.Float32(),
 		}
 		objects = append(objects, Object{
@@ -301,7 +301,7 @@ func TestSAP(t *testing.T) {
 	for x := 0; x < cap(objects); x++ {
 		var b RigidBody
 		volume := BoundingSphere{
-			center: glm.Vec3{rand.Float32() * worldsize, rand.Float32() * worldsize, rand.Float32() * worldsize},
+			center: glm.Vec3{X: rand.Float32() * worldsize, Y: rand.Float32() * worldsize, Z: rand.Float32() * worldsize},
 			radius: rand.Float32(),
 		}
 		objects = append(objects, Object{
@@ -393,7 +393,7 @@ func TestBroadphaseBug(t *testing.T) {
 	r2.SetOrientationQuat(&qi)
 
 	r1.SetCollisionShape(NewCollisionSphere(0.5))
-	r2.SetCollisionShape(NewCollisionBox(glm.Vec3{5, 5, 5}))
+	r2.SetCollisionShape(NewCollisionBox(glm.Vec3{X: 5, Y: 5, Z: 5}))
 
 	r1.SetPosition3f(0, 0.1, 0)
 	r2.SetPosition3f(0, -5, 0)

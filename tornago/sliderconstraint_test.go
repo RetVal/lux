@@ -1,8 +1,8 @@
 package tornago
 
 import (
-	"github.com/luxengine/lux/glm"
 	"github.com/luxengine/lux/flops"
+	"github.com/luxengine/lux/glm"
 	"testing"
 )
 
@@ -34,13 +34,13 @@ func TestSliderToWorldConstraint_GenerateContacts(t *testing.T) {
 				sphereBody.calculateDerivedData()
 
 				return NewSliderToWorldConstraint(
-					glm.Vec3{0, 0, 0},
-					glm.Vec3{0, 0, 0},
+					glm.Vec3{},
+					glm.Vec3{},
 					sphereBody,
 					0, 10, restitution)
 			}(),
-			normal:      glm.Vec3{-1, 0, 0},
-			point:       glm.Vec3{10.1, 0, 0},
+			normal:      glm.Vec3{X: -1, Y: 0, Z: 0},
+			point:       glm.Vec3{X: 10.1, Y: 0, Z: 0},
 			restitution: 0.5,
 			penetration: 0.1,
 			contact:     true,
@@ -59,13 +59,13 @@ func TestSliderToWorldConstraint_GenerateContacts(t *testing.T) {
 				sphereBody.calculateDerivedData()
 
 				return NewSliderToWorldConstraint(
-					glm.Vec3{0, 0, 0},
-					glm.Vec3{0, 0, 0},
+					glm.Vec3{},
+					glm.Vec3{},
 					sphereBody,
 					5, 10, restitution)
 			}(),
-			normal:      glm.Vec3{1, 0, 0},
-			point:       glm.Vec3{10.1, 0, 0},
+			normal:      glm.Vec3{X: 1, Y: 0, Z: 0},
+			point:       glm.Vec3{X: 10.1, Y: 0, Z: 0},
 			restitution: 0.5,
 			penetration: 0.1,
 			contact:     true,
@@ -84,13 +84,13 @@ func TestSliderToWorldConstraint_GenerateContacts(t *testing.T) {
 				sphereBody.calculateDerivedData()
 
 				return NewSliderToWorldConstraint(
-					glm.Vec3{0, 0, 0},
-					glm.Vec3{0, 0, 0},
+					glm.Vec3{},
+					glm.Vec3{},
 					sphereBody,
 					5, 10, restitution)
 			}(),
-			normal:      glm.Vec3{1, 0, 0},
-			point:       glm.Vec3{10.1, 0, 0},
+			normal:      glm.Vec3{X: 1, Y: 0, Z: 0},
+			point:       glm.Vec3{X: 10.1, Y: 0, Z: 0},
 			restitution: 0.5,
 			penetration: 0.1,
 			contact:     false,

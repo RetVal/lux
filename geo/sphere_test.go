@@ -12,22 +12,22 @@ func TestTestSphereSphere(t *testing.T) {
 	}{
 		{
 			a: Sphere{
-				Center: glm.Vec3{0, 0, 0},
+				Center: glm.Vec3{},
 				Radius: 1,
 			},
 			b: Sphere{
-				Center: glm.Vec3{0, 0, 0},
+				Center: glm.Vec3{},
 				Radius: 1,
 			},
 			intersects: true,
 		},
 		{
 			a: Sphere{
-				Center: glm.Vec3{0, 0, 0},
+				Center: glm.Vec3{},
 				Radius: 1,
 			},
 			b: Sphere{
-				Center: glm.Vec3{0, 4, 4},
+				Center: glm.Vec3{X: 0, Y: 4, Z: 4},
 				Radius: 1,
 			},
 			intersects: false,
@@ -35,11 +35,11 @@ func TestTestSphereSphere(t *testing.T) {
 
 		{
 			a: Sphere{
-				Center: glm.Vec3{0, 0, 0},
+				Center: glm.Vec3{},
 				Radius: 1,
 			},
 			b: Sphere{
-				Center: glm.Vec3{0, 2, 0},
+				Center: glm.Vec3{X: 0, Y: 2, Z: 0},
 				Radius: 1,
 			},
 			intersects: true,
@@ -60,33 +60,33 @@ func TestAABBFromSphere(t *testing.T) {
 	}{
 		{
 			a: Sphere{
-				Center: glm.Vec3{3, 4, 7},
+				Center: glm.Vec3{X: 3, Y: 4, Z: 7},
 				Radius: 1,
 			},
 			b: AABB{
-				Center:     glm.Vec3{3, 4, 7},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 3, Y: 4, Z: 7},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 		},
 		{
 			a: Sphere{
-				Center: glm.Vec3{-4, 2.3, 9.9},
+				Center: glm.Vec3{X: -4, Y: 2.3, Z: 9.9},
 				Radius: 1,
 			},
 			b: AABB{
-				Center:     glm.Vec3{-4, 2.3, 9.9},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: -4, Y: 2.3, Z: 9.9},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 		},
 
 		{
 			a: Sphere{
-				Center: glm.Vec3{1, 4, 5},
+				Center: glm.Vec3{X: 1, Y: 4, Z: 5},
 				Radius: 1,
 			},
 			b: AABB{
-				Center:     glm.Vec3{1, 4, 5},
-				HalfExtend: glm.Vec3{1, 1, 1},
+				Center:     glm.Vec3{X: 1, Y: 4, Z: 5},
+				HalfExtend: glm.Vec3{X: 1, Y: 1, Z: 1},
 			},
 		},
 	}
@@ -107,18 +107,18 @@ func TestSphere_MergePoint(t *testing.T) {
 		next   Sphere
 	}{
 
-		{Sphere{glm.Vec3{0, 0, 0}, 1},
-			glm.Vec3{0, 0, 0},
+		{Sphere{glm.Vec3{}, 1},
+			glm.Vec3{},
 			Sphere{glm.Vec3{}, 1}},
-		{Sphere{glm.Vec3{0, 2, 0}, 1},
-			glm.Vec3{0, 0, 0},
-			Sphere{glm.Vec3{0, 1.5, 0}, 1.5}},
-		{Sphere{glm.Vec3{0, 5, 0}, 1},
-			glm.Vec3{0, 0, 0},
-			Sphere{glm.Vec3{0, 3, 0}, 3}},
-		{Sphere{glm.Vec3{0, 0.5, 0}, 1},
-			glm.Vec3{0, 0, 0},
-			Sphere{glm.Vec3{0, 0.5, 0}, 1}},
+		{Sphere{glm.Vec3{X: 0, Y: 2, Z: 0}, 1},
+			glm.Vec3{},
+			Sphere{glm.Vec3{X: 0, Y: 1.5, Z: 0}, 1.5}},
+		{Sphere{glm.Vec3{X: 0, Y: 5, Z: 0}, 1},
+			glm.Vec3{},
+			Sphere{glm.Vec3{X: 0, Y: 3, Z: 0}, 3}},
+		{Sphere{glm.Vec3{X: 0, Y: 0.5, Z: 0}, 1},
+			glm.Vec3{},
+			Sphere{glm.Vec3{X: 0, Y: 0.5, Z: 0}, 1}},
 	}
 	for i, test := range tests {
 		s := test.sphere
@@ -134,16 +134,16 @@ func TestRitterEigenSphere(t *testing.T) {
 		points []glm.Vec3
 		sphere Sphere
 	}{
-		{[]glm.Vec3{{0, 0, 0}},
+		{[]glm.Vec3{{}},
 			Sphere{glm.Vec3{}, 0}},
 		{[]glm.Vec3{{0, 1, 0}},
-			Sphere{glm.Vec3{0, 1, 0}, 0}},
-		{[]glm.Vec3{{0, 1, 0}, {0, 0, 0}},
-			Sphere{glm.Vec3{0, 0.5, 0}, 0.5}},
-		{[]glm.Vec3{{0, 1, 0}, {0, 0, 0}, {0, 2, 0}, {3, 1, 0}, {3, 0, 0}, {3, 2, 0}, {0, 1, 2}, {0, 0, 2}, {0, 2, 2}, {-2, 1, 0}, {-2, 0, 0}, {-2, 2, 0}, {0, 1, -2}, {0, 0, -2}, {0, 2, -2}},
-			Sphere{glm.Vec3{0.50364625, 0.9490025, 0}, 2.7152972}},
+			Sphere{glm.Vec3{X: 0, Y: 1, Z: 0}, 0}},
+		{[]glm.Vec3{{0, 1, 0}, {}},
+			Sphere{glm.Vec3{X: 0, Y: 0.5, Z: 0}, 0.5}},
+		{[]glm.Vec3{{0, 1, 0}, {}, {0, 2, 0}, {3, 1, 0}, {3, 0, 0}, {3, 2, 0}, {0, 1, 2}, {0, 0, 2}, {0, 2, 2}, {-2, 1, 0}, {-2, 0, 0}, {-2, 2, 0}, {0, 1, -2}, {0, 0, -2}, {0, 2, -2}},
+			Sphere{glm.Vec3{X: 0.50364625, Y: 0.9490025, Z: 0}, 2.7152972}},
 		{[]glm.Vec3{{0, 1, 0 + 10}, {0, 0, 0 + 10}, {0, 2, 0 + 10}, {3, 1, 0 + 10}, {3, 0, 0 + 10}, {3, 2, 0}, {0, 1, 2}, {0, 0, 2}, {0, 2, 2}, {-2, 1, 0}, {-2, 0, 0}, {-2, 2, 0}, {0, 1, -2}, {0, 0, -2}, {0, 2, -2}},
-			Sphere{glm.Vec3{1.5, 1, 4}, 6.264982}},
+			Sphere{glm.Vec3{X: 1.5, Y: 1, Z: 4}, 6.264982}},
 	}
 	for i, test := range tests {
 		s := RitterEigenSphere(test.points)
@@ -156,11 +156,11 @@ func TestRitterEigenSphere(t *testing.T) {
 
 func BenchmarkTestSphereSphere(tb *testing.B) {
 	a := Sphere{
-		Center: glm.Vec3{0, 0, 0},
+		Center: glm.Vec3{},
 		Radius: 1,
 	}
 	b := Sphere{
-		Center: glm.Vec3{0, 0, 0},
+		Center: glm.Vec3{},
 		Radius: 1,
 	}
 

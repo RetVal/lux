@@ -29,7 +29,7 @@ func TestBuoyancyForceGenerator_UpdateForce(t *testing.T) {
 				Volume:   1,
 				Density:  1000,
 			},
-			expected: glm.Vec3{0, 1000, 0},
+			expected: glm.Vec3{X: 0, Y: 1000, Z: 0},
 		},
 		{
 			body: func() *RigidBody {
@@ -45,7 +45,7 @@ func TestBuoyancyForceGenerator_UpdateForce(t *testing.T) {
 				Volume:   1,
 				Density:  1000,
 			},
-			expected: glm.Vec3{0, math.NaN(), 0},
+			expected: glm.Vec3{X: 0, Y: math.NaN(), Z: 0},
 		},
 		{
 			body: func() *RigidBody {
@@ -61,7 +61,7 @@ func TestBuoyancyForceGenerator_UpdateForce(t *testing.T) {
 				Volume:   1,
 				Density:  1000,
 			},
-			expected: glm.Vec3{0, math.NaN(), 0},
+			expected: glm.Vec3{X: 0, Y: math.NaN(), Z: 0},
 		},
 		{
 			body: func() *RigidBody {
@@ -77,7 +77,7 @@ func TestBuoyancyForceGenerator_UpdateForce(t *testing.T) {
 				Volume:   math.NaN(),
 				Density:  1000,
 			},
-			expected: glm.Vec3{0, math.NaN(), 0},
+			expected: glm.Vec3{X: 0, Y: math.NaN(), Z: 0},
 		},
 		{
 			body: func() *RigidBody {
@@ -93,7 +93,7 @@ func TestBuoyancyForceGenerator_UpdateForce(t *testing.T) {
 				Volume:   1,
 				Density:  math.NaN(),
 			},
-			expected: glm.Vec3{0, math.NaN(), 0},
+			expected: glm.Vec3{X: 0, Y: math.NaN(), Z: 0},
 		},
 	}
 	for i, test := range tests {

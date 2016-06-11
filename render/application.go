@@ -67,7 +67,7 @@ func CreateWindow(width, height int, title string, fullscreen bool) (window *glf
 	window.MakeContextCurrent()
 	letsglowLETSGLOW()
 	glbs()
-	QueryExtentions()
+	QueryExtensions()
 	return
 }
 
@@ -82,6 +82,6 @@ func StartHeadless() *glfw.Window {
 	window.MakeContextCurrent()
 	letsglowLETSGLOW()
 	glbs()
-	QueryExtentions()
+	QueryExtensions()
 	return window
 }

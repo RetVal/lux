@@ -11,10 +11,10 @@ func BenchmarkIsConvexQuad(b *testing.B) {
 		a, b, c, d glm.Vec3
 		isconvex   bool
 	}{
-		a:        glm.Vec3{0, 0, 0},
-		b:        glm.Vec3{0, 1, 0},
-		c:        glm.Vec3{1, 1, 0},
-		d:        glm.Vec3{1, 0, 0},
+		a:        glm.Vec3{X: 0, Y: 0, Z: 0},
+		b:        glm.Vec3{X: 0, Y: 1, Z: 0},
+		c:        glm.Vec3{X: 1, Y: 1, Z: 0},
+		d:        glm.Vec3{X: 1, Y: 0, Z: 0},
 		isconvex: true,
 	}
 	for n := 0; n < b.N; n++ {
@@ -24,10 +24,10 @@ func BenchmarkIsConvexQuad(b *testing.B) {
 
 var points, dir = func() ([]glm.Vec3, glm.Vec3) {
 	r := rand.New(rand.NewSource(999))
-	dir := glm.Vec3{1, 0, 0}
+	dir := glm.Vec3{X: 1, Y: 0, Z: 0}
 	points := make([]glm.Vec3, 1000)
 	for n := 0; n < 1000; n++ {
-		points[n] = glm.Vec3{r.Float32(), r.Float32(), r.Float32()}
+		points[n] = glm.Vec3{X: r.Float32(), Y: r.Float32(), Z: r.Float32()}
 	}
 	return points, dir
 }()

@@ -10,7 +10,7 @@ func TestSpringForceGenerator_New(t *testing.T) {
 		k = 0.5
 		l = 3.0
 	)
-	p1, p2 := glm.Vec3{1, 2, 3}, glm.Vec3{4, 5, 6}
+	p1, p2 := glm.Vec3{X: 1, Y: 2, Z: 3}, glm.Vec3{X: 4, Y: 5, Z: 6}
 	var b RigidBody
 	g := NewSpringForceGenerator(&p1, &b, &p2, k, l)
 	if g.localPoint != p1 {
@@ -35,7 +35,7 @@ func TestSpringForceGenerator_SettersAndGetters(t *testing.T) {
 		k = 0.5
 		l = 3.0
 	)
-	p1, p2 := glm.Vec3{0, 0, 0}, glm.Vec3{0, 0, 0}
+	var p1, p2 glm.Vec3
 	g := NewSpringForceGenerator(&p1, nil, &p2, 0, 0)
 	g.SetSpringConstant(k)
 	g.SetRestLength(l)
@@ -53,10 +53,10 @@ func TestSpringForceGenerator_SettersAndGetters(t *testing.T) {
 	}
 
 	g.SetLocalPoint3f(1, 2, 3)
-	if g.localPoint != (glm.Vec3{1, 2, 3}) {
-		t.Errorf("SetLocalPoint3f = %v, want %v", g.localPoint, (glm.Vec3{1, 2, 3}))
+	if g.localPoint != (glm.Vec3{X: 1, Y: 2, Z: 3}) {
+		t.Errorf("SetLocalPoint3f = %v, want %v", g.localPoint, (glm.Vec3{X: 1, Y: 2, Z: 3}))
 	}
-	lp := glm.Vec3{4, 5, 6}
+	lp := glm.Vec3{X: 4, Y: 5, Z: 6}
 	g.SetLocalPointVec(&lp)
 	if g.localPoint != lp {
 		t.Errorf("SetLocalPointVec = %v, want %v", g.localPoint, lp)
@@ -67,10 +67,10 @@ func TestSpringForceGenerator_SettersAndGetters(t *testing.T) {
 	}
 
 	g.SetOtherPoint3f(1, 2, 3)
-	if g.otherPoint != (glm.Vec3{1, 2, 3}) {
-		t.Errorf("SetOtherPoint3f = %v, want %v", g.otherPoint, (glm.Vec3{1, 2, 3}))
+	if g.otherPoint != (glm.Vec3{X: 1, Y: 2, Z: 3}) {
+		t.Errorf("SetOtherPoint3f = %v, want %v", g.otherPoint, (glm.Vec3{X: 1, Y: 2, Z: 3}))
 	}
-	op := glm.Vec3{4, 5, 6}
+	op := glm.Vec3{X: 4, Y: 5, Z: 6}
 	g.SetOtherPointVec(&op)
 	if g.otherPoint != op {
 		t.Errorf("SetOtherPointVec = %v, want %v", g.otherPoint, op)
@@ -94,7 +94,7 @@ func TestSpringForceGenerator_UpdateForce_InfiniteMass(t *testing.T) {
 	var b RigidBody
 	var target RigidBody
 
-	pos := glm.Vec3{99, 99, 99}
+	pos := glm.Vec3{X: 99, Y: 99, Z: 99}
 	b.SetLinearDamping(1)
 	b.SetAngularDamping(1)
 	b.SetMass(0)
@@ -115,7 +115,7 @@ func TestSpringForceGenerator_UpdateForce(t *testing.T) {
 	var b RigidBody
 	var target RigidBody
 
-	pos := glm.Vec3{1, 0, 0}
+	pos := glm.Vec3{X: 1, Y: 0, Z: 0}
 	b.SetLinearDamping(0.95)
 	b.SetAngularDamping(0.95)
 	b.SetMass(1)
@@ -136,7 +136,7 @@ func TestSpringForceGenerator_UpdateForce(t *testing.T) {
 		b.Integrate(1)
 	}
 
-	expected := glm.Vec3{1.1, 0, 0}
+	expected := glm.Vec3{X: 1.1, Y: 0, Z: 0}
 	if bpos := b.Position(); !bpos.EqualThreshold(&expected, 1e-4) {
 		t.Errorf("UpdateForce position = %v, want %v", bpos, expected)
 	}
@@ -146,7 +146,7 @@ func BenchmarkSpringForceGenerator_UpdateForce(b *testing.B) {
 	var body RigidBody
 	var target RigidBody
 
-	pos := glm.Vec3{1, 0, 0}
+	pos := glm.Vec3{X: 1, Y: 0, Z: 0}
 	body.SetLinearDamping(0.95)
 	body.SetAngularDamping(0.95)
 	body.SetMass(1)

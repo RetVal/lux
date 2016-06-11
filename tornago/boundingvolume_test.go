@@ -6,20 +6,20 @@ import (
 )
 
 func TestBoundingSphere_Overlaps(t *testing.T) {
-	v1 := NewBoundingSphere(&glm.Vec3{2, 0, 0}, 2)
-	v2 := NewBoundingSphere(&glm.Vec3{3, 0, 0}, 1)
+	v1 := NewBoundingSphere(&glm.Vec3{X: 2, Y: 0, Z: 0}, 2)
+	v2 := NewBoundingSphere(&glm.Vec3{X: 3, Y: 0, Z: 0}, 1)
 
 	if !v1.Overlaps(&v2) {
 		t.Errorf("spheres should overlap %v, %v", v1, v2)
 	}
 
-	v2.center = glm.Vec3{10, 0, 0}
+	v2.center = glm.Vec3{X: 10, Y: 0, Z: 0}
 
 	if v1.Overlaps(&v2) {
 		t.Errorf("spheres should not overlap %v, %v", v1, v2)
 	}
 
-	v2.center = glm.Vec3{5, 0, 0}
+	v2.center = glm.Vec3{X: 5, Y: 0, Z: 0}
 
 	if v1.Overlaps(&v2) {
 		t.Errorf("spheres should not overlap %v, %v", v1, v2)
@@ -27,7 +27,7 @@ func TestBoundingSphere_Overlaps(t *testing.T) {
 }
 
 func TestBoundingSphere_New(t *testing.T) {
-	pos := glm.Vec3{1, 2, 3}
+	pos := glm.Vec3{X: 1, Y: 2, Z: 3}
 	radius := float32(5)
 	bs := NewBoundingSphere(&pos, radius)
 	if bs.Radius() != radius {
@@ -40,11 +40,11 @@ func TestBoundingSphere_New(t *testing.T) {
 
 func TestBoundingSphere_SphereFromSphere(t *testing.T) {
 	{ //not one inside the other
-		p1, p2 := glm.Vec3{0, 0, 0}, glm.Vec3{5, 0, 0}
+		p1, p2 := glm.Vec3{}, glm.Vec3{X: 5, Y: 0, Z: 0}
 		r1, r2 := float32(1), float32(1)
 		s1, s2 := NewBoundingSphere(&p1, r1), NewBoundingSphere(&p2, r2)
 
-		p3, r3 := glm.Vec3{2.5, 0, 0}, float32(3.5)
+		p3, r3 := glm.Vec3{X: 2.5, Y: 0, Z: 0}, float32(3.5)
 		s3 := NewBoundingSphereFromSpheres(&s1, &s2)
 
 		if r := s3.Radius(); r != r3 {
@@ -55,11 +55,11 @@ func TestBoundingSphere_SphereFromSphere(t *testing.T) {
 		}
 	}
 	{ //s1 inside s2
-		p1, p2 := glm.Vec3{0, 0, 0}, glm.Vec3{5, 0, 0}
+		p1, p2 := glm.Vec3{}, glm.Vec3{X: 5, Y: 0, Z: 0}
 		r1, r2 := float32(1), float32(10)
 		s1, s2 := NewBoundingSphere(&p1, r1), NewBoundingSphere(&p2, r2)
 
-		p3, r3 := glm.Vec3{5, 0, 0}, float32(10)
+		p3, r3 := glm.Vec3{X: 5, Y: 0, Z: 0}, float32(10)
 		s3 := NewBoundingSphereFromSpheres(&s1, &s2)
 
 		if r := s3.Radius(); r != r3 {
@@ -70,11 +70,11 @@ func TestBoundingSphere_SphereFromSphere(t *testing.T) {
 		}
 	}
 	{ //s2 inside s1
-		p1, p2 := glm.Vec3{0, 0, 0}, glm.Vec3{5, 0, 0}
+		p1, p2 := glm.Vec3{}, glm.Vec3{X: 5, Y: 0, Z: 0}
 		r1, r2 := float32(10), float32(1)
 		s1, s2 := NewBoundingSphere(&p1, r1), NewBoundingSphere(&p2, r2)
 
-		p3, r3 := glm.Vec3{0, 0, 0}, float32(10)
+		p3, r3 := glm.Vec3{}, float32(10)
 		s3 := NewBoundingSphereFromSpheres(&s1, &s2)
 
 		if r := s3.Radius(); r != r3 {
@@ -87,7 +87,7 @@ func TestBoundingSphere_SphereFromSphere(t *testing.T) {
 }
 
 func TestBoundingSphere_GetGrowth(t *testing.T) {
-	p1, p2 := glm.Vec3{0, 0, 0}, glm.Vec3{5, 0, 0}
+	p1, p2 := glm.Vec3{}, glm.Vec3{X: 5, Y: 0, Z: 0}
 	r1, r2 := float32(1), float32(1)
 	s1, s2 := NewBoundingSphere(&p1, r1), NewBoundingSphere(&p2, r2)
 

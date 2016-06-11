@@ -48,10 +48,10 @@ func Ortho2D(left, right, bottom, top float32) Mat4 {
 	return Ortho(left, right, bottom, top, -1, 1)
 }
 
-// Perspective returns a Mat4 representing a perspective projection of the given
-// arguments.
+// Perspective returns a Mat4 representing a perspective projection given fovy
+// in radians, aspect as width/height, near and far as the distance from origin.
 func Perspective(fovy, aspect, near, far float32) Mat4 {
-	nmf, f := 1/(near-far), 1./math.Tan(fovy/2.0)
+	nmf, f := 1./(near-far), 1./math.Tan(fovy/2.0)
 
 	return Mat4{
 		f / aspect, 0, 0, 0,

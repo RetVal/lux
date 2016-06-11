@@ -33,9 +33,9 @@ func main() {
 		// randomize all the points
 		for n := range points {
 			points[n] = glm.Vec3{
-				r.Float32()*cloudwidth*2 - cloudwidth,
-				r.Float32()*cloudwidth*2 - cloudwidth,
-				r.Float32()*cloudwidth*2 - cloudwidth,
+				X: r.Float32()*cloudwidth*2 - cloudwidth,
+				Y: r.Float32()*cloudwidth*2 - cloudwidth,
+				Z: r.Float32()*cloudwidth*2 - cloudwidth,
 			}
 		}
 

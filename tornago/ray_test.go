@@ -1,8 +1,8 @@
 package tornago
 
 import (
-	"github.com/luxengine/lux/glm"
 	"github.com/luxengine/lux/flops"
+	"github.com/luxengine/lux/glm"
 	"testing"
 )
 
@@ -22,35 +22,35 @@ func TestRay_FromTo(t *testing.T) {
 			Len:       0,
 		},*/
 		{
-			From:        glm.Vec3{0, 0, 0},
-			To:          glm.Vec3{1, 0, 0},
-			Origin:      glm.Vec3{0, 0, 0},
-			Direction:   glm.Vec3{1, 0, 0},
-			Destination: glm.Vec3{1, 0, 0},
+			From:        glm.Vec3{X: 0, Y: 0, Z: 0},
+			To:          glm.Vec3{X: 1, Y: 0, Z: 0},
+			Origin:      glm.Vec3{X: 0, Y: 0, Z: 0},
+			Direction:   glm.Vec3{X: 1, Y: 0, Z: 0},
+			Destination: glm.Vec3{X: 1, Y: 0, Z: 0},
 			Len:         1,
 		},
 		{
-			From:        glm.Vec3{1, 1, 1},
-			To:          glm.Vec3{1, 1, 1},
-			Origin:      glm.Vec3{1, 1, 1},
-			Direction:   glm.Vec3{0, 1, 0},
-			Destination: glm.Vec3{1, 1, 1},
+			From:        glm.Vec3{X: 1, Y: 1, Z: 1},
+			To:          glm.Vec3{X: 1, Y: 1, Z: 1},
+			Origin:      glm.Vec3{X: 1, Y: 1, Z: 1},
+			Direction:   glm.Vec3{X: 0, Y: 1, Z: 0},
+			Destination: glm.Vec3{X: 1, Y: 1, Z: 1},
 			Len:         0,
 		},
 		{
-			From:        glm.Vec3{1, 1, 1},
-			To:          glm.Vec3{0, 0, 0},
-			Origin:      glm.Vec3{1, 1, 1},
-			Direction:   glm.Vec3{-0.57735026, -0.57735026, -0.57735026},
-			Destination: glm.Vec3{0, 0, 0},
+			From:        glm.Vec3{X: 1, Y: 1, Z: 1},
+			To:          glm.Vec3{X: 0, Y: 0, Z: 0},
+			Origin:      glm.Vec3{X: 1, Y: 1, Z: 1},
+			Direction:   glm.Vec3{X: -0.57735026, Y: -0.57735026, Z: -0.57735026},
+			Destination: glm.Vec3{X: 0, Y: 0, Z: 0},
 			Len:         1.7320508,
 		},
 		{
-			From:        glm.Vec3{1, 2, 3},
-			To:          glm.Vec3{9, 8, 7},
-			Origin:      glm.Vec3{1, 2, 3},
-			Direction:   glm.Vec3{0.74278134, 0.557086, 0.37139067},
-			Destination: glm.Vec3{9, 8, 7},
+			From:        glm.Vec3{X: 1, Y: 2, Z: 3},
+			To:          glm.Vec3{X: 9, Y: 8, Z: 7},
+			Origin:      glm.Vec3{X: 1, Y: 2, Z: 3},
+			Direction:   glm.Vec3{X: 0.74278134, Y: 0.557086, Z: 0.37139067},
+			Destination: glm.Vec3{X: 9, Y: 8, Z: 7},
 			Len:         10.770329,
 		},
 	}

@@ -8,9 +8,9 @@ import (
 
 // nan vectors
 var (
-	NaN2 = glm.Vec2{math.NaN(), math.NaN()}
-	NaN3 = glm.Vec3{math.NaN(), math.NaN(), math.NaN()}
-	NaN4 = glm.Vec4{math.NaN(), math.NaN(), math.NaN(), math.NaN()}
+	NaN2 = glm.Vec2{X: math.NaN(), Y: math.NaN()}
+	NaN3 = glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()}
+	NaN4 = glm.Vec4{X: math.NaN(), Y: math.NaN(), Z: math.NaN(), W: math.NaN()}
 )
 
 // FloatEqual returns true if v0 == v1 for every component. Will also return true

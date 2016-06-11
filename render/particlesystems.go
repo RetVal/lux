@@ -87,7 +87,7 @@ func NewParticleSystem(position, direction glm.Vec3, size int) *ParticleSystem {
 
 	ps.particles[0].Lifetime = 0
 	ps.particles[0].Position = position
-	ps.particles[0].Velocity = glm.Vec3{0, 0, 0}
+	ps.particles[0].Velocity = glm.Vec3{}
 	ps.particles[0].Type = Launcher
 
 	for i := 0; i < len(ps.buffers); i++ {

@@ -8,7 +8,7 @@ import (
 func TestRayResultAny_AddResult(t *testing.T) {
 	var rr RayResultAny
 	b := NewRigidBody()
-	hit := glm.Vec3{1, 2, 3}
+	hit := glm.Vec3{X: 1, Y: 2, Z: 3}
 
 	if rr.AddResult(b, hit) != false {
 		t.Error("RayResultAny does not stop after 1 result")
@@ -25,7 +25,7 @@ func TestRayResultAny_AddResult(t *testing.T) {
 
 func TestRayResultClosest_AddResult(t *testing.T) {
 	rr := RayResultClosest{
-		Origin: glm.Vec3{0, 0, 0},
+		Origin: glm.Vec3{},
 	}
 
 	b := []*RigidBody{
@@ -34,9 +34,9 @@ func TestRayResultClosest_AddResult(t *testing.T) {
 		NewRigidBody(),
 	}
 	hit := []glm.Vec3{
-		{1, 2, 3},
-		{0, 1, 0},
-		{4, 5, 6},
+		{X: 1, Y: 2, Z: 3},
+		{X: 0, Y: 1, Z: 0},
+		{X: 4, Y: 5, Z: 6},
 	}
 
 	for n := range b {
@@ -56,7 +56,7 @@ func TestRayResultClosest_AddResult(t *testing.T) {
 
 func TestRayClosestAll_AddResult(t *testing.T) {
 	rr := RayResultAll{
-		Origin: glm.Vec3{0, 0, 0},
+		Origin: glm.Vec3{},
 	}
 
 	b := []*RigidBody{
@@ -65,9 +65,9 @@ func TestRayClosestAll_AddResult(t *testing.T) {
 		NewRigidBody(),
 	}
 	hit := []glm.Vec3{
-		{1, 2, 3},
-		{0, 1, 0},
-		{4, 5, 6},
+		{X: 1, Y: 2, Z: 3},
+		{X: 0, Y: 1, Z: 0},
+		{X: 4, Y: 5, Z: 6},
 	}
 
 	for n := range b {

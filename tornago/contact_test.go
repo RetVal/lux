@@ -33,6 +33,8 @@ func TestContact_SetterGetter(t *testing.T) {
 
 func TestContact_SwapBodies(t *testing.T) {
 	var b1, b2 RigidBody
+	b1.SetMass(1)
+	b2.SetMass(1)
 	c := Contact{
 		bodies: [2]*RigidBody{&b1, &b2},
 	}
@@ -78,8 +80,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 2, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{X: 0, Y: 2, Z: 0},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -90,8 +92,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -99,8 +101,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 2, 0}, {0, 0, 0}},
-				vel: [2]glm.Vec3{{0, 0, 0}, {0, 0, 0}},
+				pos: [2]glm.Vec3{{X: 0, Y: 2, Z: 0}, {X: 0, Y: 0, Z: 0}},
+				vel: [2]glm.Vec3{{X: 0, Y: 0, Z: 0}, {X: 0, Y: 0, Z: 0}},
 			},
 		},
 		{ // 1. no penetration, just equal perpendicular velocity
@@ -108,8 +110,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 2, 0},
-					velocity:             glm.Vec3{0, -1, 0},
+					position:             glm.Vec3{X: 0, Y: 2, Z: 0},
+					velocity:             glm.Vec3{X: 0, Y: -1, Z: 0},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -121,8 +123,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{0, 1, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{X: 0, Y: 1, Z: 0},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -131,8 +133,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 2, 0}, {0, 0, 0}},
-				vel: [2]glm.Vec3{{0, 1, 0}, {0, -1, 0}},
+				pos: [2]glm.Vec3{{X: 0, Y: 2, Z: 0}, {X: 0, Y: 0, Z: 0}},
+				vel: [2]glm.Vec3{{X: 0, Y: 1, Z: 0}, {X: 0, Y: -1, Z: 0}},
 			},
 		},
 		{ // 2. no penetration, just non equal perpendicular velocity
@@ -140,8 +142,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 2, 0},
-					velocity:             glm.Vec3{0, -1, 0},
+					position:             glm.Vec3{X: 0, Y: 2, Z: 0},
+					velocity:             glm.Vec3{X: 0, Y: -1, Z: 0},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -153,8 +155,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{0, 0.5, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{X: 0, Y: 0.5, Z: 0},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -163,8 +165,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 2, 0}, {0, 0, 0}},
-				vel: [2]glm.Vec3{{0, 0.5, 0}, {0, -1, 0}},
+				pos: [2]glm.Vec3{{X: 0, Y: 2, Z: 0}, {X: 0, Y: 0, Z: 0}},
+				vel: [2]glm.Vec3{{X: 0, Y: 0.5, Z: 0}, {X: 0, Y: -1, Z: 0}},
 			},
 		},
 		{ // 3. no penetration, just non-perpendicular velocity
@@ -172,8 +174,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 2, 0},
-					velocity:             glm.Vec3{1, 0, 1},
+					position:             glm.Vec3{X: 0, Y: 2, Z: 0},
+					velocity:             glm.Vec3{X: 1, Y: 0, Z: 1},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -185,8 +187,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{-1, 0, -1},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{X: -1, Y: 0, Z: -1},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -195,8 +197,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 2, 0}, {0, 0, 0}},
-				vel: [2]glm.Vec3{{1, 0, 1}, {-1, 0, -1}},
+				pos: [2]glm.Vec3{{X: 0, Y: 2, Z: 0}, {X: 0, Y: 0, Z: 0}},
+				vel: [2]glm.Vec3{{X: 1, Y: 0, Z: 1}, {X: -1, Y: 0, Z: -1}},
 			},
 		},
 		{ // 4. velocity with non-0 perpendicular velocity
@@ -204,8 +206,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 2, 0},
-					velocity:             glm.Vec3{-1, -1, 1},
+					position:             glm.Vec3{X: 0, Y: 2, Z: 0},
+					velocity:             glm.Vec3{X: -1, Y: -1, Z: 1},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -217,8 +219,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{1, 1, -1},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{X: 1, Y: 1, Z: -1},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -227,8 +229,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 2, 0}, {0, 0, 0}},
-				vel: [2]glm.Vec3{{-1, 1, 1}, {1, -1, -1}},
+				pos: [2]glm.Vec3{{X: 0, Y: 2, Z: 0}, {X: 0, Y: 0, Z: 0}},
+				vel: [2]glm.Vec3{{X: -1, Y: 1, Z: 1}, {X: 1, Y: -1, Z: -1}},
 			},
 		},
 		{ // 5. velocity with pi/4 angle between 2 spheres.
@@ -236,8 +238,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{math.Sqrt2, math.Sqrt2, 0},
-					velocity:             glm.Vec3{-1, -1, 1},
+					position:             glm.Vec3{X: math.Sqrt2, Y: math.Sqrt2, Z: 0},
+					velocity:             glm.Vec3{X: -1, Y: -1, Z: 1},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -249,8 +251,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{1, 1, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{X: 1, Y: 1, Z: 0},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -259,8 +261,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{math.Sqrt2, math.Sqrt2, 0}, {0, 0, 0}},
-				vel: [2]glm.Vec3{{1, 1, 1}, {-1, -1, 0}},
+				pos: [2]glm.Vec3{{X: math.Sqrt2, Y: math.Sqrt2, Z: 0}, {X: 0, Y: 0, Z: 0}},
+				vel: [2]glm.Vec3{{X: 1, Y: 1, Z: 1}, {X: -1, Y: -1, Z: 0}},
 			},
 		},
 		{ // 6. no velocity, some penetration
@@ -268,8 +270,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 10, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{X: 0, Y: 10, Z: 0},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(1, 9.5),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -281,8 +283,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -291,8 +293,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 10.25, 0}, {0, -0.25, 0}},
-				vel: [2]glm.Vec3{{0, 0, 0}, {0, 0, 0}},
+				pos: [2]glm.Vec3{{X: 0, Y: 10.25, Z: 0}, {X: 0, Y: -0.25, Z: 0}},
+				vel: [2]glm.Vec3{},
 			},
 		},
 		{ // 7. no velocity, some penetration, different weight
@@ -300,8 +302,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          0.25,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 10, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{X: 0, Y: 10, Z: 0},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(4, 9.5),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -313,8 +315,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -323,8 +325,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 10.1, 0}, {0, -0.4, 0}},
-				vel: [2]glm.Vec3{{0, 0, 0}, {0, 0, 0}},
+				pos: [2]glm.Vec3{{X: 0, Y: 10.1, Z: 0}, {X: 0, Y: -0.4, Z: 0}},
+				vel: [2]glm.Vec3{{}, {}},
 			},
 		},
 		{ // 8. no velocity, some penetration, infinite weight on one
@@ -332,8 +334,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(4, 9.5),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -345,8 +347,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          0,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, -5, 0},
-					velocity:             glm.Vec3{0, 0, 0},
+					position:             glm.Vec3{X: 0, Y: -5, Z: 0},
+					velocity:             glm.Vec3{},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -355,8 +357,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 5,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 1, 0}, {0, -5, 0}},
-				vel: [2]glm.Vec3{{0, 0, 0}, {0, 0, 0}},
+				pos: [2]glm.Vec3{{X: 0, Y: 1, Z: 0}, {X: 0, Y: -5, Z: 0}},
+				vel: [2]glm.Vec3{{}, {}},
 			},
 		},
 		{ // 9. no penetration, just equal perpendicular velocity
@@ -364,8 +366,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 2, 0},
-					velocity:             glm.Vec3{0, -1, 0},
+					position:             glm.Vec3{X: 0, Y: 2, Z: 0},
+					velocity:             glm.Vec3{X: 0, Y: -1, Z: 0},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -377,8 +379,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				body: &RigidBody{
 					inverseMass:          1,
 					orientation:          glm.QuatIdent(),
-					position:             glm.Vec3{0, 0, 0},
-					velocity:             glm.Vec3{0, 1, 0},
+					position:             glm.Vec3{},
+					velocity:             glm.Vec3{X: 0, Y: 1, Z: 0},
 					inverseInertiaTensor: sphereInertiaTensor(1, 1),
 					linearDamping:        1,
 					angularDamping:       1,
@@ -387,8 +389,8 @@ func TestContact_ResolveContact(t *testing.T) {
 				radius: 1,
 			},
 			result: Result{
-				pos: [2]glm.Vec3{{0, 2, 0}, {0, 0, 0}},
-				vel: [2]glm.Vec3{{0, 1, 0}, {0, -1, 0}},
+				pos: [2]glm.Vec3{{X: 0, Y: 2, Z: 0}, {}},
+				vel: [2]glm.Vec3{{X: 0, Y: 1, Z: 0}, {X: 0, Y: -1, Z: 0}},
 			},
 		},
 	}
@@ -434,8 +436,8 @@ func genContact() Contact {
 			body: &RigidBody{
 				inverseMass:          1,
 				orientation:          glm.QuatIdent(),
-				position:             glm.Vec3{0, 2, 0},
-				velocity:             glm.Vec3{0, 0, 0},
+				position:             glm.Vec3{X: 0, Y: 2, Z: 0},
+				velocity:             glm.Vec3{},
 				inverseInertiaTensor: sphereInertiaTensor(1, 1),
 				linearDamping:        1,
 				angularDamping:       1,
@@ -446,8 +448,8 @@ func genContact() Contact {
 			body: &RigidBody{
 				inverseMass:          1,
 				orientation:          glm.QuatIdent(),
-				position:             glm.Vec3{0, 0, 0},
-				velocity:             glm.Vec3{0, 0, 0},
+				position:             glm.Vec3{},
+				velocity:             glm.Vec3{},
 				inverseInertiaTensor: sphereInertiaTensor(1, 1),
 				linearDamping:        1,
 				angularDamping:       1,

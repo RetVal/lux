@@ -28,10 +28,10 @@ func TestVec2Equal(t *testing.T) {
 		a, b   glm.Vec2
 		result bool
 	}{
-		{glm.Vec2{0, 0}, glm.Vec2{0, 0}, true},
-		{glm.Vec2{math.NaN(), 0}, glm.Vec2{0, 0}, false},
-		{glm.Vec2{0, math.NaN()}, glm.Vec2{0, 0}, false},
-		{glm.Vec2{math.NaN(), math.NaN()}, glm.Vec2{math.NaN(), math.NaN()}, true},
+		{glm.Vec2{}, glm.Vec2{}, true},
+		{glm.Vec2{X: math.NaN(), Y: 0}, glm.Vec2{}, false},
+		{glm.Vec2{X: 0, Y: math.NaN()}, glm.Vec2{}, false},
+		{glm.Vec2{X: math.NaN(), Y: math.NaN()}, glm.Vec2{X: math.NaN(), Y: math.NaN()}, true},
 	}
 	for i, test := range tests {
 		if res := Vec2Equal(test.a, test.b); res != test.result {
@@ -45,11 +45,11 @@ func TestVec3Equal(t *testing.T) {
 		a, b   glm.Vec3
 		result bool
 	}{
-		{glm.Vec3{0, 0, 0}, glm.Vec3{0, 0, 0}, true},
-		{glm.Vec3{math.NaN(), 0, 0}, glm.Vec3{0, 0, 0}, false},
-		{glm.Vec3{0, math.NaN(), 0}, glm.Vec3{0, 0, 0}, false},
-		{glm.Vec3{0, 0, math.NaN()}, glm.Vec3{0, 0, 0}, false},
-		{glm.Vec3{math.NaN(), math.NaN(), math.NaN()}, glm.Vec3{math.NaN(), math.NaN(), math.NaN()}, true},
+		{glm.Vec3{}, glm.Vec3{}, true},
+		{glm.Vec3{X: math.NaN(), Y: 0, Z: 0}, glm.Vec3{}, false},
+		{glm.Vec3{X: 0, Y: math.NaN(), Z: 0}, glm.Vec3{}, false},
+		{glm.Vec3{X: 0, Y: 0, Z: math.NaN()}, glm.Vec3{}, false},
+		{glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()}, glm.Vec3{X: math.NaN(), Y: math.NaN(), Z: math.NaN()}, true},
 	}
 	for i, test := range tests {
 		if res := Vec3Equal(test.a, test.b); res != test.result {
@@ -63,12 +63,12 @@ func TestVec4Equal(t *testing.T) {
 		a, b   glm.Vec4
 		result bool
 	}{
-		{glm.Vec4{0, 0, 0, 0}, glm.Vec4{0, 0, 0, 0}, true},
-		{glm.Vec4{math.NaN(), 0, 0, 0}, glm.Vec4{0, 0, 0, 0}, false},
-		{glm.Vec4{0, math.NaN(), 0, 0}, glm.Vec4{0, 0, 0, 0}, false},
-		{glm.Vec4{0, 0, math.NaN(), 0}, glm.Vec4{0, 0, 0, 0}, false},
-		{glm.Vec4{0, 0, 0, math.NaN()}, glm.Vec4{0, 0, 0, 0}, false},
-		{glm.Vec4{math.NaN(), math.NaN(), math.NaN(), math.NaN()}, glm.Vec4{math.NaN(), math.NaN(), math.NaN(), math.NaN()}, true},
+		{glm.Vec4{}, glm.Vec4{}, true},
+		{glm.Vec4{X: math.NaN(), Y: 0, Z: 0, W: 0}, glm.Vec4{}, false},
+		{glm.Vec4{X: 0, Y: math.NaN(), Z: 0, W: 0}, glm.Vec4{}, false},
+		{glm.Vec4{X: 0, Y: 0, Z: math.NaN(), W: 0}, glm.Vec4{}, false},
+		{glm.Vec4{X: 0, Y: 0, Z: 0, W: math.NaN()}, glm.Vec4{}, false},
+		{glm.Vec4{X: math.NaN(), Y: math.NaN(), Z: math.NaN(), W: math.NaN()}, glm.Vec4{X: math.NaN(), Y: math.NaN(), Z: math.NaN(), W: math.NaN()}, true},
 	}
 	for i, test := range tests {
 		if res := Vec4Equal(test.a, test.b); res != test.result {

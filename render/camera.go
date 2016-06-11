@@ -28,7 +28,7 @@ func (c *Camera) SetOrtho(left, right, bottom, top, near, far float32) {
 // LookAtval sets the camera view direction by value.
 func (c *Camera) LookAtval(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ float32) {
 	c.View = glm.LookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ)
-	c.Pos = glm.Vec3{eyeX, eyeY, eyeZ}
+	c.Pos = glm.Vec3{X: eyeX, Y: eyeY, Z: eyeZ}
 }
 
 // LookAtVec sets the camera view direction by vectors.

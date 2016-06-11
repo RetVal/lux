@@ -19,17 +19,17 @@ func NewTerrain(heightmap [][]float32, scale float32) (lux.Mesh, error) {
 	uvs := make([]glm.Vec2, width*height)
 	for x := 1; x < width+1; x++ {
 		for y := 1; y < height+1; y++ { //technicly z axis
-			vertices[(y-1)*width+(x-1)] = glm.Vec3{float32(x-1) * scale, heightmap[x][y], float32(y-1) * scale}
-			uvs[(y-1)*width+(x-1)] = glm.Vec2{float32(x-1) / float32(width-1), float32(y-1) / float32(height-1)}
+			vertices[(y-1)*width+(x-1)] = glm.Vec3{X: float32(x-1) * scale, Y: heightmap[x][y], Z: float32(y-1) * scale}
+			uvs[(y-1)*width+(x-1)] = glm.Vec2{X: float32(x-1) / float32(width-1), Y: float32(y-1) / float32(height-1)}
 		}
 	}
 	for x := 1; x < width+1; x++ {
 		for y := 1; y < height+1; y++ { //technicly z axis
-			n := glm.Vec3{float32(x-1) * scale, heightmap[x][y], float32(y-1) * scale}
-			nxm := glm.Vec3{float32(x-2) * scale, heightmap[x-1][y], float32(y-1) * scale}
-			nxp := glm.Vec3{float32(x) * scale, heightmap[x+1][y], float32(y-1) * scale}
-			nym := glm.Vec3{float32(x-1) * scale, heightmap[x][y-1], float32(y-2) * scale}
-			nyp := glm.Vec3{float32(x-1) * scale, heightmap[x][y+1], float32(y) * scale}
+			n := glm.Vec3{X: float32(x-1) * scale, Y: heightmap[x][y], Z: float32(y-1) * scale}
+			nxm := glm.Vec3{X: float32(x-2) * scale, Y: heightmap[x-1][y], Z: float32(y-1) * scale}
+			nxp := glm.Vec3{X: float32(x) * scale, Y: heightmap[x+1][y], Z: float32(y-1) * scale}
+			nym := glm.Vec3{X: float32(x-1) * scale, Y: heightmap[x][y-1], Z: float32(y-2) * scale}
+			nyp := glm.Vec3{X: float32(x-1) * scale, Y: heightmap[x][y+1], Z: float32(y) * scale}
 			n1 := NormalToPlane(n, nyp, nxp)
 			n1.Normalize()
 			n2 := NormalToPlane(n, nxp, nym)
@@ -58,7 +58,7 @@ func NewTerrain(heightmap [][]float32, scale float32) (lux.Mesh, error) {
 func NormalToPlane(v1, v2, v3 glm.Vec3) glm.Vec3 {
 	u := v2.Sub(&v1)
 	v := v3.Sub(&v1)
-	return glm.Vec3{u.Y*v.Z - u.Z*v.Y, u.Z*v.X - u.X*v.Z, u.X*v.Y - u.Y*v.X}
+	return glm.Vec3{X: u.Y*v.Z - u.Z*v.Y, Y: u.Z*v.X - u.X*v.Z, Z: u.X*v.Y - u.Y*v.X}
 }
 
 // AverageVec returns the average of the vectors. they must be normalized.
@@ -72,6 +72,6 @@ func AverageVec(vecs ...glm.Vec3) glm.Vec3 {
 	x /= float32(len(vecs))
 	y /= float32(len(vecs))
 	z /= float32(len(vecs))
-	out := glm.Vec3{x, y, z}
+	out := glm.Vec3{X: x, Y: y, Z: z}
 	return out.Normalized()
 }

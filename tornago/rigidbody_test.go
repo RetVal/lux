@@ -10,7 +10,7 @@ import (
 func TestRigidBody_SetPosition3f(t *testing.T) {
 	var b RigidBody
 	b.SetPosition3f(1, 2, 3)
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	if b.position != want {
 		t.Errorf("SetPosition3f = %v, want %v", b.position, want)
 		return
@@ -19,7 +19,7 @@ func TestRigidBody_SetPosition3f(t *testing.T) {
 
 func TestRigidBody_SetPositionVec(t *testing.T) {
 	var b RigidBody
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	b.SetPositionVec3(&want)
 	if b.position != want {
 		t.Errorf("SetPositionVec = %v, want %v", b.position, want)
@@ -29,7 +29,7 @@ func TestRigidBody_SetPositionVec(t *testing.T) {
 
 func TestRigidBody_Position(t *testing.T) {
 	var b RigidBody
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	b.SetPositionVec3(&want)
 	if pos := b.Position(); pos != want {
 		t.Errorf("Position = %v, want %v", pos, want)
@@ -39,7 +39,7 @@ func TestRigidBody_Position(t *testing.T) {
 
 func TestRigidBody_SetOrientation4f(t *testing.T) {
 	var b RigidBody
-	q := glm.Quat{1, glm.Vec3{2, 3, 4}}
+	q := glm.Quat{W: 1, Vec3: glm.Vec3{X: 2, Y: 3, Z: 4}}
 	b.SetOrientation4f(q.W, q.X, q.Y, q.Z)
 	if res := b.orientation; res != q {
 		t.Errorf("SetOrientation4f = %v, want %v", res, q)
@@ -49,7 +49,7 @@ func TestRigidBody_SetOrientation4f(t *testing.T) {
 
 func TestRigidBody_SetOrientationQuat(t *testing.T) {
 	var b RigidBody
-	q := glm.Quat{1, glm.Vec3{2, 3, 4}}
+	q := glm.Quat{W: 1, Vec3: glm.Vec3{X: 2, Y: 3, Z: 4}}
 	b.SetOrientationQuat(&q)
 	if res := b.orientation; res != q {
 		t.Errorf("SetOrientationQuat = %v, want %v", res, q)
@@ -60,7 +60,7 @@ func TestRigidBody_SetOrientationQuat(t *testing.T) {
 func TestRigidBody_Orientation(t *testing.T) {
 	var b RigidBody
 
-	q := glm.Quat{1, glm.Vec3{2, 3, 4}}
+	q := glm.Quat{W: 1, Vec3: glm.Vec3{X: 2, Y: 3, Z: 4}}
 	b.SetOrientationQuat(&q)
 
 	if ori := b.Orientation(); ori != q {
@@ -72,7 +72,7 @@ func TestRigidBody_Orientation(t *testing.T) {
 func TestRigidBody_SetVelocity3f(t *testing.T) {
 	var b RigidBody
 	b.SetVelocity3f(1, 2, 3)
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	if b.velocity != want {
 		t.Errorf("SetVelocity3f = %v, want %v", b.velocity, want)
 		return
@@ -81,7 +81,7 @@ func TestRigidBody_SetVelocity3f(t *testing.T) {
 
 func TestRigidBody_SetVelocityVec(t *testing.T) {
 	var b RigidBody
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	b.SetVelocityVec3(&want)
 	if b.velocity != want {
 		t.Errorf("SetVelocityVec = %v, want %v", b.velocity, want)
@@ -91,7 +91,7 @@ func TestRigidBody_SetVelocityVec(t *testing.T) {
 
 func TestRigidBody_Velocity(t *testing.T) {
 	var b RigidBody
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	b.SetVelocityVec3(&want)
 	if b.Velocity() != want {
 		t.Errorf("Velocity = %v, want %v", b.Velocity(), want)
@@ -102,7 +102,7 @@ func TestRigidBody_Velocity(t *testing.T) {
 func TestRigidBody_SetAcceleration3f(t *testing.T) {
 	var b RigidBody
 	b.SetAcceleration3f(1, 2, 3)
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	if b.acceleration != want {
 		t.Errorf("SetAcceleration3f = %v, want %v", b.acceleration, want)
 		return
@@ -111,7 +111,7 @@ func TestRigidBody_SetAcceleration3f(t *testing.T) {
 
 func TestRigidBody_SetAccelerationVec(t *testing.T) {
 	var b RigidBody
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	b.SetAccelerationVec3(&want)
 	if b.acceleration != want {
 		t.Errorf("SetAccelerationVec = %v, want %v", b.acceleration, want)
@@ -121,7 +121,7 @@ func TestRigidBody_SetAccelerationVec(t *testing.T) {
 
 func TestRigidBody_Acceleration(t *testing.T) {
 	var b RigidBody
-	want := glm.Vec3{1, 2, 3}
+	want := glm.Vec3{X: 1, Y: 2, Z: 3}
 	b.SetAccelerationVec3(&want)
 	if b.Acceleration() != want {
 		t.Errorf("Acceleration = %v, want %v", b.Acceleration(), want)
@@ -287,10 +287,10 @@ func TestRigidBody_InterniaTensorIn(t *testing.T) {
 
 func TestRigidBody_OpenGLMatrix(t *testing.T) {
 	var b RigidBody
-	q := glm.Quat{1, glm.Vec3{2, 3, 4}}
+	q := glm.Quat{W: 1, Vec3: glm.Vec3{X: 2, Y: 3, Z: 4}}
 	q.Normalize()
 	m := q.Mat4()
-	pos := glm.Vec3{5, 6, 7}
+	pos := glm.Vec3{X: 5, Y: 6, Z: 7}
 	trans := glm.Translate3D(pos.X, pos.Y, pos.Z)
 	trans.Mul4With(&m)
 
@@ -308,7 +308,7 @@ func TestRigidBody_OpenGLMatrix(t *testing.T) {
 }
 
 func TestRigidBody_AddForce(t *testing.T) {
-	f1, f2 := glm.Vec3{0, 1, 2}, glm.Vec3{4, 5, 6}
+	f1, f2 := glm.Vec3{X: 0, Y: 1, Z: 2}, glm.Vec3{X: 4, Y: 5, Z: 6}
 	var b RigidBody
 	b.AddForce(&f1)
 	b.AddForce(&f2)
@@ -321,7 +321,7 @@ func TestRigidBody_AddForce(t *testing.T) {
 }
 
 func TestRigidBody_AddTorque(t *testing.T) {
-	f1, f2 := glm.Vec3{0, 1, 2}, glm.Vec3{4, 5, 6}
+	f1, f2 := glm.Vec3{X: 0, Y: 1, Z: 2}, glm.Vec3{X: 4, Y: 5, Z: 6}
 	var b RigidBody
 	b.AddTorque(&f1)
 	b.AddTorque(&f2)
@@ -334,11 +334,11 @@ func TestRigidBody_AddTorque(t *testing.T) {
 }
 
 func TestRigidBody_AddForceAtPoint(t *testing.T) {
-	force, point := glm.Vec3{0, 10, 0}, glm.Vec3{1, 0, 0}
+	force, point := glm.Vec3{X: 0, Y: 10, Z: 0}, glm.Vec3{X: 1, Y: 0, Z: 0}
 	var b RigidBody
 	b.AddForceAtPoint(&force, &point)
 	b.AddForceAtPoint(&force, &point)
-	ef, et := glm.Vec3{0, 20, 0}, glm.Vec3{0, 0, 20}
+	ef, et := glm.Vec3{X: 0, Y: 20, Z: 0}, glm.Vec3{X: 0, Y: 0, Z: 20}
 	if f, to := b.forceAccumulator, b.torqueAccumulator; !to.EqualThreshold(&et, 1e-4) || !f.EqualThreshold(&ef, 1e-4) {
 		t.Errorf("forceAcc, torqueAcc = %v, %v, want %v, %v", f, to, ef, et)
 		return
@@ -346,10 +346,10 @@ func TestRigidBody_AddForceAtPoint(t *testing.T) {
 }
 
 func TestRigidBody_AddForceAtBodyPoint(t *testing.T) {
-	force, point := glm.Vec3{0, 10, 0}, glm.Vec3{1, 0, 0}
+	force, point := glm.Vec3{X: 0, Y: 10, Z: 0}, glm.Vec3{X: 1, Y: 0, Z: 0}
 
-	q := glm.Quat{1, glm.Vec3{2, 3, 4}}
-	pos := glm.Vec3{5, 6, 7}
+	q := glm.Quat{W: 1, Vec3: glm.Vec3{X: 2, Y: 3, Z: 4}}
+	pos := glm.Vec3{X: 5, Y: 6, Z: 7}
 	q.Normalize()
 	var b RigidBody
 	b.SetOrientationQuat(&q)
@@ -357,7 +357,7 @@ func TestRigidBody_AddForceAtBodyPoint(t *testing.T) {
 	b.AddForceAtBodyPoint(&force, &point)
 	b.AddForceAtBodyPoint(&force, &point)
 
-	ef, et := glm.Vec3{0, 20, 0}, glm.Vec3{140, 0, -100}
+	ef, et := glm.Vec3{X: 0, Y: 20, Z: 0}, glm.Vec3{X: 140, Y: 0, Z: -100}
 	if fo, to := b.forceAccumulator, b.torqueAccumulator; !ef.EqualThreshold(&fo, 1e-4) || !et.EqualThreshold(&to, 1e-4) {
 		t.Errorf("forceAcc, torqueAcc = %v, %v, want %v, %v", fo, to, ef, et)
 		return
@@ -365,20 +365,20 @@ func TestRigidBody_AddForceAtBodyPoint(t *testing.T) {
 }
 
 func TestRigidBody_PointInWorldCoordinates(t *testing.T) {
-	q := glm.Quat{1, glm.Vec3{2, 3, 4}}
-	pos := glm.Vec3{5, 6, 7}
+	q := glm.Quat{W: 1, Vec3: glm.Vec3{X: 2, Y: 3, Z: 4}}
+	pos := glm.Vec3{X: 5, Y: 6, Z: 7}
 	q.Normalize()
 	var b RigidBody
 	b.SetOrientationQuat(&q)
 	b.SetPositionVec3(&pos)
 	b.calculateDerivedData()
 
-	point := glm.Vec3{1, 0, 0}
+	point := glm.Vec3{X: 1, Y: 0, Z: 0}
 	var dst glm.Vec3
 
 	b.PointInWorldCoordinates(&point, &dst)
 
-	expected := glm.Vec3{4.3333335, 6.6666665, 7.3333335}
+	expected := glm.Vec3{X: 4.3333335, Y: 6.6666665, Z: 7.3333335}
 
 	if !dst.EqualThreshold(&expected, 1e-4) {
 		t.Errorf("world = %v, want %v", dst, expected)
@@ -398,12 +398,12 @@ func TestRigidBody_Integrate_LinearOnly(t *testing.T) {
 	b.SetMass(mass)
 	tensor := sphereInertiaTensor(mass, radius)
 	b.SetInertiaTensor(&tensor)
-	b.acceleration = glm.Vec3{0, -10, 0}
+	b.acceleration = glm.Vec3{X: 0, Y: -10, Z: 0}
 	for x := 0; x < 10; x++ {
 		b.Integrate(0.1)
 	}
 	if b.position.Y > expectedY {
-		t.Errorf("linear integration did not work as planned, got %v, want %v", b.position, glm.Vec3{0, expectedY, 0})
+		t.Errorf("linear integration did not work as planned, got %v, want %v", b.position, glm.Vec3{X: 0, Y: expectedY, Z: 0})
 		return
 	}
 }
@@ -421,8 +421,8 @@ func TestRigidBody_Integrate_AngularOnly(t *testing.T) {
 	b.orientation.Iden()
 	tensor := sphereInertiaTensor(mass, radius)
 	b.SetInertiaTensor(&tensor)
-	force := glm.Vec3{0, 1, 0}
-	point := glm.Vec3{1, 0, 0}
+	force := glm.Vec3{X: 0, Y: 1, Z: 0}
+	point := glm.Vec3{X: 1, Y: 0, Z: 0}
 	for x := 0; x < 10; x++ {
 		b.AddForceAtPoint(&force, &point)
 		b.Integrate(0.1)
@@ -442,8 +442,8 @@ func TestRigidBody_Integrate_Both(t *testing.T) {
 	b.orientation.Iden()
 	tensor := sphereInertiaTensor(mass, radius)
 	b.SetInertiaTensor(&tensor)
-	force := glm.Vec3{0, 1, 0}
-	point := glm.Vec3{1, 0, 0}
+	force := glm.Vec3{X: 0, Y: 1, Z: 0}
+	point := glm.Vec3{X: 1, Y: 0, Z: 0}
 	for x := 0; x < 10; x++ {
 		b.AddForceAtPoint(&force, &point)
 		b.Integrate(0.1)
@@ -467,7 +467,7 @@ func BenchmarkRigidBody_Integrate(b *testing.B) {
 	b.ResetTimer()
 	b.StopTimer()
 	for x := 0; x < b.N; x++ {
-		force, point := glm.Vec3{rand.Float32(), rand.Float32(), rand.Float32()}, glm.Vec3{rand.Float32(), rand.Float32(), rand.Float32()}
+		force, point := glm.Vec3{X: rand.Float32(), Y: rand.Float32(), Z: rand.Float32()}, glm.Vec3{X: rand.Float32(), Y: rand.Float32(), Z: rand.Float32()}
 		body.AddForceAtBodyPoint(&force, &point)
 		b.StartTimer()
 		body.Integrate(0.1)
@@ -477,8 +477,8 @@ func BenchmarkRigidBody_Integrate(b *testing.B) {
 
 func BenchmarkRigidBody_calculateDerivedData(b *testing.B) {
 	var body RigidBody
-	position := glm.Vec3{1, 2, 3}
-	orientation := glm.Quat{1, glm.Vec3{2, 3, 4}}
+	position := glm.Vec3{X: 1, Y: 2, Z: 3}
+	orientation := glm.Quat{W: 1, Vec3: glm.Vec3{X: 2, Y: 3, Z: 4}}
 	body.SetPositionVec3(&position)
 	body.SetOrientationQuat(&orientation)
 	b.ResetTimer()
