@@ -1,8 +1,8 @@
 package tornago
 
 import (
-	"github.com/luxengine/lux/glm"
 	"github.com/luxengine/lux/flops"
+	"github.com/luxengine/lux/glm"
 	"github.com/luxengine/lux/math"
 )
 

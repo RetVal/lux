@@ -21,6 +21,7 @@ type IGameServer struct {
 func (g IGameServer) InitGameServer(unIP uint32, usGamePort uint16, usQueryPort uint16, unFlags uint32, nGameAppId AppId, pchVersionString string) bool {
 	return bool(C.ISteamGameServer_InitGameServer(g.Pointer, unIP, usGamePort, usQueryPort, unFlags, nGameAppId, pchVersionString))
 }
+
 /// Game product identifier.  This is currently used by the master server for version checking purposes.
 /// It's a required field, but will eventually will go away, and the AppID will be used for this purpose.
 func (g IGameServer) SetProduct(pszProduct string) {
@@ -28,7 +29,7 @@ func (g IGameServer) SetProduct(pszProduct string) {
 }
 
 /// Description of the game.  This is a required field and is displayed in the steam server browser....for now.
-/// This is a required field, but it will go away eventually, as the data should be determined from the AppID.	
+/// This is a required field, but it will go away eventually, as the data should be determined from the AppID.
 func (g IGameServer) SetGameDescription(pszGameDescription string) {
 	return C.ISteamGameServer_SetGameDescription(g.Pointer, pszGameDescription)
 }
@@ -45,7 +46,6 @@ func (g IGameServer) SetModDir(pszModDir string) {
 func (g IGameServer) SetDedicatedServer(bDedicated bool) {
 	return C.ISteamGameServer_SetDedicatedServer(g.Pointer, bDedicated)
 }
-
 
 /// Begin process to login to a persistent game server account
 ///
@@ -166,8 +166,8 @@ func (g IGameServer) SetRegion(pszRegion string) {
 }
 
 // Handles receiving a new connection from a Steam user.  This call will ask the Steam
-// servers to validate the users identity, app ownership, and VAC status.  If the Steam servers 
-// are off-line, then it will validate the cached ticket itself which will validate app ownership 
+// servers to validate the users identity, app ownership, and VAC status.  If the Steam servers
+// are off-line, then it will validate the cached ticket itself which will validate app ownership
 // and identity.  The AuthBlob here should be acquired on the game client using SteamUser()->InitiateGameConnection()
 // and must then be sent up to the game server for authentication.
 //
@@ -178,8 +178,8 @@ func (g IGameServer) SendUserConnectAndAuthenticate(unIPClient uint32, pvAuthBlo
 	return bool(C.ISteamGameServer_SendUserConnectAndAuthenticate(g.Pointer, unIPClient, pvAuthBlob, cubAuthBlobSize, pSteamIDUser))
 }
 
-// Creates a fake user (ie, a bot) which will be listed as playing on the server, but skips validation.  
-// 
+// Creates a fake user (ie, a bot) which will be listed as playing on the server, but skips validation.
+//
 // Return Value: Returns a SteamID for the user to be tracked with, you should call HandleUserDisconnect()
 // when this user leaves the server just like you would for a real user.
 func (g IGameServer) CreateUnauthenticatedUserConnection() CSteamID {
@@ -196,13 +196,13 @@ func (g IGameServer) SendUserDisconnect(steamIDUser CSteamID) {
 // Update the data to be displayed in the server browser and matchmaking interfaces for a user
 // currently connected to the server.  For regular users you must call this after you receive a
 // GSUserValidationSuccess callback.
-// 
+//
 // Return Value: true if successful, false if failure (ie, steamIDUser wasn't for an active player)
 func (g IGameServer) BUpdateUserData(steamIDUser CSteamID, pchPlayerName string, uScore uint32) bool {
 	return bool(C.ISteamGameServer_BUpdateUserData(g.Pointer, steamIDUser, pchPlayerName, uScore))
 }
 
-// Retrieve ticket to be sent to the entity who wishes to authenticate you ( using BeginAuthSession API ). 
+// Retrieve ticket to be sent to the entity who wishes to authenticate you ( using BeginAuthSession API ).
 // pcbTicket retrieves the length of the actual ticket.
 func (g IGameServer) GetAuthSessionTicket(pTicket unsafe.Pointer, cbMaxTicket int, pcbTicket *uint32) HAuthTicket {
 	return HAuthTicket(C.ISteamGameServer_GetAuthSessionTicket(g.Pointer, pTicket, cbMaxTicket, pcbTicket))
@@ -236,7 +236,7 @@ func (g IGameServer) RequestUserGroupStatus(steamIDUser CSteamID, steamIDGroup C
 	return bool(C.ISteamGameServer_RequestUserGroupStatus(g.Pointer, steamIDUser, steamIDGroup))
 }
 
-// Returns the public IP of the server according to Steam, useful when the server is 
+// Returns the public IP of the server according to Steam, useful when the server is
 // behind NAT and you want to advertise its IP in a lobby for other clients to directly
 // connect to
 func (g IGameServer) GetPublicIP() uint32 {
