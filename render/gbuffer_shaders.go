@@ -57,7 +57,7 @@ float Lux() {
 
 void colMulLux(){
 	vec4 t = texture(albedoTex, uv);
-	outColor = vec4(t.rgb*Lux(), 1);
+	outColor = vec4(t.rgb*max(Lux(), 1), 1);
 }
 
 void luxOnly() {
