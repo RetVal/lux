@@ -77,12 +77,12 @@ func (c *Contact) swapIfNeed() {
 	}
 
 	// remove zero mass bodies as they cant move.
-	/*if c.bodies[1] != nil && c.bodies[1].inverseMass == 0 {
+	if c.bodies[1] != nil && c.bodies[1].inverseMass == 0 {
 		c.bodies[1] = nil
 	} else if c.bodies[0].inverseMass == 0 {
 		c.bodies[0] = nil
 		c.swapIfNeed()
-	}*/
+	}
 }
 
 // calculateDerivateData fill in the given structure with all the common data we
@@ -243,7 +243,6 @@ func (c *Contact) resolvePenetration(data *contactDerivateData, linearChange, an
 	// of the contact normal, due to angular inertia only.
 	for i := 0; i < 2; i++ {
 		if c.bodies[i] != nil {
-
 			// Use the same procedure as for calculating frictionless
 			// velocity change to work out the angular inertia.
 			angularInertiaWorld := data.relativeContactPosition[i].Cross(&c.normal)
