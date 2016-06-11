@@ -20,9 +20,7 @@ type ActionSetFormat struct {
 		Analogtriggers []struct {
 			Name string `json:"name"`
 		} `json:"analogtriggers"`
-		Buttons []struct {
-			Name string `json:"name"`
-		} `json:"buttons"`
+		Buttons []string `json:"buttons"`
 	} `json:"actionsets"`
 }
 
@@ -171,15 +169,14 @@ func AddDriver(d Driver) {
 // actionset/action structure to all controllers. It's important to understand
 // that this data only explain what the different actions sets and actions are
 // and not their bindings.
-func LoadCtrlFormat(r io.Reader) error {
-	// TODO(hydroflame): implement config loading.
+func LoadCtrlFormat(r io.Reader) (ActionSetFormat, error) {
 	var format ActionSetFormat
 
 	err := json.NewDecoder(r).Decode(&format)
 	if err != nil {
-		return err
+		return format, err
 	}
-	return nil
+	return format, nil
 }
 
 // GetConnectedControllers returns the slice of currently connected controller.

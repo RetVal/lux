@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/luxengine/steam"
+	"github.com/luxengine/lux/steam"
 	"os"
 )
 

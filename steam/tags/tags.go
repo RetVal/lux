@@ -1,4 +1,5 @@
-pacakage tags
+package tags
+
 type Tag1 int
 type Tag2 int
 type Tag3 int

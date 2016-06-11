@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/hydroflame/isitdoneyet"
-	"github.com/luxengine/glm"
-	"github.com/luxengine/glm/geo"
+	"github.com/luxengine/lux/geo"
+	"github.com/luxengine/lux/glm"
 	"math/rand"
 	"os"
 	"runtime"
