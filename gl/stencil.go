@@ -33,15 +33,3 @@ func (stencilObj) Op(sfail, zfail, zpass uint32) {
 func (stencilObj) Mask(mask uint32) {
 	gl.StencilMask(mask)
 }
-
-//Stencil op possible values
-const (
-	Keep     = gl.KEEP
-	Zero     = gl.ZERO
-	Replace  = gl.REPLACE
-	Incr     = gl.INCR
-	IncrWrap = gl.INCR_WRAP
-	Decr     = gl.DECR
-	DecrWrap = gl.DECR_WRAP
-	Invert   = gl.INVERT
-)

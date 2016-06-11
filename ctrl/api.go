@@ -11,17 +11,19 @@ var (
 
 // ActionSetFormat holds the action sets + actions available to the players.
 type ActionSetFormat struct {
-	Actionsets []struct {
-		Name         string `json:"name"`
-		Stickpadgyro []struct {
-			Name      string `json:"name"`
-			Inputmode string `json:"inputmode"`
-		} `json:"stickpadgyro"`
-		Analogtriggers []struct {
-			Name string `json:"name"`
-		} `json:"analogtriggers"`
-		Buttons []string `json:"buttons"`
-	} `json:"actionsets"`
+	Actionsets []ActionSet `json:"actionsets"`
+}
+
+type ActionSet struct {
+	Name         string `json:"name"`
+	Stickpadgyro []struct {
+		Name      string `json:"name"`
+		Inputmode string `json:"inputmode"`
+	} `json:"stickpadgyro"`
+	Analogtriggers []struct {
+		Name string `json:"name"`
+	} `json:"analogtriggers"`
+	Buttons []string `json:"buttons"`
 }
 
 // Driver is the generic driver interface for any of the supported controllers.
@@ -48,16 +50,16 @@ type Controller interface {
 	// GetActionSet returns the action set with the given name. Should be called
 	// once at game startup but needs it needs to be possible to call this
 	// repetitively without any problem. Return nil if the set is not found.
-	GetActionSet(string) ActionSet
+	GetActionSet(string) IActionSet
 
 	// LoadControllerConfiguration maps the button to the action sets.
 	LoadControllerConfiguration(struct{}) error
 }
 
-// ActionSet is a handle to a list of actions that the user can activate, such
+// IActionSet is a handle to a list of actions that the user can activate, such
 // as jumping, firing, interracting with the environnement, opening menus.
 // ActionSet instances are tied to a specific controller.
-type ActionSet interface {
+type IActionSet interface {
 	// GetDigitalAction returns the DigitalAction associated with the given
 	// string.
 	GetDigitalAction(string) DigitalAction

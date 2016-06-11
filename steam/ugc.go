@@ -533,12 +533,12 @@ func (u ISteamUGC) GetUserItemVote(nPublishedFileID PublishedFileID) APICall {
 
 // AddItemToFavorites has no documentation, but it does have this comment above the function block "Steam Workshop Consumer API"
 func (u ISteamUGC) AddItemToFavorites(nAppID AppID, nPublishedFileID PublishedFileID) APICall {
-	return APICall(C.SteamUGC_AddItemToFavorites(u.Pointer, C.AppId_t(nAppId), C.PublishedFileId_t(nPublishedFileID)))
+	return APICall(C.SteamUGC_AddItemToFavorites(u.Pointer, C.AppId_t(nAppID), C.PublishedFileId_t(nPublishedFileID)))
 }
 
 // RemoveItemFromFavorites has no documentation, but it does have this comment above the function block "Steam Workshop Consumer API"
 func (u ISteamUGC) RemoveItemFromFavorites(nAppID AppID, nPublishedFileID PublishedFileID) APICall {
-	return APICall(C.SteamUGC_RemoveItemFromFavorites(u.Pointer, C.AppId_t(nAppId), C.PublishedFileId_t(nPublishedFileID)))
+	return APICall(C.SteamUGC_RemoveItemFromFavorites(u.Pointer, C.AppId_t(nAppID), C.PublishedFileId_t(nPublishedFileID)))
 }
 
 // SubscribeItem subscribes to this item, will be installed ASAP

@@ -15,6 +15,8 @@ type driver struct {
 	w *glfw.Window
 }
 
+type ActionSet struct{}
+
 // GetConnectedControllers returns the list of controllers this Driver can
 // support
 func (d driver) GetConnectedControllers() []ctrl.Controller {
@@ -30,9 +32,7 @@ func (d driver) Update() {
 // players
 func (d driver) LoadFormat(format ctrl.ActionSetFormat) {
 	for _, set := range format.Actionsets {
-		acsets = append(acsets, ActionSet{
-			name: set.Name,
-		})
+		acsets[set.Name] = set
 	}
 }
 
@@ -40,13 +40,7 @@ func (d driver) LoadFormat(format ctrl.ActionSetFormat) {
 type controller struct {
 }
 
-// ActionSet is an action set implemented for glfw actions sets.
-type ActionSet struct {
-	name    string
-	Actions []struct{}
-}
-
-var acsets []ActionSet
+var acsets map[string]ctrl.ActionSet
 
 // Name returns the name of the controller, "Keyboard+Mouse", "ps3 1", etc
 // different controllers from the same driver should return different names.
@@ -58,7 +52,7 @@ func (c *controller) Name() string {
 // GetActionSet returns the action set with the given name. Should be called
 // once at game startup but needs it needs to be possible to call this
 // repetitively without any problem. Return nil if the set is not found.
-func (c *controller) GetActionSet(name string) ctrl.ActionSet {
+func (c *controller) GetActionSet(name string) ctrl.IActionSet {
 	as := acsets[name]
 	return &as
 }
