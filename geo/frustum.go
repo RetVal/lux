@@ -77,7 +77,7 @@ func FrustumFromOrthographic(left, right, bottom, top, near, far float32, frustu
 	}
 }
 
-// TestAABBFrustum returns true if this aabb and plane intersect. It can return
+// TestAABBFrustum returns true if this aabb and frustum intersect. It can return
 // false positives but no false negatives.
 func TestAABBFrustum(aabb *AABB, frustum *Frustum, view *glm.Mat4) bool {
 	var taabb AABB
@@ -85,6 +85,25 @@ func TestAABBFrustum(aabb *AABB, frustum *Frustum, view *glm.Mat4) bool {
 	UpdateAABB4(aabb, &taabb, view)
 	for n := 0; n < 6; n++ {
 		if !TestAABBHalfspace(&taabb, &frustum.Planes[n]) {
+			return false
+		}
+	}
+	return true
+}
+
+// TestFrustumSphere returns true if this aabb and frustum intersect. It can
+// return false positives but no false negatives.
+func TestFrustumSphere(frustum *Frustum, sphere *Sphere, view *glm.Mat4) bool {
+	var s0 Sphere
+	for i := 0; i < 3; i++ {
+		*s0.Center.I(i) = view[i+12]
+		for j := 0; j < 3; j++ {
+			*s0.Center.I(i) += view[j*4+i] * *sphere.Center.I(j)
+		}
+	}
+
+	for n := 0; n < 6; n++ {
+		if !TestHalfspaceSphere(&frustum.Planes[n], &s0) {
 			return false
 		}
 	}
