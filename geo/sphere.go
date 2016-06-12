@@ -12,6 +12,11 @@ type Sphere struct {
 	Radius float32
 }
 
+// ShapeType returns the shape type for spheres.
+func (*Sphere) ShapeType() int {
+	return sphereShapeType
+}
+
 // Volume returns the volume of this sphere
 func (sphere *Sphere) Volume() float32 {
 	// 4/3 pi r^3

@@ -14,6 +14,11 @@ type AABB struct {
 	HalfExtend glm.Vec3
 }
 
+// ShapeType returns the shape type for aabbs.
+func (*AABB) ShapeType() int {
+	return aabbShapeType
+}
+
 // Volume returns the volume of this aabb.
 func (aabb *AABB) Volume() float32 {
 	return 8 * aabb.HalfExtend.X * aabb.HalfExtend.Y * aabb.HalfExtend.Z
@@ -41,15 +46,28 @@ func TestAABBAABB(a, b *AABB) bool {
 	return true
 }
 
-// UpdateAABB computes an enclosing AABB base transformed by t and puts the
+// UpdateAABB3x4 computes an enclosing AABB base transformed by t and puts the
 // result in fill. base and fill must not be the same.
-func UpdateAABB(base, fill *AABB, t *glm.Mat3x4) {
+func UpdateAABB3x4(base, fill *AABB, t *glm.Mat3x4) {
 	for i := 0; i < 3; i++ {
 		*fill.Center.I(i) = t[i+9]
 		*fill.HalfExtend.I(i) = 0
 		for j := 0; j < 3; j++ {
 			*fill.Center.I(i) += t[j*3+i] * *base.Center.I(j)
 			*fill.HalfExtend.I(i) += math.Abs(t[j*3+i]) * *base.HalfExtend.I(j)
+		}
+	}
+}
+
+// UpdateAABB4 computes an enclosing AABB base transformed by t and puts the
+// result in fill. base and fill must not be the same.
+func UpdateAABB4(base, fill *AABB, t *glm.Mat4) {
+	for i := 0; i < 3; i++ {
+		*fill.Center.I(i) = t[i+12]
+		*fill.HalfExtend.I(i) = 0
+		for j := 0; j < 3; j++ {
+			*fill.Center.I(i) += t[j*4+i] * *base.Center.I(j)
+			*fill.HalfExtend.I(i) += math.Abs(t[j*4+i]) * *base.HalfExtend.I(j)
 		}
 	}
 }

@@ -118,7 +118,7 @@ func TestClosestPointPointAABB(t *testing.T) {
 	}
 }
 
-func TestUpdateAABB(t *testing.T) {
+func TestUpdateAABB3x4(t *testing.T) {
 	tests := []struct {
 		aabb      AABB
 		transform glm.Mat3x4
@@ -187,7 +187,7 @@ func TestUpdateAABB(t *testing.T) {
 	}
 	for i, test := range tests {
 		var fill AABB
-		UpdateAABB(&test.aabb, &fill, &test.transform)
+		UpdateAABB3x4(&test.aabb, &fill, &test.transform)
 		if fill != test.fill {
 			t.Errorf("[%d] fill = %+v, want %+v", i, fill, test.fill)
 		}

@@ -12,6 +12,11 @@ type Capsule struct {
 	Radius float32
 }
 
+// ShapeType returns the shape type for aabbs.
+func (*Capsule) ShapeType() int {
+	return capsuleShapeType
+}
+
 // Volume returns the volume of the capsule.
 func (c *Capsule) Volume() float32 {
 	d := c.B.Sub(&c.A)

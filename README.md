@@ -1,3 +1,6 @@
+# Stability
+Do I take stability seriously ? No, I feel bad to break something, but I priorise quality and performance so if I feel I can change something for the better, I will do it. If you wish to use any of these libraries, please vendor or copy (but respect the LICENSE)
+
 #Install
 `go get github.com/luxengine/lux`
 

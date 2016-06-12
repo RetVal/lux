@@ -35,6 +35,11 @@ type Convexhull struct {
 	inertia glm.Mat3
 }
 
+// ShapeType returns the shape type for aabbs.
+func (*Convexhull) ShapeType() int {
+	return convexhullShapeType
+}
+
 // Volume returns the volume of the hull.
 func (c *Convexhull) Volume() float32 {
 	return c.volume

@@ -16,6 +16,11 @@ type OBB struct {
 	HalfExtend glm.Vec3
 }
 
+// ShapeType returns the shape type for obbs.
+func (*OBB) ShapeType() int {
+	return obbShapeType
+}
+
 // Volume returns the volume of the obb.
 func (obb *OBB) Volume() float32 {
 	return 8 * obb.HalfExtend.X * obb.HalfExtend.Y * obb.HalfExtend.Z

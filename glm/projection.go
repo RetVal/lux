@@ -49,10 +49,9 @@ func Ortho2D(left, right, bottom, top float32) Mat4 {
 }
 
 // Perspective returns a Mat4 representing a perspective projection given fovy
-// in radians, aspect as width/height, near and far as the distance from origin.
+// in radian, aspect as width/height, near and far as the distance from origin.
 func Perspective(fovy, aspect, near, far float32) Mat4 {
 	nmf, f := 1./(near-far), 1./math.Tan(fovy/2.0)
-
 	return Mat4{
 		f / aspect, 0, 0, 0,
 		0, f, 0, 0,
@@ -61,7 +60,7 @@ func Perspective(fovy, aspect, near, far float32) Mat4 {
 	}
 }
 
-// PerspectiveIn is a memory friendly version of Ortho.
+// PerspectiveIn is a memory friendly version of Perspective.
 func PerspectiveIn(fovy, aspect, near, far float32, p *Mat4) {
 	nmf, f := 1/(near-far), 1./math.Tan(fovy/2.0)
 

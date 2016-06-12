@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/luxengine/lux/geo"
+	"github.com/luxengine/lux/glm"
 	"log"
 	"runtime"
 
@@ -68,8 +70,13 @@ func main() {
 
 	// ==camera== //
 	var cam lux.Camera
-	cam.SetPerspective(70.0, float32(int32(WindowWidth))/float32(WindowHeight), 0.1, 100.0)
+	cameraAngle := glm.DegToRad(45)
+	aspect := float32(int32(WindowWidth)) / float32(WindowHeight)
+	var znear, zfar float32 = 0.1, 100.0
+	cam.SetPerspective(cameraAngle, aspect, znear, zfar)
 	cam.View.Ident()
+	var fr geo.Frustum
+	geo.FrustumFromPerspective(cameraAngle, aspect, znear, zfar, &fr)
 
 	// post process //
 	lux.InitPostProcessSystem()
@@ -86,8 +93,6 @@ func main() {
 	}
 	shadowfbo.SetOrtho(-10, 10, -10, 10, 0, 20)
 	shadowfbo.LookAt(0, 5, 5, 0, 0, 0)
-
-	log.Println("starting rendering")
 
 	// === lights === //
 	var lamp lux.PointLight
@@ -118,7 +123,14 @@ func main() {
 
 		// normal rendering
 		gbuf.Render(&cam, skydome, assman.Textures["skydome"], skydomeTransf)
-		gbuf.Render(&cam, monkey, assman.Textures["square"], monkeyTransf)
+		aabb := geo.AABB{
+			Center:     glm.Vec3{0, 0, -5},
+			HalfExtend: glm.Vec3{0.5, 0.5, 0.5},
+		}
+
+		if geo.TestAABBFrustum(&aabb, &fr, &cam.View) {
+			gbuf.Render(&cam, monkey, assman.Textures["square"], monkeyTransf)
+		}
 		gbuf.Render(&cam, ground, assman.Textures["square"], groundTransf)
 
 		// render lights

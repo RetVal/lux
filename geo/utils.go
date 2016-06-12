@@ -641,6 +641,22 @@ func TestOBBPlane(b *OBB, p *Plane) bool {
 	return math.Abs(s) <= r
 }
 
+// TestHalfspaceOBB returns true if b and p intersect.
+func TestHalfspaceOBB(p *Plane, b *OBB) bool {
+	// Compute the projection interval radius of b onto L(t) = b.c + t * p.n
+	r0 := b.Orientation.Row(0)
+	r1 := b.Orientation.Row(1)
+	r2 := b.Orientation.Row(2)
+
+	r := b.HalfExtend.X*math.Abs(p.Normal.Dot(&r0)) +
+		b.HalfExtend.Y*math.Abs(p.Normal.Dot(&r1)) +
+		b.HalfExtend.Z*math.Abs(p.Normal.Dot(&r2))
+	// Compute distance of box center from plane
+	s := p.Normal.Dot(&b.Center) - p.Offset
+	// Intersection occurs when distance d falls within [0, r] interval.
+	return s <= r
+}
+
 // TestAABBPlane tests if AABB b intersects plane p.
 func TestAABBPlane(b *AABB, p *Plane) bool {
 	// These two lines not necessary with a (center, extents) AABB representation
