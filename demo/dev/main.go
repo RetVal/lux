@@ -57,7 +57,7 @@ func main() {
 	skydomeTransf := lux.NewTransform()
 	groundTransf := lux.NewTransform()
 	monkeyTransf := lux.NewTransform()
-	monkeyTransf.Translate(0, 0, -5)
+	monkeyTransf.Translate(0, 0, -15)
 
 	gbuf, err := lux.NewGBuffer(int32(WindowWidth), int32(WindowHeight))
 	if err != nil {
@@ -75,6 +75,7 @@ func main() {
 	var znear, zfar float32 = 0.1, 100.0
 	cam.SetPerspective(cameraAngle, aspect, znear, zfar)
 	cam.View.Ident()
+	cam.LookAtval(10, 10, 10, 0, 0, 5, 0, 1, 0)
 	var fr geo.Frustum
 	geo.FrustumFromPerspective(cameraAngle, aspect, znear, zfar, &fr)
 
@@ -92,7 +93,6 @@ func main() {
 		log.Fatal(err)
 	}
 	shadowfbo.SetOrtho(-10, 10, -10, 10, 0, 20)
-	shadowfbo.LookAt(0, 5, 5, 0, 0, 0)
 
 	// === lights === //
 	var lamp lux.PointLight
@@ -118,14 +118,16 @@ func main() {
 		lamp.Move(5*math.Cos(float32(angle/2)), 5, 5*math.Sin(float32(angle/2)))
 		shadowfbo.LookAt(lamp.X, lamp.Y, lamp.Z, 0, 0, 0)
 
+		cam.LookAtval(10*math.Sin(float32(angle/4)), 10, 10*math.Cos(float32(angle/4)), 0, 0, 0, 0, 1, 0)
+
 		// ==Render== //
 		gbuf.Bind(&cam)
 
 		// normal rendering
 		gbuf.Render(&cam, skydome, assman.Textures["skydome"], skydomeTransf)
 		aabb := geo.AABB{
-			Center:     glm.Vec3{X: 0, Y: 0, Z: -5},
-			HalfExtend: glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5},
+			Center:     glm.Vec3{X: 0, Y: 0, Z: -15},
+			HalfExtend: glm.Vec3{X: 0, Y: 0, Z: 0},
 		}
 
 		if geo.TestAABBFrustum(&aabb, &fr, &cam.View) {

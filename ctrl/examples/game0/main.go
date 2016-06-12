@@ -6,6 +6,7 @@ import (
 	"github.com/go-gl/glfw/v3.1/glfw"
 	"github.com/luxengine/lux/ctrl"
 	"github.com/luxengine/lux/ctrl/glfw"
+	"runtime"
 )
 
 func init() {

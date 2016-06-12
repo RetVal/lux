@@ -11,42 +11,17 @@ func TestLoadCtrlFormat(t *testing.T) {
 	"actionsets":[
 		{
 			"name": "gameplay",
-			"i18nkey": "gameplay",
 			"stickpadgyro":[
 				{
 					"name": "move",
-					"i18nkey": "move",
 					"inputmode": "joystick_move"
 				}
 			],
-			"buttons":[
-				{
-					"name": "jump",
-					"i18nkey": "jump"
-				},
-				{
-					"name": "fire",
-					"i18nkey": "fire"
-				}
-			]
-		}
-	],
-	"localization":[
-		{
-			"language": "english",
-			"mapping":[
-				{
-					"i18nkey": "jump",
-					"localkey": "Jump"
-				},
-				{
-					"i18nkey": "fire",
-					"localkey": "Fire"
-				}]
+			"buttons":["jump", "fire"]
 		}
 	]
 }`))
-	err := LoadCtrlFormat(r)
+	_, err := LoadCtrlFormat(r)
 	if err != nil {
 		t.Error(err)
 	}

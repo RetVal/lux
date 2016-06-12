@@ -31,16 +31,16 @@ func (d driver) Update() {
 // LoadFormat explain the different actions sets that are available to the
 // players
 func (d driver) LoadFormat(format ctrl.ActionSetFormat) {
-	for _, set := range format.Actionsets {
-		acsets[set.Name] = set
-	}
+	//for _, _ = range format.Actionsets {
+	//	acsets[set.Name] = set
+	//}
 }
 
 // controller is a controller implemented for glfw controllers.
 type controller struct {
 }
 
-var acsets map[string]ctrl.ActionSet
+var acsets map[string]ActionSet
 
 // Name returns the name of the controller, "Keyboard+Mouse", "ps3 1", etc
 // different controllers from the same driver should return different names.
@@ -81,5 +81,5 @@ func (a *ActionSet) Activate() {}
 
 // Name returns the localized name of the actionset
 func (a *ActionSet) Name() string {
-	return a.name
+	return ""
 }

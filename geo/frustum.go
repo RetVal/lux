@@ -25,22 +25,24 @@ func FrustumFromPerspective(fovy, aspect, near, far float32, frustum *Frustum) {
 		Normal: glm.Vec3{0, 0, -1},
 	}
 
+	// the top and bottom planes
 	ay := (math.Pi - fovy) / 2
 	say, cay := math.Sincos(ay)
 	frustum.Planes[2] = Plane{
-		Normal: glm.Vec3{0, cay, say},
+		Normal: glm.Vec3{0, say, cay},
 	}
 	frustum.Planes[3] = Plane{
-		Normal: glm.Vec3{0, -cay, say},
+		Normal: glm.Vec3{0, -say, cay},
 	}
 
+	// the left and right planes
 	ax := (math.Pi - fovy*aspect) / 2
 	sax, cax := math.Sincos(ax)
 	frustum.Planes[4] = Plane{
-		Normal: glm.Vec3{cax, 0, sax},
+		Normal: glm.Vec3{sax, 0, cax},
 	}
 	frustum.Planes[5] = Plane{
-		Normal: glm.Vec3{-cax, 0, sax},
+		Normal: glm.Vec3{-sax, 0, cax},
 	}
 }
 
@@ -82,7 +84,7 @@ func TestAABBFrustum(aabb *AABB, frustum *Frustum, view *glm.Mat4) bool {
 	var _ = fmt.Print
 	UpdateAABB4(aabb, &taabb, view)
 	for n := 0; n < 6; n++ {
-		if !TestAABBHalfspace(aabb, &frustum.Planes[n]) {
+		if !TestAABBHalfspace(&taabb, &frustum.Planes[n]) {
 			return false
 		}
 	}
