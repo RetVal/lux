@@ -10,8 +10,7 @@ const (
 )
 
 var testTable = [shapeTypeLen][shapeTypeLen]func(Shape, Shape) bool{
-	// AABB test table
-	[shapeTypeLen]func(Shape, Shape) bool{
+	{ // AABB test table
 		// AABB AABB.
 		func(s0, s1 Shape) bool {
 			aabb0, aabb1 := s0.(*AABB), s1.(*AABB)
@@ -38,8 +37,7 @@ var testTable = [shapeTypeLen][shapeTypeLen]func(Shape, Shape) bool{
 			return TestAABBConvexhull(aabb, hull)
 		},
 	},
-	// Sphere test table
-	[shapeTypeLen]func(Shape, Shape) bool{
+	{ // Sphere test table
 		// Sphere AABB.
 		func(s0, s1 Shape) bool {
 			sphere, aabb := s0.(*Sphere), s1.(*AABB)
@@ -66,8 +64,7 @@ var testTable = [shapeTypeLen][shapeTypeLen]func(Shape, Shape) bool{
 			return TestConvexhullSphere(hull, sphere)
 		},
 	},
-	// OBB test table
-	[shapeTypeLen]func(Shape, Shape) bool{
+	{ // OBB test table
 		// OBB AABB.
 		func(s0, s1 Shape) bool {
 			obb, aabb := s0.(*OBB), s1.(*AABB)
@@ -95,8 +92,7 @@ var testTable = [shapeTypeLen][shapeTypeLen]func(Shape, Shape) bool{
 			//return TestConvexhullOBB(hull, obb)
 		},
 	},
-	// Capsule test table
-	[shapeTypeLen]func(Shape, Shape) bool{
+	{ // Capsule test table
 		// Capsule AABB.
 		func(s0, s1 Shape) bool {
 			capsule, aabb := s0.(*Capsule), s1.(*AABB)
@@ -124,8 +120,7 @@ var testTable = [shapeTypeLen][shapeTypeLen]func(Shape, Shape) bool{
 			//return TestCapsuleConvexhull(capsule, hull)
 		},
 	},
-	// Convexhull test table
-	[shapeTypeLen]func(Shape, Shape) bool{
+	{ // Convexhull test table
 		// Convexhull AABB.
 		func(s0, s1 Shape) bool {
 			hull, aabb := s0.(*Convexhull), s1.(*AABB)

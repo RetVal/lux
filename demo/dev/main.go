@@ -124,8 +124,8 @@ func main() {
 		// normal rendering
 		gbuf.Render(&cam, skydome, assman.Textures["skydome"], skydomeTransf)
 		aabb := geo.AABB{
-			Center:     glm.Vec3{0, 0, -5},
-			HalfExtend: glm.Vec3{0.5, 0.5, 0.5},
+			Center:     glm.Vec3{X: 0, Y: 0, Z: -5},
+			HalfExtend: glm.Vec3{X: 0.5, Y: 0.5, Z: 0.5},
 		}
 
 		if geo.TestAABBFrustum(&aabb, &fr, &cam.View) {
