@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"github.com/luxengine/lux/steam"
 	"os"
+	"runtime"
 )
 
 func main() {
+	runtime.LockOSThread()
 	fmt.Println(os.Getwd())
 	fmt.Printf("steam init: %t\n", steam.Init())
-	controller := steam.SteamController()
+	controller := steam.Controller()
 	fmt.Printf("Controller init: %t\n", controller.Init())
-	handles := make([]steam.ControllerHandle, 16)
+	defer steam.Shutdown()
+	handles := make([]steam.ControllerHandle, steam.MaxCount)
 	controller.RunFrame()
 	n := controller.GetConnectedControllers(&handles[0])
 	fmt.Printf("connected controllers: %d\n", n)
@@ -50,5 +53,4 @@ func main() {
 		}
 	}
 
-	//steam.Shutdown()
 }
