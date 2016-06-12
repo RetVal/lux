@@ -10,35 +10,46 @@ package steam
 import "C"
 
 import (
+	"math"
 	"unsafe"
 )
 
 // consts related to steam controllers
 const (
-	MaxSteamControllers = 16
+	MaxCount          = 16
+	MaxAnalogActions  = 16
+	MaxDigitalActions = 32
+	MaxOrigins        = 8
 
-	SteamRightTriggerMask          = 0x0000001
-	SteamLeftTriggerMask           = 0x0000002
-	SteamRightBumperMask           = 0x0000004
-	SteamLeftBumperMask            = 0x0000008
-	SteamButton0Mask               = 0x0000010
-	SteamButton1Mask               = 0x0000020
-	SteamButton2Mask               = 0x0000040
-	SteamButton3Mask               = 0x0000080
-	SteamTouch0Mask                = 0x0000100
-	SteamTouch1Mask                = 0x0000200
-	SteamTouch2Mask                = 0x0000400
-	SteamTouch3Mask                = 0x0000800
-	SteamButtonMenuMask            = 0x0001000
-	SteamButtonSteamMask           = 0x0002000
-	SteamButtonEscapeMask          = 0x0004000
-	SteamButtonBackLeftMask        = 0x0008000
-	SteamButtonBackRightMask       = 0x0010000
-	SteamButtonLeftpadClickedMask  = 0x0020000
-	SteamButtonRightpadClickedMask = 0x0040000
-	SteamLeftpadFingerdownMask     = 0x0080000
-	SteamRightpadFingerdownMask    = 0x0100000
-	SteamJoystickButtonMask        = 0x0400000
+	// When sending an option to a specific controller handle, you can send to all controllers via this command
+	HandleAllControllers = math.MaxUint64
+	MinAnalogActionData  = -1.0
+	MaxAnalogActionData  = 1.0
+
+	//MaxSteamControllers = 16
+
+	//SteamRightTriggerMask          = 0x0000001
+	//SteamLeftTriggerMask           = 0x0000002
+	//SteamRightBumperMask           = 0x0000004
+	//SteamLeftBumperMask            = 0x0000008
+	//SteamButton0Mask               = 0x0000010
+	//SteamButton1Mask               = 0x0000020
+	//SteamButton2Mask               = 0x0000040
+	//SteamButton3Mask               = 0x0000080
+	//SteamTouch0Mask                = 0x0000100
+	//SteamTouch1Mask                = 0x0000200
+	//SteamTouch2Mask                = 0x0000400
+	//SteamTouch3Mask                = 0x0000800
+	//SteamButtonMenuMask            = 0x0001000
+	//SteamButtonSteamMask           = 0x0002000
+	//SteamButtonEscapeMask          = 0x0004000
+	//SteamButtonBackLeftMask        = 0x0008000
+	//SteamButtonBackRightMask       = 0x0010000
+	//SteamButtonLeftpadClickedMask  = 0x0020000
+	//SteamButtonRightpadClickedMask = 0x0040000
+	//SteamLeftpadFingerdownMask     = 0x0080000
+	//SteamRightpadFingerdownMask    = 0x0100000
+	//SteamJoystickButtonMask        = 0x0400000
 )
 
 // ESteamControllerPad is an enum to differentiate the 2 different steam
@@ -47,8 +58,8 @@ type ESteamControllerPad int32
 
 // enum to differentiate the 2 different steam controller pads.
 const (
-	SteamControllerPadLeft ESteamControllerPad = iota
-	SteamControllerPadRight
+	SteamControllerPad_Left ESteamControllerPad = iota
+	SteamControllerPad_Right
 )
 
 // EControllerSourceMode is an enum that defines the different controller source

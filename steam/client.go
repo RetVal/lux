@@ -238,10 +238,11 @@ func (c ISteamClient) GetISteamMusicRemote(hSteamuser HSteamUser, hSteamPipe HSt
 }
 
 // GetISteamHTMLSurface returns the html page display interface.
-func (c ISteamClient) GetISteamHTMLSurface(hSteamuser HSteamUser, hSteamPipe HSteamPipe, pchVersion string) IHTMLSurface {
-	cpchVersion := C.CString(pchVersion)
-	defer C.free(unsafe.Pointer(cpchVersion))
-	return IHTMLSurface{C.SteamCAPI_SteamClient_GetISteamHTMLSurface(c.Pointer, C.HSteamUser(hSteamuser), C.HSteamPipe(hSteamPipe), cpchVersion)}
+func (c ISteamClient) GetISteamHTMLSurface(steamuser HSteamUser, steamPipe HSteamPipe, version string) IHTMLSurface {
+	cversion := C.CString(version)
+	ret := IHTMLSurface{C.SteamCAPI_SteamClient_GetISteamHTMLSurface(c.Pointer, C.HSteamUser(steamuser), C.HSteamPipe(steamPipe), cversion)}
+	C.free(unsafe.Pointer(cversion))
+	return ret
 }
 
 /*

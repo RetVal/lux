@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+
 // We need ifdef c++ because go will complain about seeing the `extern "C" {`
 #ifdef _cplusplus
 extern "C" { 
@@ -151,6 +152,7 @@ extern "C" {
 	extern bool SteamCAPI_Shutdown();
 	extern bool SteamCAPI_IsSteamRunning();
 	extern void* CSteamUser();
+	extern void* CSteamHTMLSurface();
 
 
 

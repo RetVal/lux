@@ -112,3 +112,8 @@ type IHTMLSurface struct{ unsafe.Pointer }
 func User() IUser {
 	return IUser{C.CSteamUser()}
 }
+
+// HTMLSurface returns the default HTML surface.
+func HTMLSurface() IHTMLSurface {
+	return IHTMLSurface{C.CSteamHTMLSurface()}
+}

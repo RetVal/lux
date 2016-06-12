@@ -4,7 +4,6 @@
 #include "sdk/public/steam/steamtypes.h"
 
 
-
 extern "C" {
 
 typedef int EHTMLMouseButton;
@@ -14,7 +13,8 @@ typedef int EHTMLKeyModifiers;
 //==================================Steam API==================================
 //==============================================================================
 
-void* CSteamUser() { return SteamUser(); }
+void* CSteamUser()        { return SteamUser(); }
+void* CSteamHTMLSurface() { return SteamHTMLSurface(); }
 
 bool SteamCAPI_Init()			{ return SteamAPI_Init(); }
 void SteamCAPI_Shutdown()		{ 		 SteamAPI_Shutdown(); }
@@ -292,7 +292,10 @@ SteamAPICall_t 	ISteamGameServerStats_StoreUserStats(void* stats, CSteamID steam
 //============================Steam html surface API============================
 //==============================================================================
 
-bool			SteamCAPI_ISteamHTMLSurface_Init(void* surface)																																					{ return static_cast<ISteamHTMLSurface*>(surface)->Init(); }
+bool			SteamCAPI_ISteamHTMLSurface_Init(void* surface) {
+	return static_cast<ISteamHTMLSurface*>(surface)->Init();
+}
+
 bool			SteamCAPI_ISteamHTMLSurface_Shutdown(void* surface)																																				{ return static_cast<ISteamHTMLSurface*>(surface)->Shutdown(); }
 SteamAPICall_t	SteamCAPI_ISteamHTMLSurface_CreateBrowser(void* surface, const char *pchUserAgent, const char *pchUserCSS)																						{ return static_cast<ISteamHTMLSurface*>(surface)->CreateBrowser(pchUserAgent, pchUserCSS); }
 void			SteamCAPI_ISteamHTMLSurface_RemoveBrowser(void* surface, HHTMLBrowser unBrowserHandle)																											{ 		 static_cast<ISteamHTMLSurface*>(surface)->RemoveBrowser(unBrowserHandle); }

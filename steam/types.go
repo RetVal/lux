@@ -3,6 +3,8 @@ package steam
 // APICall is an enum for steam API calls.
 type APICall uint64
 
+type RTime32 uint32
+
 /*
 // General result codes
 enum EResult
