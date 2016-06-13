@@ -887,3 +887,18 @@ func (v1 *Vec3) Dotf(x, y, z float32) float32 {
 func (v1 *Vec4) Dotf(x, y, z, w float32) float32 {
 	return v1.X*x + v1.Y*y + v1.Z*z + v1.W*w
 }
+
+// AngleBetween returns the angle between v1 and v2 in radian.
+func (v1 *Vec2) AngleBetween(v2 *Vec2) float32 {
+	return math.Acos((v1.Dot(v2)) / (v1.Len() * v2.Len()))
+}
+
+// AngleBetween returns the angle between v1 and v2 in radian.
+func (v1 *Vec3) AngleBetween(v2 *Vec3) float32 {
+	return math.Acos((v1.Dot(v2)) / (v1.Len() * v2.Len()))
+}
+
+// AngleBetween returns the angle between v1 and v2 in radian.
+func (v1 *Vec4) AngleBetween(v2 *Vec4) float32 {
+	return math.Acos((v1.Dot(v2)) / (v1.Len() * v2.Len()))
+}
