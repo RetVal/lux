@@ -645,6 +645,35 @@ func (m1 *Mat2) Mul2With(m2 *Mat2) {
 	m1[3] = v1*m2[2] + v3*m2[3]
 }
 
+// Mul2Affine is the same as mul2 but will take shortcuts as if the matrix was
+// an affine transform
+func (m1 *Mat2) Mul2Affine(m2 *Mat2) Mat2 {
+	return Mat2{
+		m1[0] * m2[0],
+		0,
+		m1[0]*m2[2] + m1[2],
+		1,
+	}
+}
+
+// Mul2AffineOf is a memory friendly version of Mul2Affine.
+func (m1 *Mat2) Mul2AffineOf(m2, m3 *Mat2) {
+	m1[0] = m1[0] * m2[0]
+	m1[1] = 0
+	m1[2] = m1[0]*m2[2] + m1[2]
+	m1[3] = 1
+}
+
+// Mul2AffineWith is a memory friendly version of Mul2Affine.
+func (m1 *Mat2) Mul2AffineWith(m2 *Mat2) {
+	v0 := m1[0]
+	v2 := m1[2]
+	m1[0] = v0 * m2[0]
+	m1[1] = 0
+	m1[2] = v0*m2[2] + v2
+	m1[3] = 1
+}
+
 // Transposed produces the transpose of this matrix. For any MxN matrix the
 // transpose is an NxM matrix with the rows swapped with the columns. For
 // instance the transpose of the Mat3x2 is a Mat2x3 like so:
@@ -978,6 +1007,53 @@ func (m1 *Mat3) Mul3With(m2 *Mat3) {
 	m1[6] = v0*m2[6] + v3*m2[7] + v6*m2[8]
 	m1[7] = v1*m2[6] + v4*m2[7] + v7*m2[8]
 	m1[8] = v2*m2[6] + v5*m2[7] + v8*m2[8]
+}
+
+// Mul3Affine is the same as Mul3 but takes a shortcut for affine transforms.
+func (m1 *Mat3) Mul3Affine(m2 *Mat3) Mat3 {
+	return Mat3{
+		m1[0]*m2[0] + m1[3]*m2[1],
+		m1[1]*m2[0] + m1[4]*m2[1],
+		0,
+		m1[0]*m2[3] + m1[3]*m2[4],
+		m1[1]*m2[3] + m1[4]*m2[4],
+		0,
+		m1[0]*m2[6] + m1[3]*m2[7] + m1[6],
+		m1[1]*m2[6] + m1[4]*m2[7] + m1[7],
+		1,
+	}
+}
+
+// Mul3AffineOf is a memory friendly version of Mul3Affine.
+func (m1 *Mat3) Mul3AffineOf(m2, m3 *Mat3) {
+	m1[0] = m1[0]*m2[0] + m1[3]*m2[1]
+	m1[1] = m1[1]*m2[0] + m1[4]*m2[1]
+	m1[2] = 0
+	m1[3] = m1[0]*m2[3] + m1[3]*m2[4]
+	m1[4] = m1[1]*m2[3] + m1[4]*m2[4]
+	m1[5] = 0
+	m1[6] = m1[0]*m2[6] + m1[3]*m2[7] + m1[6]
+	m1[7] = m1[1]*m2[6] + m1[4]*m2[7] + m1[7]
+	m1[8] = 1
+}
+
+// Mul3AffineWith is a memory friendly version of Mul3Affine.
+func (m1 *Mat3) Mul3AffineWith(m2 *Mat3) {
+	v0 := m1[0]
+	v1 := m1[1]
+	v3 := m1[3]
+	v4 := m1[4]
+	v6 := m1[6]
+	v7 := m1[7]
+	m1[0] = v0*m2[0] + v3*m2[1]
+	m1[1] = v1*m2[0] + v4*m2[1]
+	m1[2] = 0
+	m1[3] = v0*m2[3] + v3*m2[4]
+	m1[4] = v1*m2[3] + v4*m2[4]
+	m1[5] = 0
+	m1[6] = v0*m2[6] + v3*m2[7] + v6
+	m1[7] = v1*m2[6] + v4*m2[7] + v7
+	m1[8] = 1
 }
 
 // Transposed produces the transpose of this matrix. For any MxN matrix
@@ -1431,6 +1507,88 @@ func (m1 *Mat4) Mul4With(m2 *Mat4) {
 	v13 := m1[1]*m2[12] + m1[5]*m2[13] + m1[9]*m2[14] + m1[13]*m2[15]
 	v14 := m1[2]*m2[12] + m1[6]*m2[13] + m1[10]*m2[14] + m1[14]*m2[15]
 	v15 := m1[3]*m2[12] + m1[7]*m2[13] + m1[11]*m2[14] + m1[15]*m2[15]
+
+	m1[0] = v0
+	m1[1] = v1
+	m1[2] = v2
+	m1[3] = v3
+	m1[4] = v4
+	m1[5] = v5
+	m1[6] = v6
+	m1[7] = v7
+	m1[8] = v8
+	m1[9] = v9
+	m1[10] = v10
+	m1[11] = v11
+	m1[12] = v12
+	m1[13] = v13
+	m1[14] = v14
+	m1[15] = v15
+}
+
+// Mul4Affine performs a "matrix product" between this matrix
+// and another of the given dimension. For any two matrices of dimensionality
+// MxN and NxO, the result will be MxO. For instance, Mat4 multiplied using
+// Mul4Affinex2 will result in a Mat4x2.
+func (m1 *Mat4) Mul4Affine(m2 *Mat4) Mat4 {
+	return Mat4{
+		m1[0]*m2[0] + m1[4]*m2[1] + m1[8]*m2[2],
+		m1[1]*m2[0] + m1[5]*m2[1] + m1[9]*m2[2],
+		m1[2]*m2[0] + m1[6]*m2[1] + m1[10]*m2[2],
+		0,
+		m1[0]*m2[4] + m1[4]*m2[5] + m1[8]*m2[6],
+		m1[1]*m2[4] + m1[5]*m2[5] + m1[9]*m2[6],
+		m1[2]*m2[4] + m1[6]*m2[5] + m1[10]*m2[6],
+		0,
+		m1[0]*m2[8] + m1[4]*m2[9] + m1[8]*m2[10],
+		m1[1]*m2[8] + m1[5]*m2[9] + m1[9]*m2[10],
+		m1[2]*m2[8] + m1[6]*m2[9] + m1[10]*m2[10],
+		0,
+		m1[0]*m2[12] + m1[4]*m2[13] + m1[8]*m2[14] + m1[12],
+		m1[1]*m2[12] + m1[5]*m2[13] + m1[9]*m2[14] + m1[13],
+		m1[2]*m2[12] + m1[6]*m2[13] + m1[10]*m2[14] + m1[14],
+		1,
+	}
+}
+
+// Mul4AffineOf is a memory friendly version fo Mul4Affine.
+func (m1 *Mat4) Mul4AffineOf(m2, m3 *Mat4) {
+	m1[0] = m1[0]*m2[0] + m1[4]*m2[1] + m1[8]*m2[2]
+	m1[1] = m1[1]*m2[0] + m1[5]*m2[1] + m1[9]*m2[2]
+	m1[2] = m1[2]*m2[0] + m1[6]*m2[1] + m1[10]*m2[2]
+	m1[3] = 0
+	m1[4] = m1[0]*m2[4] + m1[4]*m2[5] + m1[8]*m2[6]
+	m1[5] = m1[1]*m2[4] + m1[5]*m2[5] + m1[9]*m2[6]
+	m1[6] = m1[2]*m2[4] + m1[6]*m2[5] + m1[10]*m2[6]
+	m1[7] = 0
+	m1[8] = m1[0]*m2[8] + m1[4]*m2[9] + m1[8]*m2[10]
+	m1[9] = m1[1]*m2[8] + m1[5]*m2[9] + m1[9]*m2[10]
+	m1[10] = m1[2]*m2[8] + m1[6]*m2[9] + m1[10]*m2[10]
+	m1[11] = 0
+	m1[12] = m1[0]*m2[12] + m1[4]*m2[13] + m1[8]*m2[14] + m1[12]
+	m1[13] = m1[1]*m2[12] + m1[5]*m2[13] + m1[9]*m2[14] + m1[13]
+	m1[14] = m1[2]*m2[12] + m1[6]*m2[13] + m1[10]*m2[14] + m1[14]
+	m1[15] = 1
+}
+
+// Mul4AffineWith is a memory friendly version fo Mul4Affine.
+func (m1 *Mat4) Mul4AffineWith(m2 *Mat4) {
+	v0 := m1[0]*m2[0] + m1[4]*m2[1] + m1[8]*m2[2]
+	v1 := m1[1]*m2[0] + m1[5]*m2[1] + m1[9]*m2[2]
+	v2 := m1[2]*m2[0] + m1[6]*m2[1] + m1[10]*m2[2]
+	v3 := 0
+	v4 := m1[0]*m2[4] + m1[4]*m2[5] + m1[8]*m2[6]
+	v5 := m1[1]*m2[4] + m1[5]*m2[5] + m1[9]*m2[6]
+	v6 := m1[2]*m2[4] + m1[6]*m2[5] + m1[10]*m2[6]
+	v7 := 0
+	v8 := m1[0]*m2[8] + m1[4]*m2[9] + m1[8]*m2[10]
+	v9 := m1[1]*m2[8] + m1[5]*m2[9] + m1[9]*m2[10]
+	v10 := m1[2]*m2[8] + m1[6]*m2[9] + m1[10]*m2[10]
+	v11 := 0
+	v12 := m1[0]*m2[12] + m1[4]*m2[13] + m1[8]*m2[14] + m1[12]
+	v13 := m1[1]*m2[12] + m1[5]*m2[13] + m1[9]*m2[14] + m1[13]
+	v14 := m1[2]*m2[12] + m1[6]*m2[13] + m1[10]*m2[14] + m1[14]
+	v15 := 1
 
 	m1[0] = v0
 	m1[1] = v1
