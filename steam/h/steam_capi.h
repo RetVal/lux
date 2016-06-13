@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 
+
 // We need ifdef c++ because go will complain about seeing the `extern "C" {`
 #ifdef _cplusplus
 extern "C" { 
@@ -16,7 +17,6 @@ extern "C" {
 	#define k_cchFilenameMax 260
 	#define k_cchPublishedFileURLMax 256
 
-
 	typedef int EBeginAuthSessionResult;
 	typedef int EUserHasLicenseForAppResult;
 
@@ -24,7 +24,7 @@ extern "C" {
 	typedef int EWorkshopFileType;
 	typedef int EHTMLMouseButton;
 	typedef int EHTMLKeyModifiers;
-	typedef void* CSteamID;
+	typedef uint64_t CSteamID; // needs to be exactly 8 byte
 	typedef void* CGameID;
 	typedef uint64_t SteamAPICall_t;
 	typedef int EFriendRelationship;
@@ -198,7 +198,12 @@ extern CSteamID SteamCAPI_ISteamApps_GetAppOwner(void* apps);
 extern const char* SteamCAPI_ISteamApps_GetLaunchQueryParam(void* apps,  const char* pchKey);
 extern bool SteamCAPI_ISteamApps_GetDlcDownloadProgress(void* apps,  AppId_t nAppID, unsigned long long* punBytesDownloaded, unsigned long long* punBytesTotal); 
 extern int SteamCAPI_ISteamApps_GetAppBuildId(void* apps);
+//==============================================================================
+//=============================Steam App Ticket API=============================
+//==============================================================================
 
+
+extern uint32_t SteamCAPI_ISteamAppTicket_GetAppOwnershipTicketData(void* ticket, uint32_t nAppID, void* pvBuffer, uint32_t cbBufferLength, uint32_t *piAppId, uint32_t *piSteamId, uint32_t *piSignature, uint32_t *pcbSignature);
 
 //==============================================================================
 //===============================Steam client API===============================

@@ -2,7 +2,7 @@
 #include "sdk/public/steam/steam_gameserver.h"
 #include "sdk/public/steam/isteamgamecoordinator.h"
 #include "sdk/public/steam/steamtypes.h"
-
+#include "sdk/public/steam/isteamappticket.h"
 
 extern "C" {
 
@@ -64,6 +64,11 @@ bool 			SteamCAPI_ISteamApps_GetDlcDownloadProgress(void* apps,  AppId_t nAppID,
 int 			SteamCAPI_ISteamApps_GetAppBuildId(void* apps) 																										{ return static_cast<ISteamApps*>(apps)->GetAppBuildId(); }
 
 
+//==============================================================================
+//=============================Steam App Ticket API=============================
+//==============================================================================
+
+uint32 SteamCAPI_ISteamAppTicket_GetAppOwnershipTicketData(void* ticket, uint32 nAppID, void* pvBuffer, uint32 cbBufferLength, uint32 *piAppId, uint32 *piSteamId, uint32 *piSignature, uint32 *pcbSignature) { return static_cast<ISteamAppTicket*>(ticket)->GetAppOwnershipTicketData(nAppID, pvBuffer, cbBufferLength, piAppId, piSteamId, piSignature, pcbSignature); }
 
 //==============================================================================
 //===============================Steam client API===============================

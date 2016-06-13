@@ -58,8 +58,8 @@ type ESteamControllerPad int32
 
 // enum to differentiate the 2 different steam controller pads.
 const (
-	SteamControllerPad_Left ESteamControllerPad = iota
-	SteamControllerPad_Right
+	SteamControllerPadLeft ESteamControllerPad = iota
+	SteamControllerPadRight
 )
 
 // EControllerSourceMode is an enum that defines the different controller source
@@ -139,53 +139,51 @@ func controllerAnalogActionDatafromC(c C.ControllerAnalogActionData_t) Controlle
 	}
 }
 
-// ISteamController is a handler for the steam controller API.
-type ISteamController struct{ unsafe.Pointer }
+// IController is a handler for the steam controller interface.
+type IController struct{ unsafe.Pointer }
 
 // Controller returns the controller interface, will return an invalid
 // interface if Init returned false or has not been called yet.
-func Controller() ISteamController {
-	return ISteamController{C.CSteamController()}
+func Controller() IController {
+	return IController{C.CSteamController()}
 }
 
-// Init must be called when starting the use of the ISteamController interface.
-func (c ISteamController) Init() bool {
+// Init must be called when starting the use of the IController interface.
+func (c IController) Init() bool {
 	return bool(C.SteamCAPI_SteamController_Init(c.Pointer))
 }
 
-// Shutdown must be called when ending the use of the ISteamController
+// Shutdown must be called when ending the use of the IController
 // interface.
-func (c ISteamController) Shutdown() bool {
+func (c IController) Shutdown() bool {
 	return bool(C.SteamCAPI_SteamController_Shutdown(c.Pointer))
 }
 
 // RunFrame pumps callback/callresult events
 // Note: SteamAPI_RunCallbacks will do this for you, so you should never need to
 // call this directly.
-func (c ISteamController) RunFrame() {
+func (c IController) RunFrame() {
 	C.SteamCAPI_SteamController_RunFrame(c.Pointer)
 }
 
-// GetConnectedControllers enumerate currently connected controllers
-// handlesOut should point to a STEAM_CONTROLLER_MAX_COUNT sized array of ControllerHandle_t handles
-// Returns the number of handles written to handlesOut
-func (c ISteamController) GetConnectedControllers(handlesOut *ControllerHandle) int {
-	return int(C.SteamCAPI_SteamController_GetConnectedControllers(c.Pointer, (*C.ControllerHandle_t)(handlesOut)))
+// GetConnectedControllers enumerate currently connected controllers.
+func (c IController) GetConnectedControllers(handles *[MaxCount]ControllerHandle) int {
+	return int(C.SteamCAPI_SteamController_GetConnectedControllers(c.Pointer, (*C.ControllerHandle_t)(&handles[0])))
 }
 
 // ShowBindingPanel invokes the Steam overlay and brings up the binding screen
 // Returns false if overlay is disabled / unavailable, or the user is not in Big
 // Picture mode
-func (c ISteamController) ShowBindingPanel(controllerHandle ControllerHandle) bool {
+func (c IController) ShowBindingPanel(controllerHandle ControllerHandle) bool {
 	return bool(C.SteamCAPI_SteamController_ShowBindingPanel(c.Pointer, C.ControllerHandle_t(controllerHandle)))
 }
 
 // GetActionSetHandle lookups the handle for an Action Set. Best to do this once
 // on startup, and store the handles for all future API calls.
-func (c ISteamController) GetActionSetHandle(actionSetName string) ControllerActionSetHandle {
-	cActionSetName := C.CString(actionSetName)
-	r := ControllerActionSetHandle(C.SteamCAPI_SteamController_GetActionSetHandle(c.Pointer, cActionSetName))
-	C.free(unsafe.Pointer(cActionSetName))
+func (c IController) GetActionSetHandle(name string) ControllerActionSetHandle {
+	cname := C.CString(name)
+	r := ControllerActionSetHandle(C.SteamCAPI_SteamController_GetActionSetHandle(c.Pointer, cname))
+	C.free(unsafe.Pointer(cname))
 	return r
 }
 
@@ -193,27 +191,27 @@ func (c ISteamController) GetActionSetHandle(actionSetName string) ControllerAct
 // (ie 'Menu', 'Walk' or 'Drive') This is cheap, and can be safely called
 // repeatedly. It's often easier to repeatedly call it in your state loops,
 // instead of trying to place it in all of your state transitions.
-func (c ISteamController) ActivateActionSet(controllerHandle ControllerHandle, actionSetHandle ControllerActionSetHandle) {
+func (c IController) ActivateActionSet(controllerHandle ControllerHandle, actionSetHandle ControllerActionSetHandle) {
 	C.SteamCAPI_SteamController_ActivateActionSet(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerActionSetHandle_t(actionSetHandle))
 }
 
 // GetCurrentActionSet returns the currently active Action Set.
-func (c ISteamController) GetCurrentActionSet(controllerHandle ControllerHandle) ControllerActionSetHandle {
+func (c IController) GetCurrentActionSet(controllerHandle ControllerHandle) ControllerActionSetHandle {
 	return ControllerActionSetHandle(C.SteamCAPI_SteamController_GetCurrentActionSet(c.Pointer, C.ControllerHandle_t(controllerHandle)))
 }
 
 // GetDigitalActionHandle lookups the handle for a digital action. Best to do this
 // once on startup, and store the handles for all future API calls.
-func (c ISteamController) GetDigitalActionHandle(actionName string) ControllerDigitalActionHandle {
-	cActionSetName := C.CString(actionName)
-	r := ControllerDigitalActionHandle(C.SteamCAPI_SteamController_GetDigitalActionHandle(c.Pointer, cActionSetName))
-	C.free(unsafe.Pointer(cActionSetName))
+func (c IController) GetDigitalActionHandle(name string) ControllerDigitalActionHandle {
+	cname := C.CString(name)
+	r := ControllerDigitalActionHandle(C.SteamCAPI_SteamController_GetDigitalActionHandle(c.Pointer, cname))
+	C.free(unsafe.Pointer(cname))
 	return r
 }
 
 // GetDigitalActionData returns the current state of the supplied digital game
 // action.
-func (c ISteamController) GetDigitalActionData(controllerHandle ControllerHandle, digitalActionHandle ControllerDigitalActionHandle) ControllerDigitalActionData {
+func (c IController) GetDigitalActionData(controllerHandle ControllerHandle, digitalActionHandle ControllerDigitalActionHandle) ControllerDigitalActionData {
 	return controllerDigitalActionDataFromC(C.SteamCAPI_SteamController_GetDigitalActionData(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerDigitalActionHandle_t(digitalActionHandle)))
 }
 
@@ -222,40 +220,38 @@ func (c ISteamController) GetDigitalActionData(controllerHandle ControllerHandle
 // display the appropriate on-screen prompt for the action. originsOut should
 // point to a STEAM_CONTROLLER_MAX_ORIGINS sized array of
 // EControllerActionOrigin handles
-func (c ISteamController) GetDigitalActionOrigins(controllerHandle ControllerHandle, actionSetHandle ControllerActionSetHandle, digitalActionHandle ControllerDigitalActionHandle, originsOut *EControllerActionOrigin) int {
+func (c IController) GetDigitalActionOrigins(controllerHandle ControllerHandle, actionSetHandle ControllerActionSetHandle, digitalActionHandle ControllerDigitalActionHandle, originsOut *EControllerActionOrigin) int {
 	return int(C.SteamCAPI_SteamController_GetDigitalActionOrigins(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerActionSetHandle_t(actionSetHandle), C.ControllerDigitalActionHandle_t(digitalActionHandle), (*C.EControllerActionOrigin)(originsOut)))
 }
 
 // GetAnalogActionHandle lookups the handle for an analog action. Best to do
 // this once on startup, and store the handles for all future API calls.
-func (c ISteamController) GetAnalogActionHandle(actionName string) ControllerAnalogActionHandle {
-	cActionSetName := C.CString(actionName)
-	r := ControllerAnalogActionHandle(C.SteamCAPI_SteamController_GetAnalogActionHandle(c.Pointer, cActionSetName))
-	C.free(unsafe.Pointer(cActionSetName))
+func (c IController) GetAnalogActionHandle(name string) ControllerAnalogActionHandle {
+	cname := C.CString(name)
+	r := ControllerAnalogActionHandle(C.SteamCAPI_SteamController_GetAnalogActionHandle(c.Pointer, cname))
+	C.free(unsafe.Pointer(cname))
 	return r
 }
 
 // GetAnalogActionData returns the current state of these supplied analog game
 // action.
-func (c ISteamController) GetAnalogActionData(controllerHandle ControllerHandle, analogActionHandle ControllerAnalogActionHandle) ControllerAnalogActionData {
+func (c IController) GetAnalogActionData(controllerHandle ControllerHandle, analogActionHandle ControllerAnalogActionHandle) ControllerAnalogActionData {
 	return controllerAnalogActionDatafromC(C.SteamCAPI_SteamController_GetAnalogActionData(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerAnalogActionHandle_t(analogActionHandle)))
 }
 
 // GetAnalogActionOrigins gets the origin(s) for an analog action within an
 // action set. Returns the number of origins supplied in originsOut. Use this to
-// display the appropriate on-screen prompt for the action. originsOut should
-// point to a STEAM_CONTROLLER_MAX_ORIGINS sized array of
-// EControllerActionOrigin handles
-func (c ISteamController) GetAnalogActionOrigins(controllerHandle ControllerHandle, actionSetHandle ControllerActionSetHandle, analogActionHandle ControllerAnalogActionHandle, originsOut *EControllerActionOrigin) int {
-	return int(C.SteamCAPI_SteamController_GetAnalogActionOrigins(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerActionSetHandle_t(actionSetHandle), C.ControllerAnalogActionHandle_t(analogActionHandle), (*C.EControllerActionOrigin)(originsOut)))
+// display the appropriate on-screen prompt for the action.
+func (c IController) GetAnalogActionOrigins(controllerHandle ControllerHandle, actionSetHandle ControllerActionSetHandle, analogActionHandle ControllerAnalogActionHandle, origins *[MaxOrigins]EControllerActionOrigin) int {
+	return int(C.SteamCAPI_SteamController_GetAnalogActionOrigins(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerActionSetHandle_t(actionSetHandle), C.ControllerAnalogActionHandle_t(analogActionHandle), (*C.EControllerActionOrigin)(&origins[0])))
 }
 
 // StopAnalogActionMomentum has no documentation.
-func (c ISteamController) StopAnalogActionMomentum(controllerHandle ControllerHandle, eAction ControllerAnalogActionHandle) {
-	C.SteamCAPI_SteamController_StopAnalogActionMomentum(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerAnalogActionHandle_t(eAction))
+func (c IController) StopAnalogActionMomentum(controllerHandle ControllerHandle, action ControllerAnalogActionHandle) {
+	C.SteamCAPI_SteamController_StopAnalogActionMomentum(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ControllerAnalogActionHandle_t(action))
 }
 
 // TriggerHapticPulse triggers a haptic pulse on a controller.
-func (c ISteamController) TriggerHapticPulse(controllerHandle ControllerHandle, eTargetPad ESteamControllerPad, usDurationMicroSec uint16) {
-	C.SteamCAPI_SteamController_TriggerHapticPulse(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ESteamControllerPad(eTargetPad), C.ushort(usDurationMicroSec))
+func (c IController) TriggerHapticPulse(controllerHandle ControllerHandle, targetPad ESteamControllerPad, durationms uint16) {
+	C.SteamCAPI_SteamController_TriggerHapticPulse(c.Pointer, C.ControllerHandle_t(controllerHandle), C.ESteamControllerPad(targetPad), C.ushort(durationms))
 }

@@ -3,7 +3,12 @@ package steam
 // APICall is an enum for steam API calls.
 type APICall uint64
 
+// RTime32 is used somewhere, idk
 type RTime32 uint32
+
+// SteamID is a class to represent a steam ID, it's a C++ class that weight 8
+// byte exactly.
+type SteamID [8]byte
 
 /*
 // General result codes

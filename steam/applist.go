@@ -13,46 +13,44 @@ import (
 	"unsafe"
 )
 
-// ISteamAppList is a handler for the SteamAppList API.
-type ISteamAppList struct {
+// IAppList is a handler for the SteamAppList API.
+type IAppList struct {
 	unsafe.Pointer
 }
 
-// AppList return the default steam ISteamAppList handle.
-func AppList() ISteamAppList {
-	return ISteamAppList{C.CSteamAppList}
+// AppList return the default steam AppList interface handle.
+func AppList() IAppList {
+	return IAppList{C.CSteamAppList()}
 }
 
 // GetNumInstalledApps returns the number of apps currently installed by this
 // steam user.
-func (a ISteamAppList) GetNumInstalledApps() uint32 {
-	return uint32(C.SteamAppList_GetNumInstalledApps(a.Pointer))
+func (a IAppList) GetNumInstalledApps() int {
+	return int(C.SteamAppList_GetNumInstalledApps(a.Pointer))
 }
 
-// GetInstalledApps fills pvecAppID with max unMaxAppIDs with the AppId of the
-// apps installed.
-func (a ISteamAppList) GetInstalledApps(pvecAppID *AppID, unMaxAppIDs uint32) uint32 {
-	return uint32(C.SteamAppList_GetInstalledApps(a.Pointer, (*C.AppId_t)(pvecAppID), C.uint(unMaxAppIDs)))
+// GetInstalledApps fills apps with the AppId of the apps installed. and return
+// the subslice filled.
+func (a IAppList) GetInstalledApps(apps []AppID) []AppID {
+	return apps[:C.SteamAppList_GetInstalledApps(a.Pointer, (*C.AppId_t)(&apps[0]), C.uint(len(apps)))]
 }
 
-// GetAppName returns -1 if no name was found
-// BUG(The strings are return value... so this method is actually wrong)
-func (a ISteamAppList) GetAppName(nAppID AppID, pchName string, cchNameMax int32) int32 {
-	cpchName := C.CString(pchName)
-	defer C.free(unsafe.Pointer(cpchName))
-	return int32(C.SteamAppList_GetAppName(a.Pointer, C.AppId_t(nAppID), cpchName, C.int(cchNameMax)))
+// GetAppName returns -1 if no name was found. steamworks will fill the given
+// slice as much as possible and return the string (either all of or part of the
+// byte slice) representing the name.
+func (a IAppList) GetAppName(ID AppID, name []byte) string {
+	return string(name[:C.SteamAppList_GetAppName(a.Pointer, C.AppId_t(ID), (*C.char)(unsafe.Pointer(&name[0])), C.int(len(name)))])
 }
 
-// GetAppInstallDir returns -1 if no dir was found
-// BUG(The strings are return value... so this method is actually wrong)
-func (a ISteamAppList) GetAppInstallDir(nAppID AppID, pchDirectory string, cchNameMax int32) int32 {
-	cpchDirectory := C.CString(pchDirectory)
-	defer C.free(unsafe.Pointer(cpchDirectory))
-	return int32(C.SteamAppList_GetAppInstallDir(a.Pointer, C.AppId_t(nAppID), cpchDirectory, C.int(cchNameMax)))
+// GetAppInstallDir returns -1 if no dir was found. steamworks will fill the
+// given slice as much as possible and return the string (either all of or part of the
+// byte slice) representing the directory.
+func (a IAppList) GetAppInstallDir(ID AppID, directory []byte) string {
+	return string(directory[:C.SteamAppList_GetAppInstallDir(a.Pointer, C.AppId_t(ID), (*C.char)(unsafe.Pointer(&directory[0])), C.int(len(directory)))])
 }
 
 // GetAppBuildID return the buildid of this app, may change at any time based on
-// backend updates to the game
-func (a ISteamAppList) GetAppBuildID(nAppID AppID) int32 {
-	return int32(C.SteamAppList_GetAppBuildId(a.Pointer, C.AppId_t(nAppID)))
+// backend updates to the game.
+func (a IAppList) GetAppBuildID(ID AppID) int32 {
+	return int32(C.SteamAppList_GetAppBuildId(a.Pointer, C.AppId_t(ID)))
 }

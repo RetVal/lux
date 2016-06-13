@@ -18,9 +18,9 @@ type EHTMLMouseButton int32
 
 // The different mouse buttons you can give to steamworks.
 const (
-	HTMLMouseButton_Left   EHTMLMouseButton = 0
-	HTMLMouseButton_Right  EHTMLMouseButton = 1
-	HTMLMouseButton_Middle EHTMLMouseButton = 2
+	HTMLMouseButtonLeft   EHTMLMouseButton = 0
+	HTMLMouseButtonRight  EHTMLMouseButton = 1
+	HTMLMouseButtonMiddle EHTMLMouseButton = 2
 )
 
 // EHTMLKeyModifiers is an enum for key modifiers.
@@ -28,10 +28,10 @@ type EHTMLKeyModifiers int32
 
 // The different key modifiers you can give to steamworks.
 const (
-	HTMLKeyModifier_None      EHTMLKeyModifiers = 0
-	HTMLKeyModifier_AltDown   EHTMLKeyModifiers = 1 << 0
-	HTMLKeyModifier_CtrlDown  EHTMLKeyModifiers = 1 << 1
-	HTMLKeyModifier_ShiftDown EHTMLKeyModifiers = 1 << 2
+	HTMLKeyModifierNone      EHTMLKeyModifiers = 0
+	HTMLKeyModifierAltDown   EHTMLKeyModifiers = 1 << 0
+	HTMLKeyModifierCtrlDown  EHTMLKeyModifiers = 1 << 1
+	HTMLKeyModifierShiftDown EHTMLKeyModifiers = 1 << 2
 )
 
 // Init must be called when starting use of the interface.

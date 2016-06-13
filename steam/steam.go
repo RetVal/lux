@@ -40,11 +40,6 @@ type IUser struct {
 // IGameServer is used to authenticate users via Steam to play on a game server.
 type IGameServer struct{ unsafe.Pointer }
 
-// IFriends is an interface to accessing information about individual users,
-// that can be a friend, in a group, on a game server or in a lobby with the
-// local user.
-type IFriends struct{ unsafe.Pointer }
-
 // IUtils is an interface to user independent utility functions.
 type IUtils struct{ unsafe.Pointer }
 
@@ -68,9 +63,6 @@ type IUserStats struct{ unsafe.Pointer }
 // on a game server.
 type IGameServerStats struct{ unsafe.Pointer }
 
-// IApps is an interface to app data.
-type IApps struct{ unsafe.Pointer }
-
 // INetworking holds functions for making connections and sending data between
 // clients, traversing NAT's where possible
 type INetworking struct{ unsafe.Pointer }
@@ -89,14 +81,8 @@ type IHTTP struct{ unsafe.Pointer }
 // IUnifiedMessages is an interface to unified messages client.
 type IUnifiedMessages struct{ unsafe.Pointer }
 
-// IController holds the function for the steam controller API.
-type IController struct{ unsafe.Pointer }
-
 // IUGC is an interface to steam ugc.
 type IUGC struct{ unsafe.Pointer }
-
-// IAppList is an interface to app data in Steam.
-type IAppList struct{ unsafe.Pointer }
 
 // IMusic holds functions to control music playback in the steam client.
 type IMusic struct{ unsafe.Pointer }
